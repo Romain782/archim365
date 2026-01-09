@@ -1,1 +1,157 @@
-
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Entry Level",
+        "dotColor": "#10b981", 
+        "isFoundationGroup": true,
+        "items": ["m365F1", "offF3"]
+      },
+      {
+        "id": "col2",
+        "title": "Core Standard",
+        "dotColor": "#0ea5e9",
+        "items": ["m365F3"]
+      },
+      {
+        "id": "col3",
+        "title": "Security Add-ons",
+        "dotColor": "#f59e0b",
+        "items": ["f5Sec", "f5Comp"]
+      },
+      {
+        "id": "col4",
+        "title": "All-up",
+        "dotColor": "#6366f1",
+        "items": ["m365F5"]
+      }
+    ],
+    "cards": {
+      "m365F1": {
+        "id": "card-f1",
+        "title": "Microsoft 365 F1",
+        "sub": "Secure Entry",
+        "icon": "fa-solid fa-shield-cat",
+        "iconClass": "icon-blue",
+        "desc": "Baseline security (Intune + Entra P1) with Teams for communication. No Email rights.",
+        "pills": ["Teams", "Intune", "Entra P1"],
+        "includes": ["Microsoft Teams (Walkie Talkie)", "Intune Plan 1", "Entra ID P1", "SharePoint (Read)"],
+        "outcomes": ["Device Management", "Secure Access"],
+        "useCases": ["Retail Associates", "Secure BYOD"],
+        "links": [{"label":"F1 vs F3", "url":"#"}]
+      },
+      "offF3": {
+        "title": "Office 365 F3",
+        "sub": "Apps Only",
+        "icon": "fa-brands fa-microsoft",
+        "iconClass": "icon-blue",
+        "desc": "Productivity apps and Email (2GB). <strong>No Security/Management</strong> included.",
+        "includes": ["Exchange Kiosk (2GB)", "Office Web/Mobile Apps", "SharePoint & OneDrive"],
+        "outcomes": ["Basic Communication", "Digitization"],
+        "useCases": ["Factory Workers", "Email-only users"],
+        "links": [{"label":"Service Desc", "url":"#"}]
+      },
+      "m365F3": {
+        "id": "card-f3",
+        "title": "Microsoft 365 F3",
+        "sub": " The Standard",
+        "icon": "fa-solid fa-layer-group",
+        "iconClass": "icon-dark",
+        "isHero": true,
+        "desc": "The full Frontline value: Security + Windows VDA + Power Platform + Email.",
+        "pills": ["Win VDA", "Auto-mate", "Email"],
+        "includes": ["Everything in F1 + Office F3", "Windows 11 E3 (VDA rights)", "Power Platform (Seed)", "Exchange Kiosk (2GB)"],
+        "outcomes": ["Full Empowerment", "Process Automation"],
+        "useCases": ["Firstline Managers", "Shared Devices"],
+        "links": [{"label":"Comparison", "url":"#"}]
+      },
+      "f5Sec": {
+        "id": "card-f5sec",
+        "title": "F5 Security",
+        "sub": "Add-on",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-orange",
+        "desc": "Upgrade to XDR: Defender for Endpoint, Identity, and Cloud Apps.",
+        "includes": ["Defender for Endpoint P2", "Entra ID P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "outcomes": ["Advanced Threat Protection", "Identity Automation"],
+        "useCases": ["High-risk users", "Shared PC Security"],
+        "links": [{"label":"F5 Security", "url":"#"}]
+      },
+      "f5Comp": {
+        "title": "F5 Compliance",
+        "sub": "Add-on",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-orange",
+        "desc": "Advanced Governance: eDiscovery, Insider Risk, and Auto-labeling.",
+        "includes": ["Information Protection P2", "Insider Risk Mgmt", "eDiscovery Premium"],
+        "outcomes": ["Data Governance", "Legal Compliance"],
+        "useCases": ["Regulated Industries", "Data Leak Protection"],
+        "links": [{"label":"F5 Compliance", "url":"#"}]
+      },
+      "m365F5": {
+        "id": "card-f5",
+        "title": "M365 F3 + F5 Add-ons",
+        "sub": "Ultimate Frontline",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-red",
+        "desc": "The equivalent of E5 for Frontline workers. Maximum security and compliance.",
+        "includes": ["M365 F3 Base", "F5 Security Add-on", "F5 Compliance Add-on"],
+        "outcomes": ["Zero Trust", "Full Parity with Enterprise"],
+        "useCases": ["Critical Infrastructure", "Healthcare Frontline"],
+        "links": [{"label":"M365 Maps", "url":"#"}]
+      }
+    }
+  },
+  "columns": [
+    "M365 F1", "M365 F3", "Office 365 F3", 
+    "F5 Sec Add-on", "F5 Comp Add-on",
+    "M365 E3 (Ref)"
+  ],
+  "matrix": [
+    {
+      "category": "Productivity & Apps",
+      "items": [
+        { "name": "Office Apps (Web & Mobile Only)", "vals": [1, 1, 1, 0, 0, 0] },
+        { "name": "Office Apps (Desktop - Install)", "vals": [0, 0, 0, 0, 0, 1] },
+        { "name": "Exchange Mailbox", "vals": [0, 1, 1, 0, 0, 1] },
+        { "name": "Mailbox Size", "vals": [0, 1, 1, 0, 0, 1] }, 
+        { "name": "Microsoft Teams", "vals": [1, 1, 1, 0, 0, 1] },
+        { "name": "SharePoint / OneDrive (2GB)", "vals": [1, 1, 1, 0, 0, 1] },
+        { "name": "Power Platform (Use Rights)", "vals": [0, 1, 0, 0, 0, 1] }
+      ]
+    },
+    {
+      "category": "Frontline Specifics",
+      "items": [
+        { "name": "Walkie Talkie (Teams)", "vals": [1, 1, 1, 0, 0, 1] },
+        { "name": "Shifts (Schedule Mgmt)", "vals": [1, 1, 1, 0, 0, 1] },
+        { "name": "Tasks & Approvals", "vals": [1, 1, 1, 0, 0, 1] },
+        { "name": "Windows 11 Virtualization (VDA)", "vals": [0, 1, 0, 0, 0, 1] },
+        { "name": "Screen Size Restriction (<10.9\")", "vals": [0, 1, 1, 0, 0, 0] }
+      ]
+    },
+    {
+      "category": "Identity & Security (Entra/Intune)",
+      "items": [
+        { "name": "Entra ID Plan 1 (MFA/CA)", "vals": [1, 1, 0, 0, 0, 1] },
+        { "name": "Entra ID Plan 2 (PIM/Risk)", "vals": [0, 0, 0, 1, 0, 0] },
+        { "name": "Intune Plan 1 (MDM/MAM)", "vals": [1, 1, 0, 0, 0, 1] },
+        { "name": "Autopilot", "vals": [1, 1, 0, 0, 0, 1] },
+        { "name": "Defender for Endpoint P1", "vals": [0, 1, 0, 0, 0, 1] },
+        { "name": "Defender for Endpoint P2", "vals": [0, 0, 0, 1, 0, 1] }
+      ]
+    },
+    {
+      "category": "Compliance & Advanced Security",
+      "items": [
+        { "name": "Manual Sensitivity Labels", "vals": [1, 1, 0, 0, 0, 1] },
+        { "name": "DLP (Data Leak Prevention)", "vals": [1, 1, 0, 0, 0, 1] },
+        { "name": "eDiscovery (Premium)", "vals": [0, 0, 0, 0, 1, 0] },
+        { "name": "Insider Risk Management", "vals": [0, 0, 0, 0, 1, 0] },
+        { "name": "Defender for Cloud Apps", "vals": [0, 0, 0, 1, 0, 0] },
+        { "name": "Defender for Identity", "vals": [0, 0, 0, 1, 0, 0] }
+      ]
+    }
+  ]
+}
