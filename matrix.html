@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M365 Licensing — Matrix Sales</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+  <div class="app">
+    
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo"><i class="fa-brands fa-microsoft"></i></div>
+            <div class="brand-text">
+              <h1>M365 Licensing Matrix</h1>
+              <p>Outil d'aide à la vente • Comparateur détaillé</p>
+            </div>
+          </div>
+          
+          <div class="nav-actions">
+            <a href="architecture.html" class="btn"><i class="fa-solid fa-diagram-project"></i> Architecture</a>
+            <button class="btn active"><i class="fa-solid fa-table"></i> Matrix Sales</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <div class="view-panel">
+        
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Comparateur de Fonctionnalités</h2>
+            <p>Recherchez une feature technique pour voir dans quelle suite elle est incluse.</p>
+          </div>
+        </div>
+
+        <div class="matrix-search-container">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="q" class="search-input" placeholder="Rechercher une capacité (ex: Bitlocker, PIM, eDiscovery, DLP...)" autofocus>
+          </div>
+        </div>
+
+        <div class="matrix-table-container thin-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature / Capability</th>
+                <th>M365 E3</th>
+                <th>M365 E5</th>
+                <th>Defender Suite</th>
+                <th>Purview Suite</th>
+              </tr>
+            </thead>
+            <tbody id="mxTbody">
+              </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* ============================================================
+       DATA: SALES BIBLE (60+ items)
+       Codes: 0=No/NA, 1=Included, 2=Addon, 3=Partial
+    ============================================================ */
+    const MATRIX_DATA = [
+      {
+        category: "Identity & Access (Entra)",
+        items: [
+          { name: "MFA & SSO (Entra Free/Office)", vals: [1,1,1,0] },
+          { name: "Conditional Access (Standard)", vals: [1,1,1,0] },
+          { name: "Self-Service Password Reset (Cloud)", vals: [1,1,1,0] },
+          { name: "Self-Service Password Reset (Hybrid Writeback)", vals: [1,1,1,0] },
+          { name: "Risk-based Conditional Access", vals: [2,1,1,0] },
+          { name: "Entra ID Protection (Risk Detect)", vals: [2,1,1,0] },
+          { name: "Privileged Identity Mgmt (PIM)", vals: [2,1,1,0] },
+          { name: "Access Reviews (Identity Gov)", vals: [2,1,1,0] },
+          { name: "Entitlement Management", vals: [2,1,1,0] },
+          { name: "Entra Verified ID", vals: [0,1,1,0] },
+          { name: "Entra Permissions Mgmt (CIEM)", vals: [2,2,2,0] } // Usually standalone/addon
+        ]
+      },
+      {
+        category: "Endpoint Management (Intune)",
+        items: [
+          { name: "MDM / MAM (Intune P1)", vals: [1,1,0,0] },
+          { name: "Windows Autopilot", vals: [1,1,0,0] },
+          { name: "Endpoint Analytics (Core)", vals: [1,1,0,0] },
+          { name: "Endpoint Privilege Mgmt (EPM)", vals: [2,1,0,0] },
+          { name: "Remote Help", vals: [2,1,0,0] },
+          { name: "Cloud PKI", vals: [2,1,0,0] },
+          { name: "Enterprise App Management", vals: [2,1,0,0] },
+          { name: "Advanced Analytics (Suite)", vals: [2,1,0,0] },
+          { name: "Firmware over-the-air (FOTA)", vals: [2,1,0,0] },
+          { name: "Microsoft Tunnel for MAM", vals: [2,1,0,0] }
+        ]
+      },
+      {
+        category: "Threat Protection (XDR / Defender)",
+        items: [
+          { name: "Next-Gen Protection (AV)", vals: [1,1,1,0] },
+          { name: "Attack Surface Reduction (ASR)", vals: [1,1,1,0] },
+          { name: "Endpoint Detection & Response (EDR)", vals: [2,1,1,0] },
+          { name: "Auto Investigation (AIR)", vals: [2,1,1,0] },
+          { name: "Threat & Vuln Mgmt (Core)", vals: [1,1,1,0] },
+          { name: "Threat & Vuln Mgmt (Premium/Block)", vals: [2,1,1,0] },
+          { name: "Safe Attachments (Sandboxing)", vals: [2,1,1,0] },
+          { name: "Safe Links (URL Rewrite)", vals: [2,1,1,0] },
+          { name: "Anti-Phishing (Impersonation)", vals: [2,1,1,0] },
+          { name: "Defender for Identity (MDI)", vals: [2,1,1,0] },
+          { name: "Cloud App Security (Discovery)", vals: [1,1,1,0] },
+          { name: "Cloud App Security (Full/Control)", vals: [2,1,1,0] },
+          { name: "IoT/OT Security (Defender for IoT)", vals: [2,2,2,0] }
+        ]
+      },
+      {
+        category: "Information Protection (Purview)",
+        items: [
+          { name: "Manual Sensitivity Labels", vals: [1,1,0,1] },
+          { name: "Basic Message Encryption (OME)", vals: [1,1,0,1] },
+          { name: "Advanced Message Encryption", vals: [2,1,0,1] },
+          { name: "Auto-labeling (Client-side)", vals: [2,1,0,1] },
+          { name: "Auto-labeling (Service-side)", vals: [2,1,0,1] },
+          { name: "DLP (Exchange/SharePoint/OneDrive)", vals: [1,1,0,1] },
+          { name: "DLP (Teams Chat & Channel)", vals: [2,1,0,1] },
+          { name: "DLP (Endpoint)", vals: [2,1,0,1] },
+          { name: "Double Key Encryption (DKE)", vals: [2,1,0,1] },
+          { name: "Customer Key (BYOK)", vals: [2,1,0,1] }
+        ]
+      },
+      {
+        category: "Compliance & Governance (Purview)",
+        items: [
+          { name: "eDiscovery (Standard)", vals: [1,1,0,1] },
+          { name: "eDiscovery (Premium)", vals: [2,1,0,1] },
+          { name: "Audit (Standard)", vals: [1,1,0,1] },
+          { name: "Audit (Premium)", vals: [2,1,0,1] },
+          { name: "Insider Risk Management", vals: [2,1,0,1] },
+          { name: "Communication Compliance", vals: [2,1,0,1] },
+          { name: "Information Barriers", vals: [2,1,0,1] },
+          { name: "Records Management", vals: [2,1,0,1] },
+          { name: "Customer Lockbox", vals: [2,1,0,1] }
+        ]
+      },
+      {
+        category: "Windows & Office System",
+        items: [
+          { name: "Windows 11 Enterprise E3", vals: [1,1,0,0] },
+          { name: "Windows Autopatch", vals: [1,1,0,0] },
+          { name: "Universal Print", vals: [1,1,0,0] },
+          { name: "Credential Guard", vals: [1,1,0,0] },
+          { name: "M365 Apps for Enterprise", vals: [1,1,0,0] },
+          { name: "M365 Apps for Mobile", vals: [1,1,0,0] },
+          { name: "Power Automate (Seed rights)", vals: [1,1,0,0] },
+          { name: "M365 Copilot", vals: [2,2,0,0] } // Addon always
+        ]
+      }
+    ];
+
+    /* ============================================================
+       LOGIC: RENDER & SEARCH
+    ============================================================ */
+    const tbody = document.getElementById("mxTbody");
+    const qInput = document.getElementById("q");
+
+    function renderMatrix() {
+      const query = qInput.value.toLowerCase().trim();
+      let html = "";
+
+      MATRIX_DATA.forEach(group => {
+        // Filtre les items selon la recherche
+        const matchingItems = group.items.filter(item => item.name.toLowerCase().includes(query));
+        
+        // Affiche la catégorie seulement si elle contient des résultats
+        if(matchingItems.length > 0) {
+          // Header de catégorie
+          html += `<tr class="tr-category"><td colspan="5">${group.category}</td></tr>`;
+          
+          // Lignes
+          matchingItems.forEach(item => {
+            html += `<tr>
+              <td>${item.name}</td>
+              ${item.vals.map(code => {
+                let cls="na", ico="fa-minus", txt="-";
+                
+                if(code===1){ cls="included"; ico="fa-check"; txt="Included"; }
+                if(code===2){ cls="addon"; ico="fa-plus"; txt="Add-on"; }
+                // Pas de code 3 (Partial) dans ce dataset précis, mais gérable si besoin
+                
+                return `<td><span class="badge ${cls}"><i class="fa-solid ${ico}"></i> ${txt}</span></td>`;
+              }).join('')}
+            </tr>`;
+          });
+        }
+      });
+
+      if(html === "") {
+        html = `<tr><td colspan="5" style="text-align:center;padding:40px;color:#94a3b8;font-style:italic;">Aucun résultat pour "${query}"</td></tr>`;
+      }
+      
+      tbody.innerHTML = html;
+    }
+
+    // Écouteur d'événement pour la recherche
+    qInput.addEventListener("input", renderMatrix);
+
+    // Initialisation
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMatrix();
+    });
+
+  </script>
+</body>
+</html>

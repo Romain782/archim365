@@ -1,0 +1,244 @@
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Foundation",
+        "dotColor": "#0ea5e9",
+        "isFoundationGroup": true,
+        "items": ["o365e3", "winE3", "emsE3"]
+      },
+      {
+        "id": "col2",
+        "title": "Step-ups",
+        "dotColor": "#f59e0b",
+        "items": ["emsE5", "intuneSuite", "teamsPremium"]
+      },
+      {
+        "id": "col3",
+        "title": "Suites",
+        "dotColor": "#ec4899",
+        "items": ["e5Security", "e5Compliance"]
+      },
+      {
+        "id": "col4",
+        "title": "All-up",
+        "dotColor": "#1e293b",
+        "items": ["m365E5"]
+      }
+    ],
+    "cards": {
+      "o365e3": {
+        "title": "Office 365 E3",
+        "sub": "Productivity",
+        "icon": "fa-brands fa-microsoft",
+        "iconClass": "icon-blue",
+        "pills": ["Apps", "EXO", "SPO"],
+        "desc": "Socle de productivité et collaboration pour les information workers.",
+        "includes": ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1"],
+        "outcomes": ["Standardisation", "Collaboration fluide"],
+        "useCases": ["Intranet", "Migration Exchange", "Travail hybride"],
+        "links": [{"label":"Service Description", "url":"#"}]
+      },
+      "winE3": {
+        "title": "Windows E3",
+        "sub": "OS Security",
+        "icon": "fa-brands fa-windows",
+        "iconClass": "icon-blue",
+        "desc": "Windows 11 Enterprise : Sécurité, résilience et gestion avancée.",
+        "includes": ["Windows Autopatch", "Universal Print", "Quick Machine Recovery"],
+        "outcomes": ["Réduction MTTR", "Sécurité OS homogène"],
+        "useCases": ["Modernisation parc", "Gestion patchs"],
+        "links": [{"label":"Windows Autopatch", "url":"#"}]
+      },
+      "emsE3": {
+        "id": "card-emsE3",
+        "title": "EMS E3",
+        "sub": "Intune P1 + Entra P1",
+        "icon": "fa-solid fa-mobile-screen-button",
+        "iconClass": "icon-blue",
+        "desc": "Le point de départ identité & device management (MFA + MDM).",
+        "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1"],
+        "outcomes": ["Contrôle d'accès", "Gestion mobiles"],
+        "useCases": ["MFA pour tous", "Enrôlement mobiles"],
+        "links": [{"label":"Intune Docs", "url":"#"}]
+      },
+      "emsE5": {
+        "title": "EMS E5",
+        "sub": "Identity Premium",
+        "icon": "fa-solid fa-circle-up",
+        "iconClass": "icon-orange",
+        "desc": "Identité Zero Trust : Protection basée sur le risque et automatisation.",
+        "includes": ["Entra ID P2", "Defender for Cloud Apps", "Defender for Identity"],
+        "outcomes": ["Automatisation identité", "Visibilité Shadow IT"],
+        "useCases": ["PIM (Just-in-time)", "Risk-based CA"],
+        "links": [{"label":"Entra ID P2", "url":"#"}]
+      },
+      "intuneSuite": {
+        "id": "card-intuneSuite",
+        "title": "Intune Suite",
+        "sub": "Endpoint Premium",
+        "icon": "fa-solid fa-cubes",
+        "iconClass": "icon-orange",
+        "desc": "Gestion avancée : Privilèges, Certificats Cloud, Remote Help.",
+        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics"],
+        "outcomes": ["Moins d'outils tiers", "Support IT rapide"],
+        "useCases": ["Suppression admin local", "Certificats sans AD CS"],
+        "links": [{"label":"Intune Suite", "url":"#"}]
+      },
+      "teamsPremium": {
+        "title": "Teams Premium",
+        "sub": "Comms Premium",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-orange",
+        "desc": "IA, Webinaires avancés et protection des réunions.",
+        "includes": ["Intelligent Recap (IA)", "Traduction live", "Watermarking"],
+        "outcomes": ["Productivité réunions", "Confidentialité"],
+        "useCases": ["Comités de direction", "Webinaires externes"],
+        "links": [{"label":"Teams Premium", "url":"#"}]
+      },
+      "e5Security": {
+        "id": "card-e5Security",
+        "title": "Defender Suite",
+        "sub": "ex-E5 Security",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-red",
+        "desc": "Suite XDR Unifiée : Endpoint, Identité, Email, Apps.",
+        "includes": ["Defender for Endpoint P2", "Defender for Office P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "outcomes": ["Consolidation SOC", "Réponse auto"],
+        "useCases": ["Protection Ransomware", "Chasse aux menaces"],
+        "links": [{"label":"Defender XDR", "url":"#"}]
+      },
+      "e5Compliance": {
+        "title": "Purview Suite",
+        "sub": "ex-E5 Compliance",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-red",
+        "desc": "Gouvernance des données et conformité réglementaire.",
+        "includes": ["Information Protection", "DLP Endpoint/Teams", "Insider Risk", "eDiscovery Premium"],
+        "outcomes": ["Protection Données", "Conformité"],
+        "useCases": ["Fuite de données", "Enquêtes RH"],
+        "links": [{"label":"Purview", "url":"#"}]
+      },
+      "m365E5": {
+        "id": "card-m365E5",
+        "title": "Microsoft 365 E5",
+        "sub": "Ultimate Suite",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-dark",
+        "isHero": true,
+        "pills": ["Intune Suite", "XDR", "Purview"],
+        "desc": "Inclut E3 + Defender + Purview + <strong>Full Intune Suite</strong> + SCU.",
+        "includes": ["Tout E3", "Tout Defender Suite", "Tout Purview Suite", "Tout Intune Suite", "Power BI Pro", "Phone System"],
+        "outcomes": ["Consolidation Max", "Sécurité Intégrée"],
+        "useCases": ["Transformation Zero Trust", "Full Stack Microsoft"],
+        "links": [{"label":"M365 Maps", "url":"#"}]
+      },
+      "soc": {
+        "title": "Azure Security",
+        "sub": "SOC Layer",
+        "icon": "fa-solid fa-cloud",
+        "iconClass": "icon-azure",
+        "desc": "SIEM Cloud-native et protection d'infrastructure Multi-Cloud.",
+        "includes": ["Microsoft Sentinel", "Defender for Cloud", "Log Analytics"],
+        "outcomes": ["Vision unique", "Automatisation SOC"],
+        "useCases": ["SOC Unifié", "Protection AWS/GCP"],
+        "licensing": "Pay-as-you-go (Consommation Azure)",
+        "links": [{"label":"Sentinel", "url":"#"}]
+      }
+    }
+  },
+  "matrix": [
+    {
+      "category": "Identity & Access (Entra)",
+      "items": [
+        { "name": "MFA & SSO (Entra Free/Office)", "vals": [1,1,1,0] },
+        { "name": "Conditional Access (Standard)", "vals": [1,1,1,0] },
+        { "name": "Self-Service Password Reset (Cloud)", "vals": [1,1,1,0] },
+        { "name": "Self-Service Password Reset (Hybrid Writeback)", "vals": [1,1,1,0] },
+        { "name": "Risk-based Conditional Access", "vals": [2,1,1,0] },
+        { "name": "Entra ID Protection (Risk Detect)", "vals": [2,1,1,0] },
+        { "name": "Privileged Identity Mgmt (PIM)", "vals": [2,1,1,0] },
+        { "name": "Access Reviews (Identity Gov)", "vals": [2,1,1,0] },
+        { "name": "Entitlement Management", "vals": [2,1,1,0] },
+        { "name": "Entra Verified ID", "vals": [0,1,1,0] },
+        { "name": "Entra Permissions Mgmt (CIEM)", "vals": [2,2,2,0] }
+      ]
+    },
+    {
+      "category": "Endpoint Management (Intune)",
+      "items": [
+        { "name": "MDM / MAM (Intune P1)", "vals": [1,1,0,0] },
+        { "name": "Windows Autopilot", "vals": [1,1,0,0] },
+        { "name": "Endpoint Analytics (Core)", "vals": [1,1,0,0] },
+        { "name": "Endpoint Privilege Mgmt (EPM)", "vals": [2,1,0,0] },
+        { "name": "Remote Help", "vals": [2,1,0,0] },
+        { "name": "Cloud PKI", "vals": [2,1,0,0] },
+        { "name": "Enterprise App Management", "vals": [2,1,0,0] },
+        { "name": "Advanced Analytics (Suite)", "vals": [2,1,0,0] },
+        { "name": "Firmware over-the-air (FOTA)", "vals": [2,1,0,0] },
+        { "name": "Microsoft Tunnel for MAM", "vals": [2,1,0,0] }
+      ]
+    },
+    {
+      "category": "Threat Protection (XDR / Defender)",
+      "items": [
+        { "name": "Next-Gen Protection (AV)", "vals": [1,1,1,0] },
+        { "name": "Attack Surface Reduction (ASR)", "vals": [1,1,1,0] },
+        { "name": "Endpoint Detection & Response (EDR)", "vals": [2,1,1,0] },
+        { "name": "Auto Investigation (AIR)", "vals": [2,1,1,0] },
+        { "name": "Threat & Vuln Mgmt (Core)", "vals": [1,1,1,0] },
+        { "name": "Threat & Vuln Mgmt (Premium/Block)", "vals": [2,1,1,0] },
+        { "name": "Safe Attachments (Sandboxing)", "vals": [2,1,1,0] },
+        { "name": "Safe Links (URL Rewrite)", "vals": [2,1,1,0] },
+        { "name": "Anti-Phishing (Impersonation)", "vals": [2,1,1,0] },
+        { "name": "Defender for Identity (MDI)", "vals": [2,1,1,0] },
+        { "name": "Cloud App Security (Discovery)", "vals": [1,1,1,0] },
+        { "name": "Cloud App Security (Full/Control)", "vals": [2,1,1,0] },
+        { "name": "IoT/OT Security (Defender for IoT)", "vals": [2,2,2,0] }
+      ]
+    },
+    {
+      "category": "Information Protection (Purview)",
+      "items": [
+        { "name": "Manual Sensitivity Labels", "vals": [1,1,0,1] },
+        { "name": "Basic Message Encryption (OME)", "vals": [1,1,0,1] },
+        { "name": "Advanced Message Encryption", "vals": [2,1,0,1] },
+        { "name": "Auto-labeling (Client-side)", "vals": [2,1,0,1] },
+        { "name": "Auto-labeling (Service-side)", "vals": [2,1,0,1] },
+        { "name": "DLP (Exchange/SharePoint/OneDrive)", "vals": [1,1,0,1] },
+        { "name": "DLP (Teams Chat & Channel)", "vals": [2,1,0,1] },
+        { "name": "DLP (Endpoint)", "vals": [2,1,0,1] },
+        { "name": "Double Key Encryption (DKE)", "vals": [2,1,0,1] },
+        { "name": "Customer Key (BYOK)", "vals": [2,1,0,1] }
+      ]
+    },
+    {
+      "category": "Compliance & Governance (Purview)",
+      "items": [
+        { "name": "eDiscovery (Standard)", "vals": [1,1,0,1] },
+        { "name": "eDiscovery (Premium)", "vals": [2,1,0,1] },
+        { "name": "Audit (Standard)", "vals": [1,1,0,1] },
+        { "name": "Audit (Premium)", "vals": [2,1,0,1] },
+        { "name": "Insider Risk Management", "vals": [2,1,0,1] },
+        { "name": "Communication Compliance", "vals": [2,1,0,1] },
+        { "name": "Information Barriers", "vals": [2,1,0,1] },
+        { "name": "Records Management", "vals": [2,1,0,1] },
+        { "name": "Customer Lockbox", "vals": [2,1,0,1] }
+      ]
+    },
+    {
+      "category": "Windows & Office System",
+      "items": [
+        { "name": "Windows 11 Enterprise E3", "vals": [1,1,0,0] },
+        { "name": "Windows Autopatch", "vals": [1,1,0,0] },
+        { "name": "Universal Print", "vals": [1,1,0,0] },
+        { "name": "Credential Guard", "vals": [1,1,0,0] },
+        { "name": "M365 Apps for Enterprise", "vals": [1,1,0,0] },
+        { "name": "M365 Apps for Mobile", "vals": [1,1,0,0] },
+        { "name": "Power Automate (Seed rights)", "vals": [1,1,0,0] },
+        { "name": "M365 Copilot", "vals": [2,2,0,0] }
+      ]
+    }
+  ]
+}
