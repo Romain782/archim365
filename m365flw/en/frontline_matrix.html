@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Frontline Licensing — Matrix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);"><i class="fa-solid fa-users-line"></i></div>
+            <div class="brand-text">
+              <h1>Frontline Sales Matrix</h1>
+              <p>Granular Comparison (F1, F3, F5 Add-ons)</p>
+            </div>
+          </div>
+          <div class="nav-actions">
+            <a href="frontline_arch.html" class="btn"><i class="fa-solid fa-diagram-project"></i> Architecture</a>
+            <button class="btn active"><i class="fa-solid fa-table"></i> Sales Matrix</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container" style="max-width: 100%;">
+      <div class="view-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Feature Comparison</h2>
+            <p>Compare Frontline plans against each other and Enterprise baselines.</p>
+          </div>
+        </div>
+
+        <div class="matrix-search-container">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="q" class="search-input" placeholder="Search feature (e.g., Kiosk, Walkie Talkie, Intune...)" autofocus>
+          </div>
+        </div>
+
+        <div class="matrix-table-container thin-scroll">
+          <table>
+            <thead id="mxThead"></thead>
+            <tbody id="mxTbody"><tr><td style="padding:40px; text-align:center;">Loading data...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let MATRIX_DATA = {};
+    const thead = document.getElementById("mxThead");
+    const tbody = document.getElementById("mxTbody");
+    const qInput = document.getElementById("q");
+
+    async function loadData() {
+      try {
+        const response = await fetch('frontline_data.json');
+        if (!response.ok) throw new Error("HTTP Error");
+        MATRIX_DATA = await response.json();
+        renderTable();
+      } catch (error) {
+        tbody.innerHTML = `<tr><td style="padding:40px;color:red;text-align:center;">Error loading frontline_data.json</td></tr>`;
+      }
+    }
+
+    function renderTable() {
+      const query = qInput.value.toLowerCase().trim();
+      if (!MATRIX_DATA.columns) return;
+      
+      let headerHtml = `<tr><th>Feature / Capability</th>`;
+      MATRIX_DATA.columns.forEach(col => headerHtml += `<th>${col}</th>`);
+      headerHtml += `</tr>`;
+      thead.innerHTML = headerHtml;
+
+      let bodyHtml = "";
+      MATRIX_DATA.matrix.forEach(group => {
+        const matches = group.items.filter(i => i.name.toLowerCase().includes(query));
+        if (matches.length > 0) {
+          bodyHtml += `<tr class="tr-category"><td colspan="${MATRIX_DATA.columns.length + 1}">${group.category}</td></tr>`;
+          matches.forEach(item => {
+            bodyHtml += `<tr><td>${item.name}</td>${item.vals.map(val => {
+              if (val === 1) return `<td><div class="dot-badge dot-inc"><i class="fa-solid fa-check"></i></div></td>`;
+              if (val === 2) return `<td><div class="dot-badge dot-add"><i class="fa-solid fa-plus"></i></div></td>`;
+              return `<td><span class="dot-no"><i class="fa-solid fa-minus"></i></span></td>`;
+            }).join('')}</tr>`;
+          });
+        }
+      });
+      tbody.innerHTML = bodyHtml || `<tr><td colspan="${MATRIX_DATA.columns.length + 1}" style="text-align:center;padding:40px;">No results found.</td></tr>`;
+    }
+
+    qInput.addEventListener("input", renderTable);
+    document.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>
