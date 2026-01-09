@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M365 Licensing — Sales Matrix</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* SPECIFIC STYLES FOR THE LARGE MATRIX */
+    .matrix-table-container {
+      width: 100%;
+      overflow-x: auto; /* Vital horizontal scroll */
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    table {
+      border-collapse: separate; /* Required for sticky headers */
+      border-spacing: 0;
+      width: max-content; /* Table expands as needed */
+      min-width: 100%;
+    }
+
+    /* Headers */
+    thead th {
+      background: #f8fafc;
+      padding: 16px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      border-bottom: 2px solid #e2e8f0;
+      border-right: 1px solid #f1f5f9;
+      text-align: center;
+      vertical-align: bottom;
+      height: 60px;
+      min-width: 90px; /* Min column width */
+    }
+
+    /* First column (Feature Name) frozen */
+    thead th:first-child,
+    tbody td:first-child {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 30; /* Above other cells */
+      width: 320px;
+      min-width: 320px;
+      max-width: 320px;
+      text-align: left;
+      padding-left: 24px;
+      border-right: 2px solid #e2e8f0;
+      box-shadow: 4px 0 8px -4px rgba(0,0,0,0.05);
+    }
+    
+    /* Feature Header frozen Top AND Left */
+    thead th:first-child {
+      z-index: 40; /* Above everything */
+      background: #f8fafc;
+    }
+
+    /* Category Rows */
+    .tr-category td {
+      background: #f1f5f9;
+      color: var(--accent-indigo);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 12px 24px;
+      text-align: left;
+      position: sticky;
+      left: 0;
+    }
+
+    /* Cells */
+    tbody td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #f1f5f9;
+      border-right: 1px solid #f8fafc;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* Compact Badges for Large Matrix */
+    .dot-badge {
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .dot-inc { background: #dcfce7; color: #166534; }
+    .dot-add { background: #dbeafe; color: #1e40af; }
+    .dot-no  { color: #e2e8f0; font-size: 10px; }
+    
+    /* Hover Row */
+    tbody tr:hover td { background: #f8fafc; }
+    tbody tr:hover td:first-child { background: #f8fafc; }
+
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo"><i class="fa-brands fa-microsoft"></i></div>
+            <div class="brand-text">
+              <h1>M365 Licensing Matrix</h1>
+              <p>Granular Comparison (18 Licenses)</p>
+            </div>
+          </div>
+          <div class="nav-actions">
+            <a href="architecture.html" class="btn"><i class="fa-solid fa-diagram-project"></i> Architecture</a>
+            <button class="btn active"><i class="fa-solid fa-table"></i> Sales Matrix</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container" style="max-width: 100%;"> <div class="view-panel">
+        
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Deep Dive Comparison</h2>
+            <p>Exhaustive view of features by SKU.</p>
+          </div>
+        </div>
+
+        <div class="matrix-search-container">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="q" class="search-input" placeholder="Filter features (e.g., EPM, Copilot, Bitlocker...)" autofocus>
+          </div>
+        </div>
+
+        <div class="matrix-table-container thin-scroll">
+          <table>
+            <thead id="mxThead">
+              </thead>
+            <tbody id="mxTbody">
+              <tr><td style="padding:40px; text-align:center;">Loading data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let MATRIX_DATA = {};
+    const thead = document.getElementById("mxThead");
+    const tbody = document.getElementById("mxTbody");
+    const qInput = document.getElementById("q");
+
+    async function loadData() {
+      try {
+        const response = await fetch('datamatrix.json');
+        if (!response.ok) throw new Error("HTTP Error");
+        MATRIX_DATA = await response.json();
+        renderTable();
+      } catch (error) {
+        console.error(error);
+        tbody.innerHTML = `<tr><td style="padding:40px;color:red;text-align:center;">Unable to load datamatrix.json (CORS/Server required).</td></tr>`;
+      }
+    }
+
+    function renderTable() {
+      const query = qInput.value.toLowerCase().trim();
+      
+      // 1. Generate Header (Columns)
+      if (!MATRIX_DATA.columns) return;
+      
+      let headerHtml = `<tr><th>Feature / Capability</th>`;
+      MATRIX_DATA.columns.forEach(col => {
+        headerHtml += `<th>${col}</th>`;
+      });
+      headerHtml += `</tr>`;
+      thead.innerHTML = headerHtml;
+
+      // 2. Generate Body
+      let bodyHtml = "";
+      let hasResults = false;
+
+      MATRIX_DATA.matrix.forEach(group => {
+        const matches = group.items.filter(i => i.name.toLowerCase().includes(query));
+        
+        if (matches.length > 0) {
+          hasResults = true;
+          // Category Row (colspan = nb columns + 1)
+          bodyHtml += `<tr class="tr-category"><td colspan="${MATRIX_DATA.columns.length + 1}">${group.category}</td></tr>`;
+          
+          matches.forEach(item => {
+            bodyHtml += `<tr>
+              <td>${item.name}</td>
+              ${item.vals.map(val => {
+                // Compact rendering (Icon only) to save space
+                if (val === 1) return `<td><div class="dot-badge dot-inc" title="Included"><i class="fa-solid fa-check"></i></div></td>`;
+                if (val === 2) return `<td><div class="dot-badge dot-add" title="Add-on"><i class="fa-solid fa-plus"></i></div></td>`;
+                return `<td><span class="dot-no"><i class="fa-solid fa-minus"></i></span></td>`;
+              }).join('')}
+            </tr>`;
+          });
+        }
+      });
+
+      if (!hasResults) {
+        bodyHtml = `<tr><td colspan="${MATRIX_DATA.columns.length + 1}" style="text-align:center;padding:40px;">No results found.</td></tr>`;
+      }
+
+      tbody.innerHTML = bodyHtml;
+    }
+
+    qInput.addEventListener("input", renderTable);
+    document.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>
