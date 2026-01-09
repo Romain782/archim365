@@ -1,1 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M365 Licensing — Architecture</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <link rel="stylesheet" href="style.css"/>
+</head>
 
+<body>
+  <div class="app">
+    
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo"><i class="fa-brands fa-microsoft"></i></div>
+            <div class="brand-text">
+              <h1>M365 Licensing Architecture</h1>
+              <p>Vue Stratégique • Flux de Maturité</p>
+            </div>
+          </div>
+          
+          <div class="nav-actions">
+            <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
+            <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Matrix Sales</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <div class="view-panel">
+        
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Chemins de Maturité</h2>
+            <p>Cliquez sur une brique pour voir le détail (Fonctionnalités, ROI, Prérequis).</p>
+          </div>
+        </div>
+
+        <div class="arch-board thin-scroll">
+          <div class="arch-layout" id="layoutWrap">
+            
+            <svg class="flow-svg" id="flowSvg"></svg>
+
+            <div class="arch-grid" id="archGrid"></div>
+
+            <div class="footer-socle">
+              <div class="card card-socle" onclick="openModal('soc')">
+                <div class="card-icon icon-azure"><i class="fa-solid fa-cloud"></i></div>
+                <div class="card-titles">
+                  <h3>Azure Security (SOC Layer)</h3>
+                  <span>Microsoft Sentinel + Defender for Cloud</span>
+                </div>
+                <div class="card-body">
+                  Socle d'infrastructure transversal : SIEM/SOAR unifié + Protection Multi-Cloud (CNAPP).<br>
+                  <strong>Facturation à la consommation (Pay-as-you-go).</strong>
+                </div>
+                <i class="fa-solid fa-circle-info" style="color:var(--color-text-light); font-size:20px;"></i>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <div class="modal-icon" id="mIcon"></div>
+            <div class="modal-text">
+              <h2 id="mTitle">Titre</h2>
+              <span id="mMeta">Sous-titre</span>
+            </div>
+          </div>
+          <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="modal-scroll thin-scroll">
+          <div class="detail-grid">
+            <div>
+              <div class="detail-box">
+                <div class="kicker"><i class="fa-solid fa-align-left"></i> Description</div>
+                <div id="mDesc" style="font-size:14px; line-height:1.6; color:#334155; margin-bottom:20px;"></div>
+                
+                <div class="kicker"><i class="fa-solid fa-list-check"></i> Inclus</div>
+                <ul id="mIncludes" class="clean-list"></ul>
+              </div>
+
+              <div class="detail-box">
+                 <div class="kicker"><i class="fa-solid fa-bullseye"></i> Résultats Clés (Outcomes)</div>
+                 <ul id="mOutcomes" class="clean-list"></ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="detail-box">
+                <div class="kicker"><i class="fa-solid fa-lightbulb"></i> Cas d'Usage</div>
+                <ul id="mUseCases" class="clean-list"></ul>
+              </div>
+
+              <div class="detail-box" style="background:#f8fafc;">
+                <div class="kicker"><i class="fa-solid fa-file-contract"></i> Licensing</div>
+                <p id="mLicensing" style="font-size:13px; color:#475569; margin:0;"></p>
+              </div>
+
+              <div class="detail-box">
+                <div class="kicker"><i class="fa-solid fa-link"></i> Ressources</div>
+                <div id="mLinks" style="display:flex; flex-direction:column; gap:8px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ============================================================
+       1. DATA CONFIGURATION (JSON)
+       Modifiez ici pour changer le contenu sans toucher au HTML
+    ============================================================ */
+    
+    // Structure de la grille
+    const ARCH_STRUCTURE = [
+      {
+        id: "col1",
+        title: "Foundation",
+        dotColor: "#0ea5e9", // Sky
+        isFoundationGroup: true, // Active le cadre pointillé
+        items: ["o365e3", "winE3", "emsE3"]
+      },
+      {
+        id: "col2",
+        title: "Step-ups",
+        dotColor: "#f59e0b", // Amber
+        items: ["emsE5", "intuneSuite", "teamsPremium"]
+      },
+      {
+        id: "col3",
+        title: "Suites",
+        dotColor: "#ec4899", // Rose
+        items: ["e5Security", "e5Compliance"]
+      },
+      {
+        id: "col4",
+        title: "All-up",
+        dotColor: "#1e293b", // Slate
+        items: ["m365E5"]
+      }
+    ];
+
+    // Détail des cartes
+    const CARDS_DATA = {
+      o365e3: {
+        title: "Office 365 E3",
+        sub: "Productivity",
+        icon: "fa-brands fa-microsoft",
+        iconClass: "icon-blue",
+        pills: ["Apps", "EXO", "SPO"],
+        desc: "Socle de productivité et collaboration pour les information workers.",
+        includes: ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1"],
+        outcomes: ["Standardisation", "Collaboration fluide"],
+        useCases: ["Intranet", "Migration Exchange", "Travail hybride"],
+        links: [{label:"Service Description", url:"#"}]
+      },
+      winE3: {
+        title: "Windows E3",
+        sub: "OS Security",
+        icon: "fa-brands fa-windows",
+        iconClass: "icon-blue",
+        desc: "Windows 11 Enterprise : Sécurité, résilience et gestion avancée.",
+        includes: ["Windows Autopatch", "Universal Print", "Quick Machine Recovery"],
+        outcomes: ["Réduction MTTR", "Sécurité OS homogène"],
+        useCases: ["Modernisation parc", "Gestion patchs"],
+        links: [{label:"Windows Autopatch", url:"#"}]
+      },
+      emsE3: {
+        id: "card-emsE3", // ID spécifique pour les flèches
+        title: "EMS E3",
+        sub: "Intune P1 + Entra P1",
+        icon: "fa-solid fa-mobile-screen-button",
+        iconClass: "icon-blue",
+        desc: "Le point de départ identité & device management (MFA + MDM).",
+        includes: ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1"],
+        outcomes: ["Contrôle d'accès", "Gestion mobiles"],
+        useCases: ["MFA pour tous", "Enrôlement mobiles"],
+        links: [{label:"Intune Docs", url:"#"}]
+      },
+      emsE5: {
+        title: "EMS E5",
+        sub: "Identity Premium",
+        icon: "fa-solid fa-circle-up",
+        iconClass: "icon-orange",
+        desc: "Identité Zero Trust : Protection basée sur le risque et automatisation.",
+        includes: ["Entra ID P2", "Defender for Cloud Apps", "Defender for Identity"],
+        outcomes: ["Automatisation identité", "Visibilité Shadow IT"],
+        useCases: ["PIM (Just-in-time)", "Risk-based CA"],
+        links: [{label:"Entra ID P2", url:"#"}]
+      },
+      intuneSuite: {
+        id: "card-intuneSuite",
+        title: "Intune Suite",
+        sub: "Endpoint Premium",
+        icon: "fa-solid fa-cubes",
+        iconClass: "icon-orange",
+        desc: "Gestion avancée : Privilèges, Certificats Cloud, Remote Help.",
+        includes: ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics"],
+        outcomes: ["Moins d'outils tiers", "Support IT rapide"],
+        useCases: ["Suppression admin local", "Certificats sans AD CS"],
+        links: [{label:"Intune Suite", url:"#"}]
+      },
+      teamsPremium: {
+        title: "Teams Premium",
+        sub: "Comms Premium",
+        icon: "fa-solid fa-crown",
+        iconClass: "icon-orange",
+        desc: "IA, Webinaires avancés et protection des réunions.",
+        includes: ["Intelligent Recap (IA)", "Traduction live", "Watermarking"],
+        outcomes: ["Productivité réunions", "Confidentialité"],
+        useCases: ["Comités de direction", "Webinaires externes"],
+        links: [{label:"Teams Premium", url:"#"}]
+      },
+      e5Security: {
+        id: "card-e5Security",
+        title: "Defender Suite",
+        sub: "ex-E5 Security",
+        icon: "fa-solid fa-shield-halved",
+        iconClass: "icon-red",
+        desc: "Suite XDR Unifiée : Endpoint, Identité, Email, Apps.",
+        includes: ["Defender for Endpoint P2", "Defender for Office P2", "Defender for Identity", "Defender for Cloud Apps"],
+        outcomes: ["Consolidation SOC", "Réponse auto"],
+        useCases: ["Protection Ransomware", "Chasse aux menaces"],
+        links: [{label:"Defender XDR", url:"#"}]
+      },
+      e5Compliance: {
+        title: "Purview Suite",
+        sub: "ex-E5 Compliance",
+        icon: "fa-solid fa-scale-balanced",
+        iconClass: "icon-red",
+        desc: "Gouvernance des données et conformité réglementaire.",
+        includes: ["Information Protection", "DLP Endpoint/Teams", "Insider Risk", "eDiscovery Premium"],
+        outcomes: ["Protection Données", "Conformité"],
+        useCases: ["Fuite de données", "Enquêtes RH"],
+        links: [{label:"Purview", url:"#"}]
+      },
+      m365E5: {
+        id: "card-m365E5",
+        title: "Microsoft 365 E5",
+        sub: "Ultimate Suite",
+        icon: "fa-solid fa-crown",
+        iconClass: "icon-dark", // Sera surchargé par le style Hero
+        isHero: true, // Déclenche le style spécial
+        pills: ["Intune Suite", "XDR", "Purview"],
+        desc: "Inclut E3 + Defender + Purview + <strong>Full Intune Suite</strong> + SCU.",
+        includes: ["Tout E3", "Tout Defender Suite", "Tout Purview Suite", "Tout Intune Suite", "Power BI Pro", "Phone System"],
+        outcomes: ["Consolidation Max", "Sécurité Intégrée"],
+        useCases: ["Transformation Zero Trust", "Full Stack Microsoft"],
+        links: [{label:"M365 Maps", url:"#"}]
+      },
+      soc: {
+        title: "Azure Security",
+        sub: "SOC Layer",
+        icon: "fa-solid fa-cloud",
+        iconClass: "icon-azure",
+        desc: "SIEM Cloud-native et protection d'infrastructure Multi-Cloud.",
+        includes: ["Microsoft Sentinel", "Defender for Cloud", "Log Analytics"],
+        outcomes: ["Vision unique", "Automatisation SOC"],
+        useCases: ["SOC Unifié", "Protection AWS/GCP"],
+        licensing: "Pay-as-you-go (Consommation Azure)",
+        links: [{label:"Sentinel", url:"#"}]
+      }
+    };
+
+    /* ============================================================
+       2. RENDERING LOGIC
+    ============================================================ */
+    const gridEl = document.getElementById("archGrid");
+
+    function renderGrid() {
+      gridEl.innerHTML = ARCH_STRUCTURE.map(col => {
+        
+        // Génération des cartes de la colonne
+        const cardsHtml = col.items.map(key => {
+          const d = CARDS_DATA[key];
+          const heroClass = d.isHero ? "card-hero" : "";
+          const domId = d.id ? `id="${d.id}"` : ""; // Pour les flèches
+          
+          // Pills (si présents)
+          const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${p}</span>`).join('')}</div>` : '';
+
+          return `
+            <div class="card ${heroClass}" ${domId} onclick="openModal('${key}')">
+              <div class="card-header">
+                <div class="card-icon ${d.iconClass}"><i class="${d.icon}"></i></div>
+                <div class="card-titles">
+                  <h3>${d.title}</h3>
+                  <span>${d.sub}</span>
+                </div>
+              </div>
+              <div class="card-body">
+                ${d.desc}
+              </div>
+              ${pillsHtml}
+              ${!d.isHero ? '<i class="fa-solid fa-circle-info" style="position:absolute; top:20px; right:20px; color:#cbd5e1;"></i>' : ''}
+            </div>
+          `;
+        }).join('');
+
+        // Wrapper "Foundation" si nécessaire
+        let contentHtml = `<div class="stack">${cardsHtml}</div>`;
+        if (col.isFoundationGroup) {
+          contentHtml = `<div class="foundation-group"><span class="foundation-label">Socle de base</span>${contentHtml}</div>`;
+        }
+
+        return `
+          <div class="arch-col">
+            <div class="col-header">
+              <span class="dot" style="background:${col.dotColor}"></span> ${col.title}
+            </div>
+            ${contentHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ============================================================
+       3. MODAL LOGIC
+    ============================================================ */
+    const modalOverlay = document.getElementById("modalOverlay");
+    
+    function openModal(key) {
+      const d = CARDS_DATA[key];
+      if (!d) return;
+
+      // Populate Data
+      document.getElementById("mIcon").className = `modal-icon ${d.iconClass}`;
+      document.getElementById("mIcon").innerHTML = `<i class="${d.icon}"></i>`;
+      document.getElementById("mTitle").innerText = d.title;
+      document.getElementById("mMeta").innerText = d.sub;
+      document.getElementById("mDesc").innerHTML = d.desc;
+      document.getElementById("mLicensing").innerText = d.licensing || "Licence par utilisateur (User SL).";
+
+      // Helpers for lists
+      const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${x}</li>`).join('');
+      const mkLinks = (arr) => (arr||[]).map(l => `<a href="${l.url}" target="_blank" class="btn" style="width:100%; justify-content:space-between; margin-bottom:5px; font-size:12px;">${l.label} <i class="fa-solid fa-external-link-alt"></i></a>`).join('');
+
+      document.getElementById("mIncludes").innerHTML = mkList(d.includes);
+      document.getElementById("mOutcomes").innerHTML = mkList(d.outcomes).replace(/fa-check/g, 'fa-bullseye');
+      document.getElementById("mUseCases").innerHTML = mkList(d.useCases).replace(/fa-check/g, 'fa-bolt');
+      document.getElementById("mLinks").innerHTML = mkLinks(d.links);
+
+      modalOverlay.classList.add("active");
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove("active");
+    }
+
+    // Close on click outside
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    /* ============================================================
+       4. ARROW DRAWING (Orthogonal SI Style)
+    ============================================================ */
+    function drawArrows() {
+      const svg = document.getElementById("flowSvg");
+      const wrap = document.getElementById("layoutWrap");
+      
+      // Nettoyage
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+          </marker>
+        </defs>
+      `;
+
+      // Définition des liaisons
+      // IMPORTANT: Les IDs doivent exister dans le HTML généré (cf CARDS_DATA ids)
+      connect("card-emsE3", "card-intuneSuite", svg, wrap);
+      connect("card-intuneSuite", "card-e5Security", svg, wrap);
+      connect("card-e5Security", "card-m365E5", svg, wrap);
+    }
+
+    function connect(id1, id2, svg, wrap) {
+      const el1 = document.getElementById(id1);
+      const el2 = document.getElementById(id2);
+      if(!el1 || !el2) return;
+
+      const r1 = el1.getBoundingClientRect();
+      const r2 = el2.getBoundingClientRect();
+      const wR = wrap.getBoundingClientRect();
+
+      // Start point: Middle Right of Card 1
+      const x1 = r1.right - wR.left;
+      const y1 = r1.top - wR.top + (r1.height / 2);
+
+      // End point: Middle Left of Card 2
+      const x2 = r2.left - wR.left;
+      const y2 = r2.top - wR.top + (r2.height / 2);
+
+      // Midpoint for orthogonal turn
+      const mx = x1 + (x2 - x1) / 2;
+
+      // Create Path
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      // M start -> L mid_x, start_y -> L mid_x, end_y -> L end_x, end_y
+      const d = `M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`;
+      
+      path.setAttribute("class", "flow-line");
+      path.setAttribute("d", d);
+      path.setAttribute("marker-end", "url(#arrowHead)");
+      
+      svg.appendChild(path);
+    }
+
+    /* ============================================================
+       5. INITIALIZATION
+    ============================================================ */
+    document.addEventListener("DOMContentLoaded", () => {
+      renderGrid();
+      // Petit délai pour laisser le temps au DOM de se placer avant de dessiner les flèches
+      setTimeout(drawArrows, 100);
+      window.addEventListener("resize", () => setTimeout(drawArrows, 100));
+    });
+
+  </script>
+</body>
+</html>
