@@ -135,8 +135,12 @@
 
     async function loadData() {
         try {
-            const response = await fetch('data.json');
-            if (!response.ok) throw new Error("HTTP Error");
+            // --- MODIFICATION ICI : CHEMIN RELATIF VERS LE DOSSIER ---
+            // Si votre HTML est à la racine, et le JSON dans M365/en/
+            const response = await fetch('M365/en/data.json');
+            
+            if (!response.ok) throw new Error(`HTTP Error ${response.status}: File not found`);
+            
             const json = await response.json();
             ARCH_DATA = json.architecture;
             
@@ -148,7 +152,9 @@
         } catch (error) {
             console.error(error);
             gridEl.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:red; padding:40px;">
-                Error loading data.json. <br>Ensure you are running on a local server (VS Code Live Server) or GitHub Pages.
+                <strong>Error loading JSON.</strong><br>
+                1. Check if 'M365/en/data.json' exists relative to this HTML file.<br>
+                2. Ensure you are using a Local Server or GitHub Pages (CORS security).
             </div>`;
         }
     }
@@ -258,6 +264,7 @@
       `;
 
       // Draw Connections (EMS E3 -> Suite -> Security -> E5)
+      // Note: These IDs must exist in data.json under "id" property of the cards
       connect("card-emsE3", "card-intuneSuite", svg, wrap);
       connect("card-intuneSuite", "card-e5Security", svg, wrap);
       connect("card-e5Security", "card-m365E5", svg, wrap);
