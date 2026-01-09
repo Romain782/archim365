@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Frontline Licensing — Architecture</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);"><i class="fa-solid fa-users-line"></i></div>
+            <div class="brand-text">
+              <h1>Frontline Licensing Architecture</h1>
+              <p>M365 F1 • F3 • F5 Add-ons</p>
+            </div>
+          </div>
+          <div class="nav-actions">
+            <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
+            <a href="frontline_matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <div class="view-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Frontline Maturity Paths</h2>
+            <p>From secure entry (F1) to empowered worker (F3) and advanced protection (F5).</p>
+          </div>
+        </div>
+
+        <div class="arch-board thin-scroll">
+          <div class="arch-layout" id="layoutWrap">
+            <svg class="flow-svg" id="flowSvg"></svg>
+            <div class="arch-grid" id="archGrid">
+                <div style="grid-column:1/-1; text-align:center; padding:40px; color:#64748b;">Loading Frontline Data...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <div class="modal-icon" id="mIcon"></div>
+            <div class="modal-text"><h2 id="mTitle"></h2><span id="mMeta"></span></div>
+          </div>
+          <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-scroll thin-scroll">
+          <div class="detail-grid">
+            <div>
+              <div class="detail-box">
+                <div class="kicker">Description</div><div id="mDesc" style="margin-bottom:20px;"></div>
+                <div class="kicker">Included</div><ul id="mIncludes" class="clean-list"></ul>
+              </div>
+            </div>
+            <div>
+              <div class="detail-box">
+                <div class="kicker">Outcomes</div><ul id="mOutcomes" class="clean-list"></ul>
+              </div>
+              <div class="detail-box" style="background:#f8fafc;">
+                <div class="kicker">Use Cases</div><ul id="mUseCases" class="clean-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let ARCH_DATA = {};
+    const gridEl = document.getElementById("archGrid");
+
+    async function loadData() {
+        try {
+            const response = await fetch('frontline_data.json');
+            if (!response.ok) throw new Error("HTTP Error");
+            const json = await response.json();
+            ARCH_DATA = json.architecture;
+            renderGrid();
+            setTimeout(drawArrows, 100);
+        } catch (error) { console.error(error); }
+    }
+
+    function renderGrid() {
+      if (!ARCH_DATA.structure) return;
+      gridEl.innerHTML = ARCH_DATA.structure.map(col => {
+        const cardsHtml = col.items.map(key => {
+          const d = ARCH_DATA.cards[key];
+          if(!d) return "";
+          const heroClass = d.isHero ? "card-hero" : "";
+          const domId = d.id ? `id="${d.id}"` : ""; 
+          const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${p}</span>`).join('')}</div>` : '';
+          return `
+            <div class="card ${heroClass}" ${domId} onclick="openModal('${key}')">
+              <div class="card-header">
+                <div class="card-icon ${d.iconClass}"><i class="${d.icon}"></i></div>
+                <div class="card-titles"><h3>${d.title}</h3><span>${d.sub}</span></div>
+              </div>
+              <div class="card-body">${d.desc}</div>
+              ${pillsHtml}
+            </div>`;
+        }).join('');
+        return `<div class="arch-col"><div class="col-header"><span class="dot" style="background:${col.dotColor}"></span> ${col.title}</div><div class="stack">${cardsHtml}</div></div>`;
+      }).join('');
+    }
+
+    // Modal Logic
+    const modalOverlay = document.getElementById("modalOverlay");
+    function openModal(key) {
+      const d = ARCH_DATA.cards[key]; if (!d) return;
+      document.getElementById("mIcon").className = `modal-icon ${d.iconClass}`;
+      document.getElementById("mIcon").innerHTML = `<i class="${d.icon}"></i>`;
+      document.getElementById("mTitle").innerText = d.title;
+      document.getElementById("mMeta").innerText = d.sub;
+      document.getElementById("mDesc").innerHTML = d.desc;
+      const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${x}</li>`).join('');
+      document.getElementById("mIncludes").innerHTML = mkList(d.includes);
+      document.getElementById("mOutcomes").innerHTML = mkList(d.outcomes);
+      document.getElementById("mUseCases").innerHTML = mkList(d.useCases);
+      modalOverlay.classList.add("active");
+    }
+    function closeModal() { modalOverlay.classList.remove("active"); }
+    modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
+
+    // Arrow Logic (Frontline Specific Path)
+    function drawArrows() {
+      const svg = document.getElementById("flowSvg");
+      const wrap = document.getElementById("layoutWrap");
+      svg.innerHTML = `<defs><marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" /></marker></defs>`;
+      
+      // Connect M365 F1 -> M365 F3
+      connect("card-f1", "card-f3", svg, wrap);
+      // Connect M365 F3 -> F5 Security
+      connect("card-f3", "card-f5sec", svg, wrap);
+      // Connect F5 Security -> M365 F5 (All up)
+      connect("card-f5sec", "card-f5", svg, wrap);
+    }
+
+    function connect(id1, id2, svg, wrap) {
+      const el1 = document.getElementById(id1); const el2 = document.getElementById(id2);
+      if(!el1 || !el2) return;
+      const r1 = el1.getBoundingClientRect(); const r2 = el2.getBoundingClientRect(); const wR = wrap.getBoundingClientRect();
+      const x1 = r1.right - wR.left; const y1 = r1.top - wR.top + (r1.height / 2);
+      const x2 = r2.left - wR.left; const y2 = r2.top - wR.top + (r2.height / 2);
+      const mx = x1 + (x2 - x1) / 2;
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("class", "flow-line");
+      path.setAttribute("d", `M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`);
+      path.setAttribute("marker-end", "url(#arrowHead)");
+      svg.appendChild(path);
+    }
+
+    document.addEventListener("DOMContentLoaded", loadData);
+    window.addEventListener("resize", () => setTimeout(drawArrows, 100));
+  </script>
+</body>
+</html>
