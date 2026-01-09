@@ -1,0 +1,95 @@
+{
+  "matrix": [
+    {
+      "category": "Identity & Access Management (Entra ID)",
+      "items": [
+        { "name": "MFA & SSO (Entra Free/Office)", "vals": [1, 1, 1, 0] },
+        { "name": "Conditional Access (Standard)", "vals": [1, 1, 1, 0] },
+        { "name": "Self-Service Password Reset (Cloud only)", "vals": [1, 1, 1, 0] },
+        { "name": "Self-Service Password Reset (Hybrid Writeback)", "vals": [1, 1, 1, 0] },
+        { "name": "Risk-based Conditional Access (Identity Protection)", "vals": [2, 1, 1, 0] },
+        { "name": "Privileged Identity Management (PIM)", "vals": [2, 1, 1, 0] },
+        { "name": "Access Reviews (Identity Governance)", "vals": [2, 1, 1, 0] },
+        { "name": "Entitlement Management", "vals": [2, 1, 1, 0] },
+        { "name": "Entra Verified ID", "vals": [0, 1, 1, 0] },
+        { "name": "Global Secure Access (SSE) - Internet Access", "vals": [2, 2, 0, 0] },
+        { "name": "Global Secure Access (SSE) - Private Access", "vals": [2, 2, 0, 0] }
+      ]
+    },
+    {
+      "category": "Endpoint Management (Intune)",
+      "items": [
+        { "name": "MDM / MAM (Intune Plan 1)", "vals": [1, 1, 0, 0] },
+        { "name": "Windows Autopilot", "vals": [1, 1, 0, 0] },
+        { "name": "Endpoint Analytics (Core capabilities)", "vals": [1, 1, 0, 0] },
+        { "name": "ConfigMgr (SCCM) Rights", "vals": [1, 1, 0, 0] },
+        { "name": "Endpoint Privilege Management (EPM)", "vals": [2, 1, 0, 0] },
+        { "name": "Remote Help", "vals": [2, 1, 0, 0] },
+        { "name": "Cloud PKI", "vals": [2, 1, 0, 0] },
+        { "name": "Enterprise App Management", "vals": [2, 1, 0, 0] },
+        { "name": "Advanced Analytics (Suite features)", "vals": [2, 1, 0, 0] },
+        { "name": "Firmware over-the-air (FOTA)", "vals": [2, 1, 0, 0] },
+        { "name": "Microsoft Tunnel for MAM", "vals": [2, 1, 0, 0] }
+      ]
+    },
+    {
+      "category": "Threat Protection (Defender XDR)",
+      "items": [
+        { "name": "Next-Gen Protection (Antivirus)", "vals": [1, 1, 1, 0] },
+        { "name": "Attack Surface Reduction (ASR) Rules", "vals": [1, 1, 1, 0] },
+        { "name": "Endpoint Detection & Response (EDR)", "vals": [2, 1, 1, 0] },
+        { "name": "Auto Investigation & Remediation (AIR)", "vals": [2, 1, 1, 0] },
+        { "name": "Threat & Vulnerability Mgmt (Core)", "vals": [1, 1, 1, 0] },
+        { "name": "Threat & Vulnerability Mgmt (Premium/Blocking)", "vals": [2, 1, 1, 0] },
+        { "name": "Safe Attachments (Sandboxing)", "vals": [2, 1, 1, 0] },
+        { "name": "Safe Links (URL Rewrite)", "vals": [2, 1, 1, 0] },
+        { "name": "Anti-Phishing (Impersonation protection)", "vals": [2, 1, 1, 0] },
+        { "name": "Defender for Identity (On-prem AD security)", "vals": [2, 1, 1, 0] },
+        { "name": "Cloud App Security (Discovery / Shadow IT)", "vals": [1, 1, 1, 0] },
+        { "name": "Cloud App Security (Full CASB / Session Control)", "vals": [2, 1, 1, 0] }
+      ]
+    },
+    {
+      "category": "Information Protection (Purview)",
+      "items": [
+        { "name": "Manual Sensitivity Labels", "vals": [1, 1, 0, 1] },
+        { "name": "Basic Message Encryption (OME)", "vals": [1, 1, 0, 1] },
+        { "name": "Advanced Message Encryption (Brand control)", "vals": [2, 1, 0, 1] },
+        { "name": "Auto-labeling (Client-side / Office Apps)", "vals": [2, 1, 0, 1] },
+        { "name": "Auto-labeling (Service-side / Data at rest)", "vals": [2, 1, 0, 1] },
+        { "name": "DLP (Exchange/SharePoint/OneDrive)", "vals": [1, 1, 0, 1] },
+        { "name": "DLP (Teams Chat & Channel)", "vals": [2, 1, 0, 1] },
+        { "name": "DLP (Endpoint)", "vals": [2, 1, 0, 1] },
+        { "name": "Double Key Encryption (DKE)", "vals": [2, 1, 0, 1] },
+        { "name": "Customer Key (BYOK)", "vals": [2, 1, 0, 1] }
+      ]
+    },
+    {
+      "category": "Compliance & Governance (Purview)",
+      "items": [
+        { "name": "eDiscovery (Standard / Core)", "vals": [1, 1, 0, 1] },
+        { "name": "eDiscovery (Premium / Advanced)", "vals": [2, 1, 0, 1] },
+        { "name": "Audit (Standard - 180 days)", "vals": [1, 1, 0, 1] },
+        { "name": "Audit (Premium - 1 year+)", "vals": [2, 1, 0, 1] },
+        { "name": "Insider Risk Management", "vals": [2, 1, 0, 1] },
+        { "name": "Communication Compliance", "vals": [2, 1, 0, 1] },
+        { "name": "Information Barriers", "vals": [2, 1, 0, 1] },
+        { "name": "Records Management", "vals": [2, 1, 0, 1] },
+        { "name": "Customer Lockbox", "vals": [2, 1, 0, 1] }
+      ]
+    },
+    {
+      "category": "Windows System & Apps",
+      "items": [
+        { "name": "Windows 11 Enterprise E3 License", "vals": [1, 1, 0, 0] },
+        { "name": "Windows Autopatch", "vals": [1, 1, 0, 0] },
+        { "name": "Universal Print", "vals": [1, 1, 0, 0] },
+        { "name": "Credential Guard", "vals": [1, 1, 0, 0] },
+        { "name": "M365 Apps for Enterprise (Desktop)", "vals": [1, 1, 0, 0] },
+        { "name": "M365 Apps for Mobile", "vals": [1, 1, 0, 0] },
+        { "name": "Power Automate (Seed rights)", "vals": [1, 1, 0, 0] },
+        { "name": "M365 Copilot", "vals": [2, 2, 0, 0] }
+      ]
+    }
+  ]
+}
