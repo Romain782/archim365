@@ -1,0 +1,151 @@
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Foundation",
+        "dotColor": "#0ea5e9",
+        "isFoundationGroup": true,
+        "items": ["o365e3", "winE3", "emsE3"]
+      },
+      {
+        "id": "col2",
+        "title": "Step-ups",
+        "dotColor": "#f59e0b",
+        "items": ["emsE5", "intuneSuite", "teamsPremium"]
+      },
+      {
+        "id": "col3",
+        "title": "Suites",
+        "dotColor": "#ec4899",
+        "items": ["e5Security", "e5Compliance"]
+      },
+      {
+        "id": "col4",
+        "title": "All-up",
+        "dotColor": "#1e293b",
+        "items": ["m365E5"]
+      }
+    ],
+    "cards": {
+      "o365e3": {
+        "title": "Office 365 E3",
+        "sub": "Productivity",
+        "icon": "fa-brands fa-microsoft",
+        "iconClass": "icon-blue",
+        "pills": ["Apps", "EXO", "SPO"],
+        "desc": "Productivity and collaboration baseline for information workers.",
+        "includes": ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1"],
+        "outcomes": ["Standardization", "Fluid Collaboration"],
+        "useCases": ["Intranet", "Exchange Migration", "Hybrid Work"],
+        "links": [{"label":"Service Description", "url":"#"}]
+      },
+      "winE3": {
+        "title": "Windows E3",
+        "sub": "OS Security",
+        "icon": "fa-brands fa-windows",
+        "iconClass": "icon-blue",
+        "desc": "Windows 11 Enterprise: Security, resilience, and advanced management.",
+        "includes": ["Windows Autopatch", "Universal Print", "Quick Machine Recovery"],
+        "outcomes": ["Reduced MTTR", "Consistent OS Security"],
+        "useCases": ["Fleet Modernization", "Patch Management"],
+        "links": [{"label":"Windows Autopatch", "url":"#"}]
+      },
+      "emsE3": {
+        "id": "card-emsE3",
+        "title": "EMS E3",
+        "sub": "Intune P1 + Entra P1",
+        "icon": "fa-solid fa-mobile-screen-button",
+        "iconClass": "icon-blue",
+        "desc": "The starting point for Identity & Device Management (MFA + MDM).",
+        "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1"],
+        "outcomes": ["Access Control", "Mobile Management"],
+        "useCases": ["MFA for all", "Mobile Enrollment"],
+        "links": [{"label":"Intune Docs", "url":"#"}]
+      },
+      "emsE5": {
+        "title": "EMS E5",
+        "sub": "Identity Premium",
+        "icon": "fa-solid fa-circle-up",
+        "iconClass": "icon-orange",
+        "desc": "Zero Trust Identity: Risk-based protection and automation.",
+        "includes": ["Entra ID P2", "Defender for Cloud Apps", "Defender for Identity"],
+        "outcomes": ["Identity Automation", "Shadow IT Visibility"],
+        "useCases": ["PIM (Just-in-time)", "Risk-based CA"],
+        "links": [{"label":"Entra ID P2", "url":"#"}]
+      },
+      "intuneSuite": {
+        "id": "card-intuneSuite",
+        "title": "Intune Suite",
+        "sub": "Endpoint Premium",
+        "icon": "fa-solid fa-cubes",
+        "iconClass": "icon-orange",
+        "desc": "Advanced Management: Privileges, Cloud PKI, Remote Help.",
+        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics"],
+        "outcomes": ["Vendor Consolidation", "Faster IT Support"],
+        "useCases": ["Remove Local Admin", "Cloud Certificates (No ADCS)"],
+        "links": [{"label":"Intune Suite", "url":"#"}]
+      },
+      "teamsPremium": {
+        "title": "Teams Premium",
+        "sub": "Comms Premium",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-orange",
+        "desc": "AI, Advanced Webinars, and Meeting Protection.",
+        "includes": ["Intelligent Recap (AI)", "Live Translation", "Watermarking"],
+        "outcomes": ["Meeting Productivity", "Confidentiality"],
+        "useCases": ["Board Meetings", "External Webinars"],
+        "links": [{"label":"Teams Premium", "url":"#"}]
+      },
+      "e5Security": {
+        "id": "card-e5Security",
+        "title": "Defender Suite",
+        "sub": "ex-E5 Security",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-red",
+        "desc": "Unified XDR Suite: Endpoint, Identity, Email, Apps.",
+        "includes": ["Defender for Endpoint P2", "Defender for Office P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "outcomes": ["SOC Consolidation", "Auto-Remediation"],
+        "useCases": ["Ransomware Protection", "Threat Hunting"],
+        "links": [{"label":"Defender XDR", "url":"#"}]
+      },
+      "e5Compliance": {
+        "title": "Purview Suite",
+        "sub": "ex-E5 Compliance",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-red",
+        "desc": "Data Governance and Regulatory Compliance.",
+        "includes": ["Information Protection", "DLP Endpoint/Teams", "Insider Risk", "eDiscovery Premium"],
+        "outcomes": ["Data Protection", "Regulatory Compliance"],
+        "useCases": ["Data Leak Prevention", "HR Investigations"],
+        "links": [{"label":"Purview", "url":"#"}]
+      },
+      "m365E5": {
+        "id": "card-m365E5",
+        "title": "Microsoft 365 E5",
+        "sub": "Ultimate Suite",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-dark",
+        "isHero": true,
+        "pills": ["Intune Suite", "XDR", "Purview"],
+        "desc": "Includes E3 + Defender + Purview + <strong>Full Intune Suite</strong> + SCU.",
+        "includes": ["All E3", "All Defender Suite", "All Purview Suite", "All Intune Suite", "Power BI Pro", "Phone System"],
+        "outcomes": ["Max Consolidation", "Integrated Security"],
+        "useCases": ["Zero Trust Transformation", "Full Stack Microsoft"],
+        "links": [{"label":"M365 Maps", "url":"#"}]
+      },
+      "soc": {
+        "title": "Azure Security",
+        "sub": "SOC Layer",
+        "icon": "fa-solid fa-cloud",
+        "iconClass": "icon-azure",
+        "desc": "Cloud-native SIEM and Multi-Cloud Infrastructure Protection.",
+        "includes": ["Microsoft Sentinel", "Defender for Cloud", "Log Analytics"],
+        "outcomes": ["Single Pane of Glass", "SOC Automation"],
+        "useCases": ["Unified SOC", "AWS/GCP Protection"],
+        "licensing": "Pay-as-you-go (Azure Consumption)",
+        "links": [{"label":"Sentinel", "url":"#"}]
+      }
+    }
+  }
+}
