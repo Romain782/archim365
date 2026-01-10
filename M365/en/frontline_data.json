@@ -1,0 +1,108 @@
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Entry Level",
+        "dotColor": "#10b981", 
+        "isFoundationGroup": true,
+        "items": ["m365F1"]
+      },
+      {
+        "id": "col2",
+        "title": "Standard",
+        "dotColor": "#0ea5e9",
+        "items": ["m365F3"]
+      },
+      {
+        "id": "col3",
+        "title": "F5 Add-ons",
+        "dotColor": "#f59e0b",
+        "items": ["f5Sec", "f5Comp"]
+      },
+      {
+        "id": "col4",
+        "title": "All-up",
+        "dotColor": "#1e293b",
+        "items": ["m365F5"]
+      }
+    ],
+    "cards": {
+      "m365F1": {
+        "id": "card-f1",
+        "title": "Microsoft 365 F1",
+        "sub": "Secure Entry (No Mail)",
+        "icon": "fa-solid fa-shield-cat",
+        "iconClass": "icon-green",
+        "desc": "Baseline security + Teams. Designed for workers who don't need email but need connection & security.",
+        "pills": ["Teams", "Intune P1", "Entra P1"],
+        "includes": ["Microsoft Teams (Walkie Talkie, Shifts)", "Intune Plan 1", "Entra ID P1", "SharePoint (Read only)"],
+        "outcomes": ["Device Management", "Secure Access", "Connected Workforce"],
+        "useCases": ["Retail Associates", "Secure BYOD", "Task Workers"],
+        "links": [{"label":"F1 vs F3", "url":"#"}]
+      },
+      "m365F3": {
+        "id": "card-f3",
+        "title": "Microsoft 365 F3",
+        "sub": "The Hero SKU",
+        "icon": "fa-solid fa-layer-group",
+        "iconClass": "icon-blue",
+        "isHero": true,
+        "desc": "The complete standard: Windows VDA rights, Power Platform, Email, and full Management.",
+        "pills": ["Win VDA", "Email 2GB", "Auto-mate"],
+        "includes": ["Everything in F1", "Exchange Kiosk (2GB)", "Windows 11 Enterprise E3 (VDA)", "Power Platform (Seed rights)", "Office Web/Mobile Apps"],
+        "outcomes": ["Full Empowerment", "Process Automation", "Virtualization Ready"],
+        "useCases": ["Firstline Managers", "Shared Devices", "VDI Users"],
+        "links": [{"label":"Service Description", "url":"#"}]
+      },
+      "f5Sec": {
+        "id": "card-f5sec",
+        "title": "F5 Security +",
+        "sub": "Add-on",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-orange",
+        "desc": "Upgrades F3 to XDR level: Endpoint, Identity, and Cloud App security.",
+        "includes": ["Defender for Endpoint P2", "Entra ID P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "outcomes": ["Advanced Threat Protection", "Identity Automation", "Risk-based Access"],
+        "useCases": ["Shared PC Security", "High-risk Environments"],
+        "links": [{"label":"F5 Security", "url":"#"}]
+      },
+      "f5Comp": {
+        "title": "F5 Compliance +",
+        "sub": "Add-on",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-orange",
+        "desc": "Advanced Governance: eDiscovery, Insider Risk, and Auto-labeling.",
+        "includes": ["Information Protection P2", "Insider Risk Mgmt", "eDiscovery Premium", "Communication Compliance"],
+        "outcomes": ["Data Governance", "Legal Compliance", "Internal Investigations"],
+        "useCases": ["Regulated Industries", "Data Leak Prevention"],
+        "links": [{"label":"F5 Compliance", "url":"#"}]
+      },
+      "m365F5": {
+        "id": "card-f5all",
+        "title": "M365 F5 Value",
+        "sub": "Ultimate Frontline",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-dark",
+        "desc": "The equivalent of E5 for Frontline workers. Maximum security, automation and compliance.",
+        "pills": ["XDR", "Automation", "Gov"],
+        "includes": ["M365 F3 Base", "F5 Security Add-on", "F5 Compliance Add-on"],
+        "outcomes": ["Zero Trust", "Full Parity with Enterprise"],
+        "useCases": ["Critical Infrastructure", "Healthcare Frontline"],
+        "links": [{"label":"M365 Maps", "url":"#"}]
+      },
+      "soc": {
+        "title": "Azure Security",
+        "sub": "SOC Layer",
+        "icon": "fa-solid fa-cloud",
+        "iconClass": "icon-azure",
+        "desc": "Cloud-native SIEM and Multi-Cloud Infrastructure Protection.",
+        "includes": ["Microsoft Sentinel", "Defender for Cloud", "Log Analytics"],
+        "outcomes": ["Single Pane of Glass", "SOC Automation"],
+        "useCases": ["Unified SOC", "AWS/GCP Protection"],
+        "licensing": "Pay-as-you-go (Azure Consumption)",
+        "links": [{"label":"Sentinel", "url":"#"}]
+      }
+    }
+  }
+}
