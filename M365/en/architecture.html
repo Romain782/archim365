@@ -137,7 +137,7 @@
         try {
             // --- MODIFICATION ICI : CHEMIN RELATIF VERS LE DOSSIER ---
             // Si votre HTML est à la racine, et le JSON dans M365/en/
-            const response = await fetch('M365/en/data.json');
+            const response = await fetch('data.json');
             
             if (!response.ok) throw new Error(`HTTP Error ${response.status}: File not found`);
             
