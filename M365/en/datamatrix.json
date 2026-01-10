@@ -46,90 +46,172 @@
         { "name": "Identity Governance (Full Suite)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
       ]
     },
-    {
-      "category": "Endpoint Management (Intune)",
+{
+      "category": "Endpoint Management (Microsoft Intune)",
       "items": [
-        { "name": "MDM / MAM (Intune Core)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Windows Autopilot", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "MDM / MAM (Intune Plan 1 Core)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Windows Autopilot (Pre-provisioning)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Windows LAPS (Local Admin Password Solution)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Endpoint Security (Antivirus, Disk Encryption profiles)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Windows Update for Business (WUfB)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Driver & Firmware Management", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Endpoint Analytics (Startup/Boot performance)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
         { "name": "ConfigMgr (SCCM) Co-management rights", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Endpoint Security Configuration", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Remote Help", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Endpoint Privilege Management (EPM)", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Cloud PKI", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Enterprise App Management", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Advanced Analytics", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Firmware over-the-air (FOTA)", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
-        { "name": "Microsoft Tunnel for MAM", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] }
+        { "name": "macOS Management (Platform SSO, Scripting)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0] },
+        
+        { "name": "Remote Help (Secure TeamViewer alternative)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Advanced Analytics (Anomaly detection, Battery health)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Microsoft Tunnel for MAM (VPN for Mobile Apps)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Firmware-over-the-air (FOTA - Zebra/Android)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Specialized Devices (AR/VR, Large Screen, Hololens)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0] },
+        
+        { "name": "Endpoint Privilege Management (EPM)", "vals": [2, 1, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Cloud PKI (Cloud Certificate Authority)", "vals": [2, 1, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
+        { "name": "Enterprise App Management (Auto-patching 3rd party)", "vals": [2, 1, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0] },
+        
+        { "name": "Copilot in Intune (Security Copilot)", "vals": [2, 2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0] }
       ]
     },
-    {
-      "category": "Threat Protection (Defender XDR)",
+{
+      "category": "Threat Protection (Endpoint - MDE)",
       "items": [
-        { "name": "Defender Antivirus (Next-Gen Protection)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
-        { "name": "Attack Surface Reduction (ASR)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "Next-Gen Protection (Defender Antivirus)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
+        { "name": "Attack Surface Reduction (ASR Rules)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
+        { "name": "Device Control (USB Protection)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
+        { "name": "Microsoft Defender for Endpoint Plan 1 (Core)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
         { "name": "Endpoint Detection & Response (EDR)", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
-        { "name": "Auto Investigation (AIR)", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
-        { "name": "Threat & Vuln Mgmt (Core)", "vals": [1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
-        { "name": "Threat & Vuln Mgmt (Premium)", "vals": [2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Safe Attachments & Safe Links", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Anti-Phishing (Impersonation)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Defender for Identity (AD On-prem)", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Cloud App Security (Discovery Only)", "vals": [1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "Cloud App Security (Full CASB)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+        { "name": "Automated Investigation & Remediation (AIR)", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
+        { "name": "Advanced Hunting (KQL Queries)", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
+        { "name": "Threat & Vulnerability Mgmt (Core Capabilities)", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
+        { "name": "Vulnerability Mgmt Add-on (Blocking, Certs)", "vals": [2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2] },
+        { "name": "Web Content Filtering", "vals": [2, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] }
       ]
     },
     {
-      "category": "Information Protection (Purview)",
+      "category": "Threat Protection (Email & Collab - MDO)",
       "items": [
-        { "name": "Manual Sensitivity Labels", "vals": [1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "Auto-labeling (Client-side Office)", "vals": [2, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Auto-labeling (Service-side Data at Rest)", "vals": [2, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Basic Message Encryption (OME)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "Advanced Message Encryption", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "DLP (Exchange/SharePoint/OneDrive)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "DLP (Teams Chat & Channel)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "DLP (Endpoint / Devices)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Double Key Encryption (DKE)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Customer Key (BYOK)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] }
+        { "name": "EOP Standard (Anti-spam / Anti-malware)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Safe Attachments (Sandbox Analysis)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Safe Links (URL Rewrite / Time-of-click)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Anti-Phishing (Impersonation Protection)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Real-time Detections", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Threat Explorer (Deep Analysis)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Automated Investigation (Email & Collab)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Attack Simulation Training", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] }
       ]
     },
     {
+      "category": "Threat Protection (Identity & Apps)",
+      "items": [
+        { "name": "Defender for Identity (On-prem AD Signals)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "UEBA (User Entity Behavior Analytics)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Cloud App Discovery (Shadow IT Basics)", "vals": [1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Cloud App Security (Full CASB / Proxy)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "App Governance (OAuth App Behavior)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      ]
+    },
+    {
+      "category": "Threat Protection (XDR Cross-Domain)",
+      "items": [
+        { "name": "Unified XDR Portal (security.microsoft.com)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Incidents (Cross-domain Correlation)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Self-Healing (Cross-domain Automation)", "vals": [2, 1, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Microsoft Secure Score", "vals": [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Copilot for Security (AI Assistant)", "vals": [2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      ]
+    },
+{
+      "category": "Information Protection (Purview DLP & MIP)",
+      "items": [
+        { "name": "Manual Sensitivity Labels (Office Apps)", "vals": [1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Basic Message Encryption (OME)", "vals": [1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "DLP for Exchange, SharePoint, OneDrive", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Manual Retention Labels (Basic)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "AIP Unified Labeling Client (On-prem Scanner - Discovery)", "vals": [1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        
+        { "name": "Auto-labeling (Client-side / Office Apps)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "Auto-labeling (Service-side / Data at Rest)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "Endpoint DLP (Windows/macOS Restrictions)", "vals": [2, 1, 0, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Teams DLP (Chat & Channel Protection)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "Advanced Message Encryption (Branding, Expiration)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        
+        { "name": "Exact Data Match (EDM - Custom Fingerprinting)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "Trainable Classifiers (Machine Learning / OCR)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "AIP On-prem Scanner (Enforcement/Auto-labeling)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Double Key Encryption (DKE)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "Customer Key (BYOK for Tenant)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] },
+        { "name": "Default Label Policies (Mandatory Labeling)", "vals": [2, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0] }
+      ]
+    },
+{
       "category": "Compliance & Governance (Purview)",
       "items": [
-        { "name": "eDiscovery (Standard / Core)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "eDiscovery (Premium / Advanced)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Audit (Standard - 180 days)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "Audit (Premium - 1 year+)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Insider Risk Management", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Communication Compliance", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Information Barriers", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Records Management", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-        { "name": "Customer Lockbox", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] }
+        { "name": "eDiscovery (Standard / Core) - Search & Export", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "eDiscovery (Premium) - Custodians, Review Sets", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Audit (Standard) - 180 Days Retention", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Audit (Premium) - 1 Year + High Value Signals", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Communication Compliance (Teams/Email Analysis)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Insider Risk Management (User Behavior)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Information Barriers (Segmented comms)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Customer Lockbox (Microsoft Access Approval)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Customer Key (Service Encryption BYOK)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Data Lifecycle Mgmt (Basic Retention Policies)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Records Management (File Plans, Event-based)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Privileged Access Management (Office 365)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Adaptive Policy Scopes (Dynamic targeting)", "vals": [2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Microsoft Graph Data Connect (Analytics)", "vals": [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0] }
       ]
     },
-    {
-      "category": "Windows System & Apps",
+{
+      "category": "Windows System & Apps (OS & Office)",
       "items": [
-        { "name": "Windows 11 Enterprise E3 License", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
-        { "name": "Windows 11 Enterprise E5 License", "vals": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1] },
-        { "name": "Windows Autopatch", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
-        { "name": "Universal Print", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
-        { "name": "Credential Guard", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
-        { "name": "Desktop Apps (Word, Excel, PPT)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "Web/Mobile Apps Only", "vals": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0] },
-        { "name": "M365 Copilot", "vals": [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0] }
+        { "name": "Windows 10/11 Pro (OEM License)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
+        { "name": "Windows 11 Enterprise Edition (OS Upgrade)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "Virtualization Rights (VDA for Azure/VDI)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "LTSC Access (Long-Term Servicing Channel)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "MDT & Autopilot Deployment Rights", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1] },
+        
+        { "name": "M365 Apps for Enterprise (Word, Excel, PPT Desktop)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "M365 Apps for Web & Mobile (Core editing)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Group Policy Management (ADMX)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
+        
+        { "name": "Universal Print (Cloud Printing)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "Windows Autopatch (Automated Updates)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "Test Base for M365", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        
+        { "name": "BitLocker (OS Feature)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] },
+        { "name": "Credential Guard & App Control", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "AppLocker Management", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        
+        { "name": "Copilot for M365 (AI in Word/Excel/PPT)", "vals": [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0] },
+        { "name": "Copilot for Windows (OS Assistant)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1] }
       ]
     },
-    {
-      "category": "Office 365 Services",
+{
+      "category": "Office 365 Services (Exchange, Teams, SharePoint)",
       "items": [
-        { "name": "Exchange Online (Plan 1 - 50GB)", "vals": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0] },
-        { "name": "Exchange Online (Plan 2 - 100GB)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "SharePoint Online / OneDrive", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
-        { "name": "Microsoft Teams", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
-        { "name": "Phone System", "vals": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0] },
-        { "name": "Audio Conferencing", "vals": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0] },
-        { "name": "Power BI Pro", "vals": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] }
+        { "name": "Exchange Online Plan 1 (50GB Mailbox)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Exchange Online Plan 2 (100GB Mailbox)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Online Archiving (1.5TB / Auto-expanding)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Inactive Mailboxes (Retention after departure)", "vals": [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        
+        { "name": "SharePoint Online (1TB + 10GB/user)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "OneDrive for Business (1TB Limit)", "vals": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0] },
+        { "name": "OneDrive for Business (5TB to 25TB Limit)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        
+        { "name": "Microsoft Teams (Collab, Chat, Meetings)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Teams Phone Standard (Cloud PBX)", "vals": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0] },
+        { "name": "Audio Conferencing (Dial-in numbers)", "vals": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0] },
+        { "name": "Teams Premium (AI Recap, Translation, Webinars)", "vals": [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0] },
+        
+        { "name": "Power BI Pro (Visual Analytics)", "vals": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0] },
+        { "name": "Power Automate (Seed Rights - M365 Context)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Power Apps (Seed Rights - Canvas Apps)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        
+        { "name": "Viva Engage (ex-Yammer) & Viva Connections", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Microsoft Stream (Enterprise Video)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Microsoft Planner (Task Mgmt)", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Microsoft Bookings", "vals": [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] }
       ]
     }
   ]
