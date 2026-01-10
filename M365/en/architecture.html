@@ -6,7 +6,6 @@
   <title>M365 Licensing — Architecture</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  
   <link rel="stylesheet" href="style.css"/>
 </head>
 
@@ -24,19 +23,18 @@
             </div>
           </div>
           
-<div class="nav-actions">
-  <div class="persona-switch">
-    <span class="ps-btn active-ent">Enterprise</span>
-    <a href="frontline_arch.html" class="ps-btn">Frontline</a>
-  </div>
+          <div class="nav-actions">
+            <div class="persona-switch">
+              <span class="ps-btn active-ent">Enterprise</span>
+              <a href="frontline_arch.html" class="ps-btn">Frontline</a>
+            </div>
 
-  <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
-  <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
-</div>
-
-  <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
-  <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
-</div>
+            <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
+            <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <main class="container">
       <div class="view-panel">
@@ -129,7 +127,8 @@
     </div>
 
   </div>
-<script>
+
+  <script>
     /* ============================================================
        LOGIC: FETCH JSON & RENDER
     ============================================================ */
@@ -140,7 +139,7 @@
 
     async function loadData() {
         try {
-            // CORRECTION ICI : Chemin relatif simple car les fichiers sont dans le même dossier
+            // CHARGEMENT DATA.JSON (Enterprise)
             const response = await fetch('data.json');
             
             if (!response.ok) throw new Error(`HTTP Error ${response.status}: File not found`);
@@ -149,16 +148,15 @@
             ARCH_DATA = json.architecture;
             
             renderGrid();
-            footerEl.style.display = "flex"; // Show footer after load
+            footerEl.style.display = "flex"; 
             
-            // Draw arrows after DOM is rendered
             setTimeout(drawArrows, 100);
         } catch (error) {
             console.error(error);
             gridEl.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:red; padding:40px;">
                 <strong>Error loading JSON.</strong><br>
-                1. Check if 'data.json' is in the same folder as this HTML file.<br>
-                2. If testing locally, use VS Code Live Server (browsers block JSON fetch on file://).
+                1. Check if 'data.json' is in the same folder.<br>
+                2. Use VS Code Live Server or GitHub Pages.
             </div>`;
         }
     }
@@ -168,7 +166,6 @@
 
       gridEl.innerHTML = ARCH_DATA.structure.map(col => {
         
-        // Generate Cards
         const cardsHtml = col.items.map(key => {
           const d = ARCH_DATA.cards[key];
           if(!d) return "";
@@ -176,7 +173,6 @@
           const heroClass = d.isHero ? "card-hero" : "";
           const domId = d.id ? `id="${d.id}"` : ""; 
           
-          // Pills
           const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${p}</span>`).join('')}</div>` : '';
 
           return `
@@ -197,7 +193,6 @@
           `;
         }).join('');
 
-        // Wrapper "Foundation"
         let contentHtml = `<div class="stack">${cardsHtml}</div>`;
         if (col.isFoundationGroup) {
           contentHtml = `<div class="foundation-group"><span class="foundation-label">Foundation Base</span>${contentHtml}</div>`;
@@ -223,7 +218,6 @@
       const d = ARCH_DATA.cards[key];
       if (!d) return;
 
-      // Populate Data
       document.getElementById("mIcon").className = `modal-icon ${d.iconClass}`;
       document.getElementById("mIcon").innerHTML = `<i class="${d.icon}"></i>`;
       document.getElementById("mTitle").innerText = d.title;
@@ -231,7 +225,6 @@
       document.getElementById("mDesc").innerHTML = d.desc;
       document.getElementById("mLicensing").innerText = d.licensing || "Per User License (User SL).";
 
-      // Lists Helper
       const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${x}</li>`).join('');
       const mkLinks = (arr) => (arr||[]).map(l => `<a href="${l.url}" target="_blank" class="btn" style="width:100%; justify-content:space-between; margin-bottom:5px; font-size:12px;">${l.label} <i class="fa-solid fa-external-link-alt"></i></a>`).join('');
 
@@ -252,13 +245,12 @@
     });
 
     /* ============================================================
-       ARROW DRAWING (Orthogonal SI Style)
+       ARROW DRAWING
     ============================================================ */
     function drawArrows() {
       const svg = document.getElementById("flowSvg");
       const wrap = document.getElementById("layoutWrap");
       
-      // Clean
       svg.innerHTML = `
         <defs>
           <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
@@ -267,8 +259,6 @@
         </defs>
       `;
 
-      // Draw Connections (EMS E3 -> Suite -> Security -> E5)
-      // Note: These IDs must exist in data.json under "id" property of the cards
       connect("card-emsE3", "card-intuneSuite", svg, wrap);
       connect("card-intuneSuite", "card-e5Security", svg, wrap);
       connect("card-e5Security", "card-m365E5", svg, wrap);
@@ -283,18 +273,12 @@
       const r2 = el2.getBoundingClientRect();
       const wR = wrap.getBoundingClientRect();
 
-      // Start: Middle Right of Card 1
       const x1 = r1.right - wR.left;
       const y1 = r1.top - wR.top + (r1.height / 2);
-
-      // End: Middle Left of Card 2
       const x2 = r2.left - wR.left;
       const y2 = r2.top - wR.top + (r2.height / 2);
-
-      // Midpoint
       const mx = x1 + (x2 - x1) / 2;
 
-      // Path
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       const d = `M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`;
       
@@ -305,7 +289,6 @@
       svg.appendChild(path);
     }
 
-    // Init
     document.addEventListener("DOMContentLoaded", () => {
       loadData();
       window.addEventListener("resize", () => setTimeout(drawArrows, 100));
