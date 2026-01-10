@@ -71,7 +71,7 @@
         "desc": "Zero Trust Identity: Risk-based protection and automation.",
         "includes": ["Entra ID P2", "Defender for Cloud Apps", "Defender for Identity"],
         "outcomes": ["Full Identity Protection", "Shadow IT Visibility"],
-        "useCases": ["PIM (Just-in-time)", "Risk-based CA", "On-prem Identity Protection],
+        "useCases": ["PIM (Just-in-time)", "Risk-based CA", "On-prem Identity Protection"],
         "links": [{"label":"Entra ID P2", "url":"https://www.microsoft.com/en-us/microsoft-365/enterprise-mobility-security/compare-plans-and-pricing"}]
       },
       "intuneSuite": {
