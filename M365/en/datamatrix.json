@@ -8,18 +8,42 @@
     "Win 11 Pro", "Win 11 E3", "Win 11 E5"
   ],
   "matrix": [
-    {
-      "category": "Identity & Access Management (Entra ID)",
+{
+      "category": "Identity & Access (Microsoft Entra ID)",
       "items": [
-        { "name": "MFA & SSO (Entra Free/Office)", "vals": [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
-        { "name": "Conditional Access (Standard)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
-        { "name": "Password Protection (Banned Pwd)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Self-Service Pwd Reset (Hybrid Writeback)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Risk-based Conditional Access (Identity Protection)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Directory Objects Limit (Users/Devices)", "vals": [1, 1, 1, 0, 1, 1, 3, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "SLA 99.99% Availability", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Premium Reporting (Sign-in & Audit Logs)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        
+        { "name": "Multi-Factor Authentication (MFA) - Standard", "vals": [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Conditional Access (Granular Policies)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Passwordless Auth (FIDO2 / Hello for Business)", "vals": [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Custom Banned Passwords (Smart Lockout)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Self-Service Password Reset (Cloud Only)", "vals": [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Self-Service Password Reset (Hybrid Writeback)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        
+        { "name": "Group-Based Licensing", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Dynamic Groups (Rules-based membership)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Administrative Units (Delegated Admin)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Entra Connect Health (Hybrid Monitoring)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Cloud Provisioning (HR to Cloud Sync)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        
+        { "name": "Application Proxy (On-prem Remote Access)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Cloud App Discovery (Shadow IT Basics)", "vals": [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "B2B Guest Access & Collaboration", "vals": [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        
+        { "name": "Risk-Based Conditional Access (ID Protection)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
         { "name": "Privileged Identity Management (PIM)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Access Reviews (Identity Governance)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Entitlement Management", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-        { "name": "Global Secure Access (SSE)", "vals": [2, 2, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+        { "name": "Access Reviews (Recertification)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Entitlement Management (Access Packages)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Lifecycle Workflows (Joiner/Mover/Leaver)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        
+        { "name": "Entra Verified ID (Premium)", "vals": [2, 2, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Permissions Management (CIEM / CloudKnox)", "vals": [2, 2, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Workload Identities Premium (Apps/Service Principals)", "vals": [2, 2, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Global Secure Access (Internet Access)", "vals": [2, 2, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Global Secure Access (Private Access)", "vals": [2, 2, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Identity Governance (Full Suite)", "vals": [2, 1, 1, 0, 2, 1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
       ]
     },
     {
