@@ -123,8 +123,7 @@
     </div>
 
   </div>
-
-  <script>
+<script>
     /* ============================================================
        LOGIC: FETCH JSON & RENDER
     ============================================================ */
@@ -135,8 +134,7 @@
 
     async function loadData() {
         try {
-            // --- MODIFICATION ICI : CHEMIN RELATIF VERS LE DOSSIER ---
-            // Si votre HTML est à la racine, et le JSON dans M365/en/
+            // CORRECTION ICI : Chemin relatif simple car les fichiers sont dans le même dossier
             const response = await fetch('data.json');
             
             if (!response.ok) throw new Error(`HTTP Error ${response.status}: File not found`);
@@ -153,8 +151,8 @@
             console.error(error);
             gridEl.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:red; padding:40px;">
                 <strong>Error loading JSON.</strong><br>
-                1. Check if 'M365/en/data.json' exists relative to this HTML file.<br>
-                2. Ensure you are using a Local Server or GitHub Pages (CORS security).
+                1. Check if 'data.json' is in the same folder as this HTML file.<br>
+                2. If testing locally, use VS Code Live Server (browsers block JSON fetch on file://).
             </div>`;
         }
     }
