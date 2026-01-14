@@ -62,7 +62,7 @@
         "icon": "fa-solid fa-shield-halved",
         "iconClass": "icon-orange",
         "desc": "Upgrades F3 to XDR level: Endpoint, Identity, and Cloud App security.",
-        "includes": ["Defender for Endpoint P2", "Entra ID P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "includes": ["Defender for Endpoint P2", "Entra ID P2", "Defender for Identity", "Defender For Office P2", "Defender for Cloud Apps"],
         "outcomes": ["Advanced Threat Protection", "Identity Automation", "Risk-based Access"],
         "useCases": ["Shared PC Security", "High-risk Environments"],
         "links": [{"label":"F5 Security", "url":"#"}]
