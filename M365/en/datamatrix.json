@@ -60,11 +60,11 @@
         { "name": "ConfigMgr (SCCM) Co-management rights", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
         { "name": "macOS Management (Platform SSO, Scripting)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
         
-        { "name": "Remote Help (Secure TeamViewer alternative)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
-        { "name": "Advanced Analytics (Anomaly detection, Battery health)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
-        { "name": "Microsoft Tunnel for MAM (VPN for Mobile Apps)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
-        { "name": "Firmware-over-the-air (FOTA - Zebra/Android)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
-        { "name": "Specialized Devices (AR/VR, Large Screen, Hololens)", "vals": [2, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
+        { "name": "Remote Help (Secure TeamViewer alternative)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
+        { "name": "Advanced Analytics (Anomaly detection, Battery health)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
+        { "name": "Microsoft Tunnel for MAM (VPN for Mobile Apps)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
+        { "name": "Firmware-over-the-air (FOTA - Zebra/Android)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
+        { "name": "Specialized Devices (AR/VR, Large Screen, Hololens)", "vals": [1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
         
         { "name": "Endpoint Privilege Management (EPM)", "vals": [2, 1, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
         { "name": "Cloud PKI (Cloud Certificate Authority)", "vals": [2, 1, 0, 0, 2, 2, 0, 0, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
