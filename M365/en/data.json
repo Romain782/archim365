@@ -129,10 +129,10 @@
         "isHero": true,
         "pills": ["Intune Suite", "XDR", "Purview", "Security Copilot", "PBI Pro", "Teams Phone"],
         "desc": "Includes E3 + Defender + Purview + <strong>Full Intune Suite</strong> + SCU.",
-        "includes": ["All E3", "All Defender Suite", "All Purview Suite", "All Intune Suite", "Power BI Pro", "Phone System", "400SCUs/month/1000 users"],
+        "includes": ["All E3", "All Defender Suite", "All Purview Suite", "All Intune Suite 🆕", "Power BI Pro", "Phone System", "400SCUs/month/1000 users 🆕"],
         "outcomes": ["Max Consolidation", "Integrated Security"],
         "useCases": ["Zero Trust Transformation", "Full Stack Microsoft"],
-        "links": [{"label":"M365 Maps", "url":"#"}]
+        "links": [{"label":"M365 E5", "url":"https://www.microsoft.com/en-us/microsoft-365/enterprise/e5"}]
       },
       "soc": {
         "title": "Azure Security",
