@@ -35,10 +35,10 @@
         "iconClass": "icon-blue",
         "pills": ["Apps", "EXO", "SPO"],
         "desc": "Productivity and collaboration baseline for information workers.",
-        "includes": ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1"],
+        "includes": ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1 🆕"],
         "outcomes": ["Standardization", "Fluid Collaboration"],
         "useCases": ["Intranet", "Exchange Migration", "Hybrid Work"],
-        "links": [{"label":"Service Description", "url":"#"}]
+        "links": [{"label":"Service Description", "url":"https://www.microsoft.com/fr-fr/microsoft-365/enterprise/office-365-e3"}]
       },
       "winE3": {
         "title": "Windows E3",
@@ -47,9 +47,9 @@
         "iconClass": "icon-blue",
         "desc": "Windows 11 Enterprise: Security, resilience, and advanced management.",
         "includes": ["Windows Autopatch", "Universal Print", "Bitlocker Mgt", "VDA Rights"],
-        "outcomes": ["Reduced MTTR", "Consistent OS Security"],
+        "outcomes": ["Reduced MTTR", "Consistent OS Security", "Attack Surface Reduction Rules"],
         "useCases": ["Fleet Modernization", "Patch Management"],
-        "links": [{"label":"Windows Autopatch", "url":"https://www.microsoft.com/fr-fr/microsoft-365/windows/windows-11-enterprise"}]
+        "links": [{"label":"Windows Enterprise", "url":"https://www.microsoft.com/fr-fr/microsoft-365/windows/windows-11-enterprise"}]
       },
       "emsE3": {
         "id": "card-emsE3",
@@ -58,10 +58,10 @@
         "icon": "fa-solid fa-mobile-screen-button",
         "iconClass": "icon-blue",
         "desc": "The starting point for Identity & Device Management (MFA + MDM).",
-        "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1", "Partial Intune Suite"],
-        "outcomes": ["Access Control", "Mobile Management", "Basic Data Protection", "Remote Help", "Intune Plan 2", "Adv. Endpoint Analytics"],
+        "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1", "Partial Intune Suite 🆕"],
+        "outcomes": ["Conditional Access", "Mobile Management", "Basic Data Protection", "Remote Help 🆕", "Intune Plan 2 🆕", "Adv. Endpoint Analytics 🆕"],
         "useCases": ["MFA for all", "Mobile Enrollment", "Conditional Access", "Endpoint & Mobile security"],
-        "links": [{"label":"Intune Docs", "url":"https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/what-is-intune"}]
+        "links": [{"label":"Enterprise Mobility + Security doc", "url":"https://learn.microsoft.com/en-us/enterprise-mobility-security/"}]
       },
       "emsE5": {
         "title": "EMS E5",
@@ -81,7 +81,7 @@
         "icon": "fa-solid fa-cubes",
         "iconClass": "icon-orange",
         "desc": "Advanced Management: Privileges, Cloud PKI, Remote Help.",
-        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics", "Intune Plan 2", "Endpoint Privilege Management", "Enterprise App Management", "Tunnel for MAM"],
+        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics", "Intune Plan 2", "Enterprise App Management", "Tunnel for MAM"],
         "outcomes": ["Vendor Consolidation", "Faster IT Support"],
         "useCases": ["Remove Local Admin", "Cloud Certificates (No ADCS)", "Remote Help"],
         "links": [{"label":"Intune Suite", "url":"https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/intune-add-ons"}]
@@ -95,7 +95,7 @@
         "includes": ["Intelligent Recap (AI)", "Live Translation", "Watermarking"],
         "outcomes": ["Meeting Productivity", "Confidentiality"],
         "useCases": ["Board Meetings", "External Webinars"],
-        "links": [{"label":"Teams Premium", "url":"#"}]
+        "links": [{"label":"Teams Premium", "url":"https://www.microsoft.com/en-us/microsoft-teams/premium"}]
       },
       "e5Security": {
         "id": "card-e5Security",
