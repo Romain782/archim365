@@ -38,7 +38,7 @@
         "includes": ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1 🆕"],
         "outcomes": ["Standardization", "Fluid Collaboration"],
         "useCases": ["Intranet", "Exchange Migration", "Hybrid Work"],
-        "links": [{"label":"Service Description", "url":"https://www.microsoft.com/fr-fr/microsoft-365/enterprise/office-365-e3"}]
+        "links": [{"label":"Office E3", "url":"https://www.microsoft.com/en-us/microsoft-365/enterprise/office-365-e3"}]
       },
       "winE3": {
         "title": "Windows E3",
