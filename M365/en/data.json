@@ -3,7 +3,7 @@
     "structure": [
       {
         "id": "col1",
-        "title": "Foundation",
+        "title": "Microsoft 365 E3",
         "dotColor": "#0ea5e9",
         "isFoundationGroup": true,
         "items": ["o365e3", "winE3", "emsE3"]
