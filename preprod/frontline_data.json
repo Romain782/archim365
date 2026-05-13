@@ -5,7 +5,6 @@
         "id": "col1",
         "title": "Entry Level",
         "dotColor": "#10b981", 
-        "isFoundationGroup": true,
         "items": ["m365F1"]
       },
       {
@@ -34,7 +33,7 @@
         "sub": "Secure Entry (No Mail)",
         "icon": "fa-solid fa-shield-cat",
         "iconClass": "icon-green",
-        "desc": "Baseline security + Teams. Designed for workers who don't need email  but need connection & security.",
+        "desc": "Baseline security + Teams. Designed for workers who don't need email but need connection & security.",
         "pills": ["Teams", "Intune P1", "Entra P1"],
         "includes": ["Microsoft Teams (Walkie Talkie, Shifts)", "Intune Plan 1", "Entra ID P1", "SharePoint (Read only)"],
         "outcomes": ["Device Management", "Secure Access", "Connected Workforce"],
@@ -90,18 +89,6 @@
         "outcomes": ["Zero Trust", "Full Parity with Enterprise"],
         "useCases": ["Critical Infrastructure", "Healthcare Frontline"],
         "links": [{"label":"M365 Maps", "url":"#"}]
-      },
-      "soc": {
-        "title": "Azure Security",
-        "sub": "SOC Layer",
-        "icon": "fa-solid fa-cloud",
-        "iconClass": "icon-azure",
-        "desc": "Cloud-native SIEM and Multi-Cloud Infrastructure Protection.",
-        "includes": ["Microsoft Sentinel", "Defender for Cloud", "Log Analytics"],
-        "outcomes": ["Single Pane of Glass", "SOC Automation"],
-        "useCases": ["Unified SOC", "AWS/GCP Protection"],
-        "licensing": "Pay-as-you-go (Azure Consumption)",
-        "links": [{"label":"Sentinel", "url":"#"}]
       }
     }
   }
