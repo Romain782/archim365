@@ -1,0 +1,85 @@
+{
+  "columns": [
+    "M365 E3", "M365 E5", "M365 E7", "Defender Suite", "Purview Suite", "Agent 365", 
+    "Entra P1", "Entra P2", "Entra Suite", "Intune Suite",
+    "M365 F1", "M365 F3", "Defender Suite FLW", "Purview Suite FLW", "Def+Purv FLW"
+  ],
+  "matrix": [
+    {
+      "category": "Artificial Intelligence & Copilot",
+      "items": [
+        { "name": "Microsoft 365 Copilot (Word, Excel, PPT)", "vals": [2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Copilot Chat", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Microsoft Security Copilot (SCU included)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Copilot Studio for Teams (Chatbots)", "vals": [2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      ]
+    },
+    {
+      "category": "Agent Observability & Governance",
+      "items": [
+        { "name": "Agent Identity & Registry", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Basic agent usage insights", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Advanced agent usage insights & Agent Map", "vals": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Admin agent governance actions", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Lifecycle management for agents", "vals": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      ]
+    },
+    {
+      "category": "Agent Security",
+      "items": [
+        { "name": "Discovery of AI on endpoints", "vals": [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Block unsanctioned local endpoint agents", "vals": [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Data Security Posture Management for agents", "vals": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Data loss prevention for agents", "vals": [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] }
+      ]
+    },
+    {
+      "category": "Identity & Access (Microsoft Entra ID)",
+      "items": [
+        { "name": "Multi-Factor Authentication (MFA) - Standard", "vals": [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0] },
+        { "name": "Conditional Access (Granular Policies)", "vals": [1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0] },
+        { "name": "Risk-Based Conditional Access (ID Protection)", "vals": [2, 1, 1, 0, 0, 0, 0, 1, 1, 0, 2, 2, 1, 0, 1] },
+        { "name": "Privileged Identity Management (PIM)", "vals": [2, 1, 1, 0, 0, 0, 0, 1, 1, 0, 2, 2, 1, 0, 1] },
+        { "name": "Global Secure Access (Internet & Private Access)", "vals": [2, 2, 2, 0, 0, 0, 0, 0, 1, 0, 2, 2, 0, 0, 0] }
+      ]
+    },
+    {
+      "category": "Endpoint Management (Microsoft Intune)",
+      "items": [
+        { "name": "MDM / MAM (Intune Plan 1 Core)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0] },
+        { "name": "Endpoint Privilege Management (EPM)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0] },
+        { "name": "Cloud PKI (Cloud Certificate Authority)", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0] },
+        { "name": "Enterprise App Management", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 0] }
+      ]
+    },
+    {
+      "category": "Threat Protection (Defender XDR)",
+      "items": [
+        { "name": "Microsoft Defender for Endpoint Plan 1", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Endpoint Detection & Response (EDR - P2)", "vals": [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1] },
+        { "name": "Defender for Office P2 (Safe Links, Attachments)", "vals": [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1] },
+        { "name": "Defender for Identity", "vals": [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1] },
+        { "name": "Defender for Cloud Apps", "vals": [2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1] }
+      ]
+    },
+    {
+      "category": "Information Protection & Governance (Purview)",
+      "items": [
+        { "name": "Manual Sensitivity Labels (Office Apps)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Auto-labeling (Client-side / Service-side)", "vals": [2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "Insider Risk Management", "vals": [2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] },
+        { "name": "eDiscovery (Premium)", "vals": [2, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1] }
+      ]
+    },
+    {
+      "category": "Office 365 Services & Voice",
+      "items": [
+        { "name": "Exchange Online (100GB Mailbox)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        { "name": "Exchange Kiosk (2GB)", "vals": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+        { "name": "Microsoft Teams (Collab, Chat, Meetings)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] },
+        { "name": "Teams Phone Standard", "vals": [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0] },
+        { "name": "Power Platform (Seed Rights)", "vals": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0] }
+      ]
+    }
+  ]
+}
