@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M365 Licensing — Frontline Architecture</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo" style="background: var(--accent-mint);"><i class="fa-solid fa-users-line"></i></div>
+            <div class="brand-text">
+              <h1>Frontline Architecture</h1>
+              <p>F1 to F5 Pathways • Vision 2026</p>
+            </div>
+          </div>
+          <div class="nav-actions">
+            <div class="persona-switch">
+              <a href="architecture.html" class="ps-btn">Enterprise</a>
+              <span class="ps-btn active-front">Frontline</span>
+            </div>
+            <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
+            <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <div class="view-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Frontline Maturity</h2>
+            <p>Du socle sécurisé F1 à la protection avancée F5.</p>
+          </div>
+          <button class="btn-info" onclick="toggleLegal()"><i class="fa-solid fa-circle-info"></i> Info & Légal</button>
+        </div>
+
+        <div class="arch-board thin-scroll">
+          <div class="arch-layout" id="layoutWrap">
+            <svg class="flow-svg" id="flowSvg"></svg>
+            <div class="arch-grid" id="archGrid">
+                </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="legal-overlay" id="legalOverlay">
+        <div class="legal-modal">
+            <h3>Information & Légal</h3>
+            <div class="legal-body">
+                <p><strong>Auteur :</strong> Romain Curel (rocurel@microsoft.com)</p>
+                <p>Ceci est un document de synthèse informel. Microsoft ne garantit pas l'exactitude contractuelle de ce support.</p>
+            </div>
+            <button class="btn" onclick="toggleLegal()">Fermer</button>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    let ARCH_DATA = {};
+    async function loadData() {
+        try {
+            const response = await fetch('frontline_data.json');
+            const json = await response.json();
+            ARCH_DATA = json.architecture;
+            renderGrid();
+            setTimeout(drawArrows, 150);
+        } catch (error) { console.error(error); }
+    }
+
+    function renderGrid() {
+      if (!ARCH_DATA.structure) return;
+      document.getElementById("archGrid").innerHTML = ARCH_DATA.structure.map(col => {
+        const cardsHtml = col.items.map(key => {
+          const d = ARCH_DATA.cards[key];
+          if(!d) return "";
+          const heroClass = d.isHero ? "card-hero" : "";
+          const domId = d.id ? `id="${d.id}"` : ""; 
+          return `
+            <div class="card ${heroClass}" ${domId} onclick="openModal('${key}')">
+              <div class="card-header">
+                <div class="card-icon ${d.iconClass}"><i class="${d.icon}"></i></div>
+                <div class="card-titles"><h3>${d.title}</h3><span>${d.sub}</span></div>
+              </div>
+              <div class="card-body">${d.desc}</div>
+              ${d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${p}</span>`).join('')}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+        return `<div class="arch-col"><div class="col-header">${col.title}</div><div class="stack">${cardsHtml}</div></div>`;
+      }).join('');
+    }
+
+    function drawArrows() {
+      const svg = document.getElementById("flowSvg");
+      const wrap = document.getElementById("layoutWrap");
+      svg.innerHTML = `<defs><marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#475569" /></marker></defs>`;
+      connect("card-f1", "card-f3", svg, wrap);
+      connect("card-f3", "card-f5all", svg, wrap);
+    }
+    // ... Fonctions connect, modal, legal identiques ...
+    document.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>
