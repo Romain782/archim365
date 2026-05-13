@@ -1,0 +1,176 @@
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Microsoft 365 E3",
+        "dotColor": "#0ea5e9",
+        "isFoundationGroup": true,
+        "items": ["o365e3", "winE3", "emsE3"]
+      },
+      {
+        "id": "col2",
+        "title": "Step-ups",
+        "dotColor": "#f59e0b",
+        "items": ["entraSuite", "intuneSuite", "teamsPremium"]
+      },
+      {
+        "id": "col3",
+        "title": "Suites",
+        "dotColor": "#ec4899",
+        "items": ["e5Security", "e5Compliance", "agent365"]
+      },
+      {
+        "id": "col4",
+        "title": "All-up",
+        "dotColor": "#fbbf24",
+        "items": ["m365E5", "m365E7"]
+      }
+    ],
+    "cards": {
+      "o365e3": {
+        "title": "Office 365 E3",
+        "sub": "Productivity & Mail Security",
+        "icon": "fa-brands fa-microsoft",
+        "iconClass": "icon-blue",
+        "pills": ["Apps", "EXO", "SPO"],
+        "desc": "Productivity and collaboration baseline for information workers.",
+        "includes": ["M365 Apps for Enterprise", "Exchange Online P2", "SharePoint & OneDrive", "Defender for Office P1"],
+        "outcomes": ["Standardization", "Fluid Collaboration"],
+        "useCases": ["Intranet", "Exchange Migration", "Hybrid Work"],
+        "links": [{"label":"Office E3", "url":"https://www.microsoft.com/en-us/microsoft-365/enterprise/office-365-e3"}]
+      },
+      "winE3": {
+        "title": "Windows E3",
+        "sub": "OS Security",
+        "icon": "fa-brands fa-windows",
+        "iconClass": "icon-blue",
+        "desc": "Windows 11 Enterprise: Security, resilience, and advanced management.",
+        "includes": ["Windows Autopatch", "Universal Print", "Bitlocker Mgt", "VDA Rights"],
+        "outcomes": ["Reduced MTTR", "Consistent OS Security", "Attack Surface Reduction Rules"],
+        "useCases": ["Fleet Modernization", "Patch Management"],
+        "links": [{"label":"Windows Enterprise", "url":"https://www.microsoft.com/fr-fr/microsoft-365/windows/windows-11-enterprise"}]
+      },
+      "emsE3": {
+        "id": "card-emsE3",
+        "title": "EMS E3",
+        "sub": "Intune P1 + Entra P1 + AIP P1",
+        "icon": "fa-solid fa-mobile-screen-button",
+        "iconClass": "icon-blue",
+        "desc": "The starting point for Identity & Device Management (MFA + MDM).",
+        "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1"],
+        "outcomes": ["Conditional Access", "Mobile Management", "Basic Data Protection"],
+        "useCases": ["MFA for all", "Mobile Enrollment", "Conditional Access", "Endpoint & Mobile security"],
+        "links": [{"label":"Enterprise Mobility + Security doc", "url":"https://learn.microsoft.com/en-us/enterprise-mobility-security/"}]
+      },
+      "entraSuite": {
+        "title": "Microsoft Entra Suite",
+        "sub": "Next-Gen Identity",
+        "icon": "fa-solid fa-id-card-clip",
+        "iconClass": "icon-azure",
+        "desc": "Secure Access Service Edge (SASE) and Identity Governance.",
+        "includes": ["Entra ID P2", "Entra Private Access", "Entra Internet Access", "Entra ID Governance"],
+        "outcomes": ["Zero Trust Architecture", "VPN Replacement", "Automated Lifecycles"],
+        "useCases": ["Secure Remote Work", "Vendor Access Management"],
+        "links": [{"label":"Entra Suite", "url":"#"}]
+      },
+      "intuneSuite": {
+        "id": "card-intuneSuite",
+        "title": "Intune Suite",
+        "sub": "Endpoint Premium Tools",
+        "icon": "fa-solid fa-cubes",
+        "iconClass": "icon-orange",
+        "desc": "Advanced Management: Privileges, Cloud PKI, Remote Help.",
+        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics", "Intune Plan 2", "Enterprise App Management", "Tunnel for MAM"],
+        "outcomes": ["Vendor Consolidation", "Faster IT Support"],
+        "useCases": ["Remove Local Admin", "Cloud Certificates (No ADCS)", "Remote Help"],
+        "links": [{"label":"Intune Suite", "url":"https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/intune-add-ons"}]
+      },
+      "teamsPremium": {
+        "title": "Teams Premium",
+        "sub": "Comms Premium",
+        "icon": "fa-solid fa-video",
+        "iconClass": "icon-orange",
+        "desc": "AI, Advanced Webinars, and Meeting Protection.",
+        "includes": ["Intelligent Recap (AI)", "Live Translation", "Watermarking"],
+        "outcomes": ["Meeting Productivity", "Confidentiality"],
+        "useCases": ["Board Meetings", "External Webinars"],
+        "links": [{"label":"Teams Premium", "url":"https://www.microsoft.com/en-us/microsoft-teams/premium"}]
+      },
+      "e5Security": {
+        "id": "card-e5Security",
+        "title": "Defender Suite",
+        "sub": "ex-E5 Security",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-red",
+        "desc": "Unified XDR Suite: Endpoint, Identity, Email, Apps.",
+        "includes": ["Defender for Endpoint P2", "Defender for Office P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "outcomes": ["SOC Consolidation", "Auto-Remediation"],
+        "useCases": ["Ransomware Protection", "Threat Hunting"],
+        "links": [{"label":"Defender XDR", "url":"https://learn.microsoft.com/en-us/defender-xdr/microsoft-365-defender"}]
+      },
+      "e5Compliance": {
+        "title": "Purview Suite",
+        "sub": "ex-E5 Compliance",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-red",
+        "desc": "Data Governance and Regulatory Compliance.",
+        "includes": ["Information Protection", "DLP Endpoint/Teams", "Insider Risk", "eDiscovery Premium"],
+        "outcomes": ["Data Protection", "Regulatory Compliance"],
+        "useCases": ["Data Leak Prevention", "HR Investigations", "Shadow IT"],
+        "links": [{"label":"Purview", "url":"https://learn.microsoft.com/en-us/purview/purview"}]
+      },
+      "agent365": {
+        "title": "Agent 365",
+        "sub": "Agent Management",
+        "icon": "fa-solid fa-robot",
+        "iconClass": "icon-teal",
+        "desc": "Lifecycle, security, and observability for AI agents.",
+        "includes": ["Agent 365 License", "Agent Security Posture", "Advanced Usage Insights", "Agent Map"],
+        "outcomes": ["AI Governance", "Secure AI Workflows"],
+        "useCases": ["Managing Custom Copilots", "Shadow AI Discovery"],
+        "links": [{"label":"Agent 365", "url":"#"}]
+      },
+      "m365E5": {
+        "id": "card-m365E5",
+        "title": "Microsoft 365 E5",
+        "sub": "Advanced Suite",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-dark",
+        "isHero": true,
+        "pills": ["XDR", "Purview", "PBI Pro", "Teams Phone"],
+        "desc": "Includes E3 + Defender + Purview + <strong>Security Copilot (400 SCUs)</strong>[cite: 740].",
+        "includes": ["All E3", "All Defender Suite", "All Purview Suite", "Microsoft Security Copilot", "Power BI Pro", "Phone System"],
+        "outcomes": ["Max Consolidation", "Integrated Security"],
+        "useCases": ["Zero Trust Transformation", "Full Stack Microsoft"],
+        "links": [{"label":"M365 E5", "url":"https://www.microsoft.com/en-us/microsoft-365/enterprise/e5"}]
+      },
+      "m365E7": {
+        "id": "card-m365E7",
+        "title": "Microsoft 365 E7",
+        "sub": "The Ultimate Frontier",
+        "icon": "fa-solid fa-wand-magic-sparkles",
+        "iconClass": "icon-gold",
+        "isHero": true,
+        "pills": ["M365 Copilot", "Agent Security", "Agent Gov", "All E5"],
+        "desc": "The ultimate suite bringing together E5, <strong>Microsoft 365 Copilot</strong>, Copilot Chat, and advanced Agent Security/Governance.",
+        "includes": ["All E5 capabilities", "Microsoft 365 Copilot", "Agent Security Posture Management", "Agent Lifecycle Management", "Block unsanctioned local agents"],
+        "outcomes": ["Full AI Empowerment", "Absolute AI Security Control"],
+        "useCases": ["Enterprise-wide AI deployment", "Next-Gen Data & Agent Protection"],
+        "links": [{"label":"M365 E7", "url":"#"}]
+      },
+      "soc": {
+        "title": "Azure Security",
+        "sub": "SOC Layer",
+        "icon": "fa-solid fa-cloud",
+        "iconClass": "icon-azure",
+        "desc": "Cloud-native SIEM and Multi-Cloud Infrastructure Protection.",
+        "includes": ["Microsoft Sentinel", "Defender for Cloud", "Log Analytics"],
+        "outcomes": ["Single Pane of Glass", "SOC Automation"],
+        "useCases": ["Unified SOC", "AWS/GCP Protection"],
+        "licensing": "Pay-as-you-go (Azure Consumption)",
+        "links": [{"label":"Sentinel", "url":"#"}]
+      }
+    }
+  }
+}
