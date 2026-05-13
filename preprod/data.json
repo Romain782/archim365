@@ -1,34 +1,28 @@
 {
   "architecture": {
-    "structure": [
+    "mainColumns": [
       {
         "id": "col1",
-        "title": "Fondations M365",
-        "dotColor": "#38bdf8",
-        "groupType": "E3",
+        "title": "M365 E3",
+        "groupClass": "group-e3",
         "items": ["o365e3", "winE3", "emsE3"]
       },
       {
         "id": "col2",
-        "title": "Step-ups & Add-ons",
-        "dotColor": "#fcd34d",
-        "items": ["entraSuite", "intuneSuite", "teamsPremium"]
+        "title": "M365 E5",
+        "groupClass": "group-e5",
+        "items": ["purview", "defender", "secCopilot", "pbiPro", "teamsPremium", "intuneSuite"]
       },
       {
         "id": "col3",
-        "title": "Suites Avancées",
-        "dotColor": "#6366f1",
-        "groupType": "E5",
-        "items": ["e5Security", "e5Compliance", "agent365"]
-      },
-      {
-        "id": "col4",
-        "title": "Offres All-up",
-        "dotColor": "#fbbf24",
-        "groupType": "E7",
-        "items": ["m365E5", "m365E7"]
+        "title": "M365 E7",
+        "groupClass": "group-e7",
+        "items": ["m365Copilot", "copilotChat", "agent365"]
       }
     ],
+    "addOns": {
+      "items": ["emsE5", "agent365", "intuneSuite", "entraSuite", "teamsPremium", "copilotStudio", "m365Copilot"]
+    },
     "cards": {
       "o365e3": {
         "title": "Office 365 E3",
@@ -49,117 +43,153 @@
         "iconClass": "icon-blue",
         "desc": "Windows 11 Enterprise: Security, resilience, and advanced management.",
         "includes": ["Windows Autopatch", "Universal Print", "Bitlocker Mgt", "VDA Rights"],
-        "outcomes": ["Reduced MTTR", "Consistent OS Security", "Attack Surface Reduction Rules"],
+        "outcomes": ["Reduced MTTR", "Consistent OS Security"],
         "useCases": ["Fleet Modernization", "Patch Management"],
-        "links": [{"label":"Windows Enterprise", "url":"https://www.microsoft.com/fr-fr/microsoft-365/windows/windows-11-enterprise"}]
+        "links": [{"label":"Windows Enterprise", "url":"#"}]
       },
       "emsE3": {
-        "id": "card-emsE3",
-        "title": "EMS E3",
-        "sub": "Intune P1 + Entra P1 + AIP P1",
+        "title": "EM+S E3",
+        "sub": "Core Identity & Management",
         "icon": "fa-solid fa-mobile-screen-button",
         "iconClass": "icon-blue",
-        "desc": "The starting point for Identity & Device Management (MFA + MDM).",
-        "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1"],
+        "desc": "The starting point for Identity & Device Management. Includes Partial Intune Suite.",
+        "pills": ["Intune P1", "Entra P1"],
+        "includes": ["Intune Plan 1 & Entra ID Plan 1", "Information Protection P1", "Partial Intune Suite (Remote Help, Intune P2, Advanced Endpoint Analytics)"],
         "outcomes": ["Conditional Access", "Mobile Management", "Basic Data Protection"],
-        "useCases": ["MFA for all", "Mobile Enrollment", "Conditional Access", "Endpoint & Mobile security"],
-        "links": [{"label":"Enterprise Mobility + Security", "url":"https://learn.microsoft.com/en-us/enterprise-mobility-security/"}]
+        "useCases": ["MFA for all", "Mobile Enrollment"],
+        "links": [{"label":"EM+S Overview", "url":"#"}]
       },
-      "entraSuite": {
-        "title": "Microsoft Entra Suite",
-        "sub": "Next-Gen Identity",
-        "icon": "fa-solid fa-id-card-clip",
-        "iconClass": "icon-azure",
-        "desc": "Secure Access Service Edge (SASE) and Identity Governance.",
-        "includes": ["Entra ID P2", "Entra Private Access", "Entra Internet Access", "Entra ID Governance"],
-        "outcomes": ["Zero Trust Architecture", "VPN Replacement", "Automated Lifecycles"],
-        "useCases": ["Secure Remote Work", "Vendor Access Management"],
-        "links": [{"label":"Entra Suite", "url":"#"}]
+      "purview": {
+        "title": "Purview Suite",
+        "sub": "Data Governance",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-indigo",
+        "desc": "Advanced Compliance, eDiscovery, and Data Loss Prevention.",
+        "includes": ["Information Protection P2", "Endpoint & Teams DLP", "Insider Risk Management", "eDiscovery Premium"],
+        "outcomes": ["Regulatory Compliance", "Data Protection"],
+        "useCases": ["Data Leak Prevention", "HR Investigations"],
+        "links": [{"label":"Microsoft Purview", "url":"#"}]
+      },
+      "defender": {
+        "title": "Defender Suite",
+        "sub": "Unified XDR",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-indigo",
+        "desc": "Full Cross-Domain Threat Protection.",
+        "includes": ["Defender for Endpoint P2", "Defender for Office P2", "Defender for Identity", "Defender for Cloud Apps"],
+        "outcomes": ["SOC Consolidation", "Auto-Remediation"],
+        "useCases": ["Ransomware Protection", "Threat Hunting"],
+        "links": [{"label":"Defender XDR", "url":"#"}]
+      },
+      "secCopilot": {
+        "title": "Security Copilot",
+        "sub": "AI for SOC",
+        "icon": "fa-solid fa-user-shield",
+        "iconClass": "icon-indigo",
+        "desc": "AI assistant for security operations. Included in E5 with 400 SCUs.",
+        "includes": ["Incident Summarization", "Reverse Engineering Scripts", "KQL Generation"],
+        "outcomes": ["Faster Incident Response", "Skill Augmentation"],
+        "useCases": ["SOC Analyst Assistance", "Threat Intelligence"],
+        "links": [{"label":"Security Copilot", "url":"#"}]
+      },
+      "pbiPro": {
+        "title": "Power BI Pro",
+        "sub": "Data Visualization",
+        "icon": "fa-solid fa-chart-pie",
+        "iconClass": "icon-indigo",
+        "desc": "Self-service analytics and data visualization capabilities.",
+        "includes": ["Publishing and Sharing Reports", "Paginated Reports", "Data Modeling"],
+        "outcomes": ["Data-Driven Decisions", "Democratized Analytics"],
+        "useCases": ["Executive Dashboards", "Departmental Reporting"],
+        "links": [{"label":"Power BI", "url":"#"}]
+      },
+      "m365Copilot": {
+        "title": "M365 Copilot",
+        "sub": "Generative AI in Apps",
+        "icon": "fa-solid fa-wand-magic-sparkles",
+        "iconClass": "icon-gold",
+        "desc": "Your everyday AI companion integrated into Word, Excel, PowerPoint, Outlook, and Teams.",
+        "includes": ["Content Generation", "Meeting Summaries", "Data Analysis in Excel"],
+        "outcomes": ["Increased Productivity", "Creativity Boost"],
+        "useCases": ["Drafting Proposals", "Catching up on Meetings"],
+        "links": [{"label":"Copilot for M365", "url":"#"}]
+      },
+      "copilotChat": {
+        "title": "Copilot Chat",
+        "sub": "Enterprise AI Chat",
+        "icon": "fa-solid fa-comments",
+        "iconClass": "icon-gold",
+        "desc": "Secure, enterprise-grade AI chat grounded in your organizational data.",
+        "includes": ["Enterprise Data Protection", "Graph Grounding", "Web Search Capability"],
+        "outcomes": ["Secure Information Retrieval", "Knowledge Democratization"],
+        "useCases": ["Internal Knowledge Search", "Brainstorming"],
+        "links": [{"label":"Copilot Chat", "url":"#"}]
+      },
+      "agent365": {
+        "title": "Agent 365",
+        "sub": "AI Agent Management",
+        "icon": "fa-solid fa-robot",
+        "iconClass": "icon-gold",
+        "desc": "Lifecycle, security, and observability for autonomous AI agents.",
+        "includes": ["Agent Registry", "Agent Security Posture Management", "Advanced Usage Insights"],
+        "outcomes": ["AI Governance", "Secure AI Workflows"],
+        "useCases": ["Managing Custom Copilots", "Shadow AI Discovery"],
+        "links": [{"label":"Agent 365", "url":"#"}]
+      },
+      "emsE5": {
+        "title": "EM+S E5",
+        "sub": "Advanced Identity",
+        "icon": "fa-solid fa-id-badge",
+        "iconClass": "icon-dark",
+        "desc": "Step-up offering advanced identity protection and cloud app security.",
+        "includes": ["Entra ID P2 (Risk-based CA, PIM)", "Defender for Cloud Apps", "Information Protection P2"],
+        "outcomes": ["Zero Trust Identity", "Shadow IT Control"],
+        "useCases": ["Just-in-Time Access", "Compromised Account Detection"],
+        "links": [{"label":"EM+S Pricing", "url":"#"}]
       },
       "intuneSuite": {
-        "id": "card-intuneSuite",
         "title": "Intune Suite",
         "sub": "Endpoint Premium Tools",
         "icon": "fa-solid fa-cubes",
         "iconClass": "icon-orange",
         "desc": "Advanced Management: Privileges, Cloud PKI, Remote Help.",
-        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Advanced Analytics", "Intune Plan 2", "Enterprise App Management", "Tunnel for MAM"],
+        "includes": ["Endpoint Privilege Mgmt", "Cloud PKI", "Remote Help", "Enterprise App Management"],
         "outcomes": ["Vendor Consolidation", "Faster IT Support"],
-        "useCases": ["Remove Local Admin", "Cloud Certificates (No ADCS)", "Remote Help"],
-        "links": [{"label":"Intune Suite", "url":"https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/intune-add-ons"}]
+        "useCases": ["Remove Local Admin", "Cloud Certificates"],
+        "links": [{"label":"Intune Suite", "url":"#"}]
+      },
+      "entraSuite": {
+        "title": "Entra Suite",
+        "sub": "Next-Gen Identity & Access",
+        "icon": "fa-solid fa-id-card-clip",
+        "iconClass": "icon-azure",
+        "desc": "Secure Access Service Edge (SASE) and Identity Governance.",
+        "includes": ["Entra ID P2", "Entra Private Access", "Entra Internet Access", "Entra ID Governance"],
+        "outcomes": ["Zero Trust Architecture", "VPN Replacement"],
+        "useCases": ["Secure Remote Work", "Vendor Access Management"],
+        "links": [{"label":"Entra Suite", "url":"#"}]
       },
       "teamsPremium": {
         "title": "Teams Premium",
-        "sub": "Comms Premium",
+        "sub": "Advanced Communications",
         "icon": "fa-solid fa-video",
         "iconClass": "icon-orange",
         "desc": "AI, Advanced Webinars, and Meeting Protection.",
-        "includes": ["Intelligent Recap (AI)", "Live Translation", "Watermarking"],
+        "includes": ["Intelligent Recap", "Live Translation", "Watermarking", "Advanced Webinars"],
         "outcomes": ["Meeting Productivity", "Confidentiality"],
         "useCases": ["Board Meetings", "External Webinars"],
-        "links": [{"label":"Teams Premium", "url":"https://www.microsoft.com/en-us/microsoft-teams/premium"}]
+        "links": [{"label":"Teams Premium", "url":"#"}]
       },
-      "e5Security": {
-        "id": "card-defender",
-        "title": "Defender Suite",
-        "sub": "ex-E5 Security",
-        "icon": "fa-solid fa-shield-halved",
-        "iconClass": "icon-red",
-        "desc": "Unified XDR Suite: Endpoint, Identity, Email, Apps.",
-        "includes": ["Defender for Endpoint P2", "Defender for Office P2", "Defender for Identity", "Defender for Cloud Apps"],
-        "outcomes": ["SOC Consolidation", "Auto-Remediation"],
-        "useCases": ["Ransomware Protection", "Threat Hunting"],
-        "links": [{"label":"Defender XDR", "url":"https://learn.microsoft.com/en-us/defender-xdr/microsoft-365-defender"}]
-      },
-      "e5Compliance": {
-        "title": "Purview Suite",
-        "sub": "ex-E5 Compliance",
-        "icon": "fa-solid fa-scale-balanced",
-        "iconClass": "icon-red",
-        "desc": "Data Governance and Regulatory Compliance.",
-        "includes": ["Information Protection", "DLP Endpoint/Teams", "Insider Risk", "eDiscovery Premium"],
-        "outcomes": ["Data Protection", "Regulatory Compliance"],
-        "useCases": ["Data Leak Prevention", "HR Investigations", "Shadow IT"],
-        "links": [{"label":"Purview", "url":"https://learn.microsoft.com/en-us/purview/purview"}]
-      },
-      "agent365": {
-        "title": "Agent 365",
-        "sub": "Agent Management",
-        "icon": "fa-solid fa-robot",
+      "copilotStudio": {
+        "title": "Copilot Studio",
+        "sub": "Custom AI Creation",
+        "icon": "fa-solid fa-code-branch",
         "iconClass": "icon-teal",
-        "desc": "Lifecycle, security, and observability for AI agents.",
-        "includes": ["Agent 365 License", "Agent Security Posture", "Advanced Usage Insights", "Agent Map"],
-        "outcomes": ["AI Governance", "Secure AI Workflows"],
-        "useCases": ["Managing Custom Copilots", "Shadow AI Discovery"],
-        "links": [{"label":"Agent 365", "url":"#"}]
-      },
-      "m365E5": {
-        "id": "card-m365E5",
-        "title": "Microsoft 365 E5",
-        "sub": "Advanced Suite",
-        "icon": "fa-solid fa-crown",
-        "iconClass": "icon-dark",
-        "isHero": true,
-        "pills": ["XDR", "Purview", "PBI Pro", "Teams Phone"],
-        "desc": "Includes E3 + Defender + Purview + Security Copilot (400 SCUs). Intune Suite is an add-on.",
-        "includes": ["All E3", "All Defender Suite", "All Purview Suite", "Microsoft Security Copilot", "Power BI Pro", "Phone System"],
-        "outcomes": ["Max Consolidation", "Integrated Security"],
-        "useCases": ["Zero Trust Transformation", "Full Stack Microsoft"],
-        "links": [{"label":"M365 E5", "url":"https://www.microsoft.com/en-us/microsoft-365/enterprise/e5"}]
-      },
-      "m365E7": {
-        "id": "card-m365E7",
-        "title": "Microsoft 365 E7",
-        "sub": "The Ultimate Frontier",
-        "icon": "fa-solid fa-wand-magic-sparkles",
-        "iconClass": "icon-gold",
-        "isHero": true,
-        "pills": ["M365 Copilot", "Agent Security", "Agent Gov", "All E5"],
-        "desc": "The ultimate suite bringing together E5, <strong>Microsoft 365 Copilot</strong>, Copilot Chat, and advanced Agent Security/Governance.",
-        "includes": ["All E5 capabilities", "Microsoft 365 Copilot", "Agent Security Posture Management", "Agent Lifecycle Management", "Block unsanctioned local agents"],
-        "outcomes": ["Full AI Empowerment", "Absolute AI Security Control"],
-        "useCases": ["Enterprise-wide AI deployment", "Next-Gen Data & Agent Protection"],
-        "links": [{"label":"M365 E7", "url":"#"}]
+        "desc": "Low-code platform to build and customize AI assistants and standalone copilots.",
+        "includes": ["Custom Copilot Creation", "Plugin Development", "Data Connectors"],
+        "outcomes": ["Tailored AI Experiences", "Automated Workflows"],
+        "useCases": ["HR Assistant Bot", "IT Helpdesk Copilot"],
+        "links": [{"label":"Copilot Studio", "url":"#"}]
       },
       "soc": {
         "title": "Azure Security",
