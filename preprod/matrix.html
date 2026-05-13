@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M365 Licensing — Sales Matrix</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-inner">
+          <div class="brand">
+            <div class="brand-logo"><i class="fa-brands fa-microsoft"></i></div>
+            <div class="brand-text">
+              <h1>Licensing Matrix</h1>
+              <p>Comparaison Granulaire • Vision 2026</p>
+            </div>
+          </div>
+          <div class="nav-actions">
+            <div class="persona-switch">
+              <a href="architecture.html" class="ps-btn">Enterprise</a>
+              <a href="frontline_arch.html" class="ps-btn">Frontline</a>
+            </div>
+            <a href="architecture.html" class="btn"><i class="fa-solid fa-diagram-project"></i> Architecture</a>
+            <button class="btn active"><i class="fa-solid fa-table"></i> Sales Matrix</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container" style="max-width: 100%;"> 
+      <div class="view-panel">
+        <div class="matrix-search-container">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="q" class="search-input" placeholder="Filtrer par fonctionnalité (ex: Copilot, Intune, Purview...)" autofocus>
+          </div>
+        </div>
+
+        <div class="matrix-table-container thin-scroll">
+          <table>
+            <thead id="mxThead"></thead>
+            <tbody id="mxTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let MATRIX_DATA = {};
+    async function loadData() {
+      try {
+        const response = await fetch('datamatrix.json');
+        MATRIX_DATA = await response.json();
+        renderTable();
+      } catch (error) { console.error(error); }
+    }
+
+    function renderTable() {
+      const query = document.getElementById("q").value.toLowerCase().trim();
+      if (!MATRIX_DATA.columns) return;
+      
+      let headerHtml = `<tr><th>Fonctionnalités & Services</th>`;
+      MATRIX_DATA.columns.forEach(col => { headerHtml += `<th>${col}</th>`; });
+      headerHtml += `</tr>`;
+      document.getElementById("mxThead").innerHTML = headerHtml;
+
+      let bodyHtml = "";
+      MATRIX_DATA.matrix.forEach(group => {
+        const matches = group.items.filter(i => i.name.toLowerCase().includes(query));
+        if (matches.length > 0) {
+          bodyHtml += `<tr class="tr-category"><td colspan="${MATRIX_DATA.columns.length + 1}">${group.category}</td></tr>`;
+          matches.forEach(item => {
+            bodyHtml += `<tr>
+              <td class="feature-name">${item.name}</td>
+              ${item.vals.map(val => {
+                if (val === 1) return `<td><div class="dot-badge dot-inc"><i class="fa-solid fa-check"></i></div></td>`;
+                if (val === 2) return `<td><div class="dot-badge dot-add"><i class="fa-solid fa-plus"></i></div></td>`;
+                return `<td><span class="dot-no"><i class="fa-solid fa-minus"></i></span></td>`;
+              }).join('')}
+            </tr>`;
+          });
+        }
+      });
+      document.getElementById("mxTbody").innerHTML = bodyHtml;
+    }
+
+    document.getElementById("q").addEventListener("input", renderTable);
+    document.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>
