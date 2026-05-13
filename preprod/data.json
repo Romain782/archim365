@@ -3,27 +3,29 @@
     "structure": [
       {
         "id": "col1",
-        "title": "Microsoft 365 E3",
-        "dotColor": "#0ea5e9",
-        "isFoundationGroup": true,
+        "title": "Fondations M365",
+        "dotColor": "#38bdf8",
+        "groupType": "E3",
         "items": ["o365e3", "winE3", "emsE3"]
       },
       {
         "id": "col2",
-        "title": "Step-ups",
-        "dotColor": "#f59e0b",
+        "title": "Step-ups & Add-ons",
+        "dotColor": "#fcd34d",
         "items": ["entraSuite", "intuneSuite", "teamsPremium"]
       },
       {
         "id": "col3",
-        "title": "Suites",
-        "dotColor": "#ec4899",
+        "title": "Suites Avancées",
+        "dotColor": "#6366f1",
+        "groupType": "E5",
         "items": ["e5Security", "e5Compliance", "agent365"]
       },
       {
         "id": "col4",
-        "title": "All-up",
+        "title": "Offres All-up",
         "dotColor": "#fbbf24",
+        "groupType": "E7",
         "items": ["m365E5", "m365E7"]
       }
     ],
@@ -61,7 +63,7 @@
         "includes": ["Intune Plan 1", "Entra ID Plan 1", "Information Protection P1"],
         "outcomes": ["Conditional Access", "Mobile Management", "Basic Data Protection"],
         "useCases": ["MFA for all", "Mobile Enrollment", "Conditional Access", "Endpoint & Mobile security"],
-        "links": [{"label":"Enterprise Mobility + Security doc", "url":"https://learn.microsoft.com/en-us/enterprise-mobility-security/"}]
+        "links": [{"label":"Enterprise Mobility + Security", "url":"https://learn.microsoft.com/en-us/enterprise-mobility-security/"}]
       },
       "entraSuite": {
         "title": "Microsoft Entra Suite",
@@ -98,7 +100,7 @@
         "links": [{"label":"Teams Premium", "url":"https://www.microsoft.com/en-us/microsoft-teams/premium"}]
       },
       "e5Security": {
-        "id": "card-e5Security",
+        "id": "card-defender",
         "title": "Defender Suite",
         "sub": "ex-E5 Security",
         "icon": "fa-solid fa-shield-halved",
@@ -139,7 +141,7 @@
         "iconClass": "icon-dark",
         "isHero": true,
         "pills": ["XDR", "Purview", "PBI Pro", "Teams Phone"],
-        "desc": "Includes E3 + Defender + Purview + <strong>Security Copilot (400 SCUs)</strong>[cite: 740].",
+        "desc": "Includes E3 + Defender + Purview + Security Copilot (400 SCUs). Intune Suite is an add-on.",
         "includes": ["All E3", "All Defender Suite", "All Purview Suite", "Microsoft Security Copilot", "Power BI Pro", "Phone System"],
         "outcomes": ["Max Consolidation", "Integrated Security"],
         "useCases": ["Zero Trust Transformation", "Full Stack Microsoft"],
