@@ -581,11 +581,24 @@
       const goals = ARCH_DATA.goals || [];
       if (!goals.length) { goalStripEl.style.display = 'none'; pathCaptionEl.style.display = 'none'; return; }
 
-      goalStripEl.innerHTML = goals.map(g => `
-        <button type="button" class="goal-pill ${g.id === ACTIVE_GOAL ? 'active' : ''}" data-goal="${esc(g.id)}">
-          <i class="${esc(g.icon)}"></i> ${esc(g.label)}
-        </button>
-      `).join('');
+      const activeIdx = Math.max(0, goals.findIndex(g => g.id === ACTIVE_GOAL));
+
+      goalStripEl.innerHTML = goals.map((g, i) => {
+        const isActive = g.id === ACTIVE_GOAL;
+        const isReached = i <= activeIdx;
+        const connectorHtml = i > 0
+          ? `<div class="goal-connector ${i <= activeIdx ? 'reached' : ''}"><i class="fa-solid fa-chevron-right"></i></div>`
+          : '';
+        return `
+          ${connectorHtml}
+          <div class="goal-step">
+            <span class="goal-step-num ${isReached ? 'reached' : ''} ${isActive ? 'active' : ''}">${i + 1}</span>
+            <button type="button" class="goal-pill ${isActive ? 'active' : ''}" data-goal="${esc(g.id)}">
+              <i class="${esc(g.icon)}"></i> ${esc(g.label)}
+            </button>
+          </div>
+        `;
+      }).join('');
 
       goalStripEl.querySelectorAll('.goal-pill').forEach(btn => {
         btn.addEventListener('click', () => {

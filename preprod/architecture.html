@@ -212,7 +212,7 @@
         "id": "zerotrust",
         "label": "Zero Trust, all-in",
         "icon": "fa-solid fa-key",
-        "path": ["o365e3", "winE3", "emsE3", "entraSuite", "e5Security", "e5Compliance", "m365E5", "m365E7"]
+        "path": ["o365e3", "winE3", "emsE3", "entraSuite", "e5Security", "e5Compliance", "m365E5", "m365E7", "agent365"]
       }
     ],
     "cards": {
@@ -391,16 +391,15 @@
       },
       "agent365": {
         "title": "Agent 365",
-        "sub": "New — May 2026 · Agent Plans",
-        "alwaysOn": true,
+        "sub": "New — May 2026 · Agent Plans · Add-on",
         "icon": "fa-solid fa-robot",
         "iconClass": "icon-dark",
         "pills": ["Agent Observability", "Agent Governance", "Agent Security"],
-        "desc": "The control plane for AI agents: identity, registry, lifecycle governance, and security signals for agents built or run across the Microsoft Cloud — <strong>included</strong> with Microsoft 365/Office 365 and Azure subscriptions, with a standalone license for agent-only scenarios.",
+        "desc": "The control plane for AI agents: identity, registry, lifecycle governance, and security signals for agents built or run across the Microsoft Cloud — an <strong>add-on license</strong> purchased on top of Microsoft 365/Office 365 and Azure subscriptions.",
         "includes": ["Agent Identity & Agent Registry", "Basic + advanced agent usage insights", "Agent lifecycle governance & policy templates", "Data Security Posture Management for agents", "Threat detection & hunting for agents (Defender)"],
         "outcomes": ["Full visibility into every agent in the tenant", "Consistent governance across 1st- and 3rd-party agents", "Same XDR/Purview protections extended to agents"],
         "useCases": ["Inventorying Copilot Studio & custom agents", "Blocking unsanctioned local agents", "Extending DLP/Insider Risk to agent interactions"],
-        "licensing": "Included in Microsoft cloud subscriptions (M365/O365 + Azure); a standalone Agent 365 License also exists for pure agent-identity scenarios.",
+        "licensing": "Add-on license purchased on top of Microsoft cloud subscriptions (M365/O365 + Azure) — not bundled or included automatically.",
         "links": [
           {"label": "Microsoft Entra Agent ID", "url": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-agent-id"},
           {"label": "Microsoft 365 roadmap (Agent 365 updates)", "url": "https://www.microsoft.com/en-us/microsoft-365/roadmap"}
@@ -666,11 +665,24 @@
       const goals = ARCH_DATA.goals || [];
       if (!goals.length) { goalStripEl.style.display = 'none'; pathCaptionEl.style.display = 'none'; return; }
 
-      goalStripEl.innerHTML = goals.map(g => `
-        <button type="button" class="goal-pill ${g.id === ACTIVE_GOAL ? 'active' : ''}" data-goal="${esc(g.id)}">
-          <i class="${esc(g.icon)}"></i> ${esc(g.label)}
-        </button>
-      `).join('');
+      const activeIdx = Math.max(0, goals.findIndex(g => g.id === ACTIVE_GOAL));
+
+      goalStripEl.innerHTML = goals.map((g, i) => {
+        const isActive = g.id === ACTIVE_GOAL;
+        const isReached = i <= activeIdx;
+        const connectorHtml = i > 0
+          ? `<div class="goal-connector ${i <= activeIdx ? 'reached' : ''}"><i class="fa-solid fa-chevron-right"></i></div>`
+          : '';
+        return `
+          ${connectorHtml}
+          <div class="goal-step">
+            <span class="goal-step-num ${isReached ? 'reached' : ''} ${isActive ? 'active' : ''}">${i + 1}</span>
+            <button type="button" class="goal-pill ${isActive ? 'active' : ''}" data-goal="${esc(g.id)}">
+              <i class="${esc(g.icon)}"></i> ${esc(g.label)}
+            </button>
+          </div>
+        `;
+      }).join('');
 
       goalStripEl.querySelectorAll('.goal-pill').forEach(btn => {
         btn.addEventListener('click', () => {
