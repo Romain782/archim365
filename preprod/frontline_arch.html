@@ -96,6 +96,7 @@
             <div class="modal-text">
               <h2 id="mTitle">Title</h2>
               <span id="mMeta">Subtitle</span>
+              <div id="mPills" class="pills modal-pills"></div>
             </div>
           </div>
           <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -628,17 +629,18 @@
           const stepIdx = pathKeys.indexOf(key);
           const isOnPath = stepIdx !== -1;
           const isAlwaysOn = !!d.alwaysOn;
-          const isMuted = pathKeys.length > 0 && !isOnPath && !isAlwaysOn;
+          // Flagship/hero SKUs (e.g. the F3 hero and the F3+Defender+Purview ultimate bundle) always stay
+          // fully visible and vivid — they're valid options regardless of goal, never "greyed out" like a
+          // granular add-on you don't need.
+          const isMuted = pathKeys.length > 0 && !isOnPath && !isAlwaysOn && !d.isHero;
 
           const heroClass = d.isHero ? "card-hero" : "";
           const stateClass = isOnPath ? "on-path" : (isMuted ? "muted" : "");
           const domId = d.id ? `id="${esc(d.id)}"` : ""; 
           
-          const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${esc(p)}</span>`).join('')}</div>` : '';
           const connectorHtml = d.connectorLabel ? `<div class="stack-connector"><i class="fa-solid fa-arrow-down-long"></i><span>${esc(d.connectorLabel)}</span></div>` : '';
           const stepBadgeHtml = isOnPath ? `<span class="step-badge">${stepIdx + 1}</span>` : '';
           const alwaysOnHtml = isAlwaysOn ? `<span class="always-on-badge">Always included</span>` : '';
-          const infoIconHtml = (!d.isHero && !isAlwaysOn) ? '<i class="fa-solid fa-circle-info" style="position:absolute; top:20px; right:20px; color:#cbd5e1;"></i>' : '';
 
           return `
             ${connectorHtml}
@@ -655,8 +657,6 @@
               <div class="card-body">
                 ${d.desc}
               </div>
-              ${pillsHtml}
-              ${infoIconHtml}
             </div>
           `;
         }).join('');
@@ -690,6 +690,7 @@
       document.getElementById("mIcon").innerHTML = `<i class="${esc(d.icon)}"></i>`;
       document.getElementById("mTitle").innerText = d.title;
       document.getElementById("mMeta").innerText = d.sub;
+      document.getElementById("mPills").innerHTML = (d.pills || []).map(p => `<span class="pill">${esc(p)}</span>`).join('');
       document.getElementById("mDesc").innerHTML = d.desc;
       document.getElementById("mLicensing").innerText = d.licensing || "Per User License (Frontline Worker needs to satisfy eligibility).";
 
