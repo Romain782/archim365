@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"/>
   <title>M365 Licensing — Architecture</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="style.css"/>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="style.css?v=20260701"/>
 </head>
 
 <body>
@@ -24,13 +27,17 @@
           </div>
           
           <div class="nav-actions">
+            <button class="source-badge" onclick="openChangelog()" title="View what changed in the July 2026 update">
+              <i class="fa-solid fa-circle-check"></i> Updated Jul 1, 2026
+            </button>
+
             <div class="persona-switch">
               <span class="ps-btn active-ent">Enterprise</span>
               <a href="frontline_arch.html" class="ps-btn">Frontline</a>
             </div>
 
             <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
-            <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
+            <a href="matrix.html?persona=enterprise" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
           </div>
         </div>
       </div>
@@ -41,10 +48,13 @@
         
         <div class="panel-header">
           <div class="panel-title">
-            <h2>Maturity Paths</h2>
-            <p>Click on a brick to view details (Capabilities, Outcomes, Prerequisites).</p>
+            <h2>Choose your goal, see your path</h2>
+            <p>The full licensing map always stays visible — pick a goal to spotlight the cards you need, click any card for full details.</p>
           </div>
         </div>
+
+        <div class="goal-strip" id="goalStrip"></div>
+        <div class="path-caption" id="pathCaption"></div>
 
         <div class="arch-board thin-scroll">
           <div class="arch-layout" id="layoutWrap">
@@ -126,27 +136,513 @@
       </div>
     </div>
 
+    <div class="modal-overlay" id="changelogOverlay">
+      <div class="modal-content" style="width:min(720px, 95%);">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <div class="modal-icon" style="background:#059669;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="modal-text">
+              <h2>What's new</h2>
+              <span>Changes since the previous licensing comparison</span>
+            </div>
+          </div>
+          <button class="btn-close" onclick="closeChangelog()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-scroll thin-scroll" style="background:white;">
+          <ul class="changelog-list" id="changelogList">
+            <li class="changelog-row"><span class="changelog-date">—</span><div class="changelog-body">Loading…</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <script>
+  <script type="application/json" id="site-data">
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Microsoft 365 E3",
+        "dotColor": "#0ea5e9",
+        "isFoundationGroup": true,
+        "items": ["o365e3", "winE3", "emsE3"]
+      },
+      {
+        "id": "col2",
+        "title": "Step-ups",
+        "dotColor": "#f59e0b",
+        "items": ["emsE5", "intuneSuite", "teamsPremium", "entraSuite"]
+      },
+      {
+        "id": "col3",
+        "title": "Suites",
+        "dotColor": "#ec4899",
+        "items": ["e5Security", "e5Compliance"]
+      },
+      {
+        "id": "col4",
+        "title": "Top-tier (E5 → E7)",
+        "dotColor": "#1e293b",
+        "items": ["m365E5", "m365E7"]
+      },
+      {
+        "id": "col5",
+        "title": "Agent Plans",
+        "dotColor": "#8b5cf6",
+        "items": ["agent365"]
+      }
+    ],
+    "goals": [
+      {
+        "id": "standardize",
+        "label": "Just standardize",
+        "icon": "fa-solid fa-rocket",
+        "path": ["o365e3", "winE3", "emsE3"]
+      },
+      {
+        "id": "secure",
+        "label": "Add security & compliance",
+        "icon": "fa-solid fa-shield-halved",
+        "path": ["o365e3", "winE3", "emsE3", "e5Security", "e5Compliance", "m365E5"]
+      },
+      {
+        "id": "zerotrust",
+        "label": "Zero Trust, all-in",
+        "icon": "fa-solid fa-key",
+        "path": ["o365e3", "winE3", "emsE3", "entraSuite", "e5Security", "e5Compliance", "m365E5", "m365E7"]
+      }
+    ],
+    "cards": {
+      "o365e3": {
+        "title": "Office 365 E3",
+        "sub": "Productivity & Mail Security",
+        "icon": "fa-brands fa-microsoft",
+        "iconClass": "icon-blue",
+        "pills": ["Apps", "EXO", "SPO", "Copilot Chat"],
+        "desc": "Productivity and collaboration baseline for information workers: desktop Office apps, mail, meetings, and file storage.",
+        "includes": ["M365 Apps for Enterprise", "Exchange Online Plan 2 (100 GB mailbox)", "SharePoint & OneDrive", "Microsoft Teams", "Defender for Office 365 Plan 1", "Copilot Chat + Copilot Chat Analytics (included)"],
+        "outcomes": ["Standardization", "Fluid collaboration", "Baseline mail hygiene"],
+        "useCases": ["Intranet", "Exchange migration", "Hybrid work"],
+        "licensing": "Per-user subscription license (User SL). Foundation of the Microsoft 365 E3 suite.",
+        "links": [
+          {"label": "Office 365 E3 overview", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/office-365-e3"},
+          {"label": "Compare all Microsoft 365 plans", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-plans-and-pricing"}
+        ]
+      },
+      "winE3": {
+        "title": "Windows 11 Enterprise E3",
+        "sub": "OS Security & Management",
+        "icon": "fa-brands fa-windows",
+        "iconClass": "icon-blue",
+        "desc": "Windows 11 Enterprise: advanced OS security, resilience, and management rights on top of Windows 11 Pro.",
+        "includes": ["Windows Autopatch", "Universal Print", "BitLocker management", "Credential Guard & App Control", "Virtual Desktop Access (VDA) rights", "Windows Autopilot"],
+        "outcomes": ["Reduced MTTR", "Consistent OS security", "Attack surface reduction"],
+        "useCases": ["Fleet modernization", "Patch management", "VDI / AVD entitlement"],
+        "licensing": "Per-user subscription; upgrades any qualifying Windows license to Enterprise edition.",
+        "links": [
+          {"label": "Windows 11 Enterprise", "url": "https://www.microsoft.com/en-us/microsoft-365/windows/windows-11-enterprise"},
+          {"label": "Windows Autopatch docs", "url": "https://learn.microsoft.com/en-us/windows/deployment/windows-autopatch/overview/windows-autopatch-overview"}
+        ]
+      },
+      "emsE3": {
+        "id": "card-emsE3",
+        "title": "EMS E3",
+        "sub": "Intune P1 + Entra ID P1 + Purview IP P1",
+        "icon": "fa-solid fa-mobile-screen-button",
+        "iconClass": "icon-blue",
+        "desc": "The starting point for identity and device management: conditional access, MDM/MAM, and baseline information protection.",
+        "includes": ["Microsoft Intune Plan 1", "Microsoft Entra ID Plan 1", "Information protection (manual labeling)", "Microsoft Entra ID Governance (base)"],
+        "outcomes": ["Conditional access everywhere", "Mobile device management", "Basic data protection"],
+        "useCases": ["MFA for all users", "Mobile enrollment", "Conditional Access", "Endpoint & mobile security baseline"],
+        "licensing": "Per-user subscription; can be purchased standalone or is included in Microsoft 365 E3.",
+        "links": [
+          {"label": "Enterprise Mobility + Security", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise-mobility-security/compare-plans-and-pricing"},
+          {"label": "Microsoft Intune Plan 1", "url": "https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/what-is-intune"}
+        ]
+      },
+      "emsE5": {
+        "title": "EMS E5",
+        "sub": "Identity Protection & CASB",
+        "icon": "fa-solid fa-circle-up",
+        "iconClass": "icon-orange",
+        "desc": "Zero Trust identity: Entra ID P2 risk-based protection, Microsoft Defender for Identity, and Microsoft Defender for Cloud Apps.",
+        "includes": ["Microsoft Entra ID Plan 2", "Microsoft Defender for Cloud Apps", "Microsoft Defender for Identity", "Microsoft Entra ID Governance Plan 2 (add-on eligible)"],
+        "outcomes": ["Full identity protection", "Shadow IT visibility", "On-prem identity signal coverage"],
+        "useCases": ["Privileged Identity Management (PIM)", "Risk-based Conditional Access", "On-prem identity threat detection"],
+        "licensing": "Steps up EMS E3 to E5; also included in Microsoft 365 E5/E7.",
+        "links": [
+          {"label": "Microsoft Entra ID Plan 2", "url": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"},
+          {"label": "Compare EMS plans", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise-mobility-security/compare-plans-and-pricing"}
+        ]
+      },
+      "intuneSuite": {
+        "id": "card-intuneSuite",
+        "title": "Intune Suite",
+        "sub": "Endpoint Premium Tools",
+        "icon": "fa-solid fa-cubes",
+        "iconClass": "icon-orange",
+        "desc": "Advanced endpoint management add-on: least-privilege, cloud PKI, remote help, and deep analytics on top of Intune Plan 1/2.",
+        "includes": ["Endpoint Privilege Management", "Microsoft Cloud PKI", "Microsoft Intune Remote Help", "Microsoft Intune Advanced Analytics", "Intune Plan 2", "Enterprise App Management", "Microsoft Tunnel for MAM"],
+        "outcomes": ["Vendor consolidation", "Faster IT support", "No local admin rights needed"],
+        "useCases": ["Remove local admin", "Cloud certificates (no ADCS)", "Remote help for hybrid workers"],
+        "licensing": "Add-on to Intune Plan 1; included in full in Microsoft 365 E5.",
+        "links": [
+          {"label": "Intune Suite add-ons", "url": "https://learn.microsoft.com/en-us/intune/intune-service/fundamentals/intune-add-ons"}
+        ]
+      },
+      "teamsPremium": {
+        "title": "Teams Premium",
+        "sub": "Meetings, AI & Protection",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-orange",
+        "desc": "AI-assisted meetings, advanced webinars/town halls, and meeting protection controls on top of Teams.",
+        "includes": ["Intelligent Recap (AI)", "Live translation & captions", "Watermarking & meeting guard", "Premium Town hall / Webinar capabilities"],
+        "outcomes": ["Meeting productivity", "Confidentiality & compliance", "Executive-grade broadcasts"],
+        "useCases": ["Board meetings", "External webinars & town halls", "Regulated industries"],
+        "licensing": "Per-user add-on subscription on top of any Teams-enabled plan.",
+        "links": [
+          {"label": "Teams Premium", "url": "https://www.microsoft.com/en-us/microsoft-teams/premium"}
+        ]
+      },
+      "entraSuite": {
+        "title": "Microsoft Entra Suite",
+        "sub": "Unified Identity + Network Access",
+        "icon": "fa-solid fa-key",
+        "iconClass": "icon-orange",
+        "desc": "Brings Entra ID P2, Entra ID Governance P2, Entra Internet Access, Entra Private Access, and Verified ID together into one Zero Trust identity and network access bundle — also secures human and agent identities.",
+        "pills": ["SSE", "Governance", "Agent ID"],
+        "includes": ["Microsoft Entra ID Governance Plan 2", "Microsoft Entra Internet Access", "Microsoft Entra Private Access (ZTNA)", "Microsoft Entra Verified ID"],
+        "outcomes": ["Zero Trust network access", "Least-privilege identity governance", "Secured AI agent identities"],
+        "useCases": ["Replacing legacy VPN with ZTNA", "Lifecycle governance at scale", "Securing agent-to-resource access"],
+        "licensing": "Suite add-on requiring Microsoft Entra ID P1 as a base; included in Microsoft 365 E7.",
+        "links": [
+          {"label": "Microsoft Entra Suite", "url": "https://www.microsoft.com/en-us/security/business/microsoft-entra-suite"},
+          {"label": "Microsoft Entra Agent ID", "url": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-agent-id"}
+        ]
+      },
+      "e5Security": {
+        "id": "card-e5Security",
+        "title": "Defender Suite",
+        "sub": "formerly Microsoft 365 E5 Security",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-red",
+        "desc": "Unified XDR suite covering endpoint, identity, email, and cloud apps in one bundle. Requires Microsoft 365 E3 or Office 365 E3 + EMS E3.",
+        "includes": ["Microsoft Defender for Endpoint Plan 2", "Microsoft Defender for Office 365 Plan 2", "Microsoft Defender for Identity", "Microsoft Defender for Cloud Apps"],
+        "outcomes": ["SOC consolidation", "Auto-remediation", "Cross-domain incident correlation"],
+        "useCases": ["Ransomware protection", "Threat hunting", "Unified XDR portal"],
+        "licensing": "Suite add-on on top of Microsoft 365/Office 365 E3 + EMS E3; included in Microsoft 365 E5/E7.",
+        "links": [
+          {"label": "Microsoft Defender XDR", "url": "https://learn.microsoft.com/en-us/defender-xdr/microsoft-365-defender"}
+        ]
+      },
+      "e5Compliance": {
+        "title": "Purview Suite",
+        "sub": "formerly Microsoft 365 E5 Compliance",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-red",
+        "desc": "Data governance and regulatory compliance: information protection, DLP, insider risk, and premium eDiscovery/audit.",
+        "includes": ["Information Protection (auto-labeling)", "DLP for Endpoint/Teams/Exchange/SharePoint", "Insider Risk Management", "eDiscovery Premium & Audit Premium"],
+        "outcomes": ["Data leak prevention", "Regulatory compliance", "Faster legal investigations"],
+        "useCases": ["Data leak prevention", "HR / insider investigations", "Litigation & regulatory response"],
+        "licensing": "Suite add-on on top of Microsoft 365/Office 365 E3 + EMS E3; included in Microsoft 365 E5/E7.",
+        "links": [
+          {"label": "Microsoft Purview", "url": "https://learn.microsoft.com/en-us/purview/purview"}
+        ]
+      },
+      "m365E5": {
+        "id": "card-m365E5",
+        "title": "Microsoft 365 E5",
+        "sub": "= E3 + Defender + Purview + Intune Suite",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-dark",
+        "isHero": true,
+        "pills": ["Intune Suite", "XDR", "Purview", "Security Copilot", "PBI Pro", "Teams Phone"],
+        "desc": "Everything in E3 + <strong>Defender Suite</strong> + <strong>Purview Suite</strong> + <strong>full Intune Suite</strong> + Security Copilot capacity, in one SKU.",
+        "includes": ["All Microsoft 365 E3", "All Defender Suite", "All Purview Suite", "Full Intune Suite", "Power BI Pro", "Teams Phone System", "Microsoft Security Copilot — 400 SCUs / month per 1,000 users"],
+        "outcomes": ["Maximum consolidation", "Integrated security & compliance", "Built-in agentic security (SCUs)"],
+        "useCases": ["Zero Trust transformation", "Full-stack Microsoft security", "SOC modernization"],
+        "licensing": "Per-user subscription license; the all-inclusive Information Worker SKU.",
+        "links": [
+          {"label": "Microsoft 365 E5", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/e5"},
+          {"label": "Security Copilot inclusion details", "url": "https://learn.microsoft.com/en-us/copilot/security/security-copilot-inclusion"}
+        ]
+      },
+      "m365E7": {
+        "id": "card-m365E7",
+        "title": "Microsoft 365 E7",
+        "sub": "= E5 + Microsoft Entra Suite",
+        "connectorLabel": "Everything above, PLUS Microsoft Entra Suite",
+        "icon": "fa-solid fa-gem",
+        "iconClass": "icon-dark",
+        "pills": ["Entra Suite", "Global Secure Access", "Agent-ready"],
+        "desc": "The newest top-tier SKU: <strong>everything in E5</strong>, plus the full <strong>Microsoft Entra Suite</strong> (Zero Trust network access + identity governance) included outright instead of as an add-on. Think of it as: <strong>E7 = E5 + Entra Suite</strong>, in one SKU.",
+        "includes": ["All Microsoft 365 E5", "Microsoft Entra Suite (fully included)", "Microsoft Entra Internet Access & Private Access", "Microsoft Entra ID Governance Plan 2"],
+        "outcomes": ["VPN replacement at no extra add-on cost", "Full identity governance out of the box", "Ready for secured agentic workflows"],
+        "useCases": ["Organizations replacing legacy VPN/ZTNA point products", "Large enterprises standardizing on one all-up SKU", "Advanced identity governance at scale"],
+        "licensing": "Per-user subscription license; newest and most complete Information Worker SKU (added May 2026). Choose E7 over E5 specifically when you need Microsoft Entra Suite included rather than purchased separately.",
+        "links": [
+          {"label": "Microsoft 365 E7", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/e7"},
+          {"label": "Compare all Microsoft 365 plans", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-plans-and-pricing"}
+        ]
+      },
+      "agent365": {
+        "title": "Agent 365",
+        "sub": "New — May 2026 · Agent Plans",
+        "alwaysOn": true,
+        "icon": "fa-solid fa-robot",
+        "iconClass": "icon-dark",
+        "pills": ["Agent Observability", "Agent Governance", "Agent Security"],
+        "desc": "The control plane for AI agents: identity, registry, lifecycle governance, and security signals for agents built or run across the Microsoft Cloud — <strong>included</strong> with Microsoft 365/Office 365 and Azure subscriptions, with a standalone license for agent-only scenarios.",
+        "includes": ["Agent Identity & Agent Registry", "Basic + advanced agent usage insights", "Agent lifecycle governance & policy templates", "Data Security Posture Management for agents", "Threat detection & hunting for agents (Defender)"],
+        "outcomes": ["Full visibility into every agent in the tenant", "Consistent governance across 1st- and 3rd-party agents", "Same XDR/Purview protections extended to agents"],
+        "useCases": ["Inventorying Copilot Studio & custom agents", "Blocking unsanctioned local agents", "Extending DLP/Insider Risk to agent interactions"],
+        "licensing": "Included in Microsoft cloud subscriptions (M365/O365 + Azure); a standalone Agent 365 License also exists for pure agent-identity scenarios.",
+        "links": [
+          {"label": "Microsoft Entra Agent ID", "url": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-agent-id"},
+          {"label": "Microsoft 365 roadmap (Agent 365 updates)", "url": "https://www.microsoft.com/en-us/microsoft-365/roadmap"}
+        ]
+      },
+      "soc": {
+        "title": "Azure Security",
+        "sub": "SOC Layer",
+        "icon": "fa-solid fa-cloud",
+        "iconClass": "icon-azure",
+        "desc": "Cloud-native SIEM and multi-cloud infrastructure protection that sits underneath every Microsoft 365 tier.",
+        "includes": ["Microsoft Sentinel", "Microsoft Defender for Cloud", "Log Analytics"],
+        "outcomes": ["Single pane of glass", "SOC automation"],
+        "useCases": ["Unified SOC", "AWS / GCP protection (CNAPP)"],
+        "licensing": "Pay-as-you-go (Azure consumption).",
+        "links": [
+          {"label": "Microsoft Sentinel", "url": "https://learn.microsoft.com/en-us/azure/sentinel/overview"},
+          {"label": "Microsoft Defender for Cloud", "url": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-cloud-introduction"}
+        ]
+      }
+    }
+  }
+}
+</script>
+<script type="application/json" id="changelog-data">
+{
+ "publishDate": "2026-07-01",
+ "entries": [
+  {
+   "feature": "Quick Machine Recovery",
+   "change": "Added Quick Machine Recovery",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Post-quantum security APIs",
+   "change": "Added Post-quantum security APIs",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "URL time-of-click protection",
+   "change": "Added URL time-of-click protection",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Intune Remote Help",
+   "change": "Added Microsoft Intune Remote Help",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Intune Advanced Analytics",
+   "change": "Added Microsoft Intune Advanced Analytics",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Copilot Chat Analytics",
+   "change": "Added Copilot Chat Analytics",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Entra Suite",
+   "change": "Added Microsoft Entra Suite",
+   "action": "New",
+   "date": "2026-06"
+  },
+  {
+   "feature": "E7",
+   "change": "Added Microsoft 365 E7",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent 365",
+   "change": "Added Agent 365",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Observability",
+   "change": "Added Agent Observability",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Security",
+   "change": "Added Agent Security",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Governance",
+   "change": "Added Agent Governance",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Copilot Chat and Microsoft 365 Copilot",
+   "change": "Changed from Add-ons to Suites",
+   "action": "Change",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Town Hall",
+   "change": "Town Hall now ‘Included’ in certain Suites; added new footnote",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Webinars",
+   "change": "Webinars now ‘Included’ in certain Suites",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Immersive Events",
+   "change": "Added Immersive Events",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Places Explorer",
+   "change": "Added Places Explorer",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Places Finder",
+   "change": "Added Places Finder",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Windows 11 Edition",
+   "change": "Added new footnote",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "SharePoint Plan 2",
+   "change": "Additional storage requirements",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Attendee Packs",
+   "change": "Added Attendee Packs",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Microsoft Teams Shared Space License",
+   "change": "Added Microsoft Teams Shared Space License",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Microsoft Teams Room Pro",
+   "change": "Added Microsoft Teams Room Pro",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Basic org-wide or location-wide retention policies",
+   "change": "Added for all Purview Suites",
+   "action": "Change",
+   "date": "2026-03"
+  },
+  {
+   "feature": "Exchange Online Protection",
+   "change": "Rebranded to Built-in security add-on for cloud mailboxes",
+   "action": "Change",
+   "date": "2026-03"
+  },
+  {
+   "feature": "Microsoft Defender Experts Suite P1 and P2",
+   "change": "Added Microsoft Defender Experts Suite P1 and P2 as add-on",
+   "action": "New",
+   "date": "2026-02"
+  },
+  {
+   "feature": "Microsoft Security Copilot",
+   "change": "Added Microsoft Security Copilot to M365 E5",
+   "action": "New",
+   "date": "2025-12"
+  },
+  {
+   "feature": "Microsoft Security Copilot",
+   "change": "Added Microsoft Security Copilot as add-on",
+   "action": "New",
+   "date": "2025-12"
+  },
+  {
+   "feature": "Microsoft 365 Copilot Business",
+   "change": "Added Microsoft 365 Copilot Business as add-on",
+   "action": "New",
+   "date": "2025-12"
+  }
+ ]
+}
+</script>
+<script>
+    /* ============================================================
+       SECURITY HELPERS
+    ============================================================ */
+    // Escapes text before it is ever placed into innerHTML, so a stray
+    // "<" or "&" in a data file can never be interpreted as markup.
+    function esc(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+    // Only allow http(s) URLs to be rendered as links (blocks javascript: / data: schemes).
+    function safeUrl(url) {
+      try {
+        const u = new URL(url, window.location.href);
+        return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : '#';
+      } catch { return '#'; }
+    }
+
     /* ============================================================
        LOGIC: FETCH JSON & RENDER
     ============================================================ */
     
     let ARCH_DATA = {};
+    let ACTIVE_GOAL = null;
     const gridEl = document.getElementById("archGrid");
     const footerEl = document.getElementById("footerSocle");
+    const goalStripEl = document.getElementById("goalStrip");
+    const pathCaptionEl = document.getElementById("pathCaption");
 
     async function loadData() {
         try {
-            // CHARGEMENT DATA.JSON (Enterprise)
-            const response = await fetch('data.json');
-            
-            if (!response.ok) throw new Error(`HTTP Error ${response.status}: File not found`);
-            
-            const json = await response.json();
+            // Data is embedded directly in this page (see <script type="application/json" id="site-data">
+            // above), so it works with a simple double-click — no local web server required.
+            const json = JSON.parse(document.getElementById('site-data').textContent);
             ARCH_DATA = json.architecture;
+            ACTIVE_GOAL = (ARCH_DATA.goals && ARCH_DATA.goals[1]) ? ARCH_DATA.goals[1].id : (ARCH_DATA.goals?.[0]?.id ?? null);
             
+            renderGoalStrip();
             renderGrid();
             footerEl.style.display = "flex"; 
             
@@ -154,54 +650,110 @@
         } catch (error) {
             console.error(error);
             gridEl.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:red; padding:40px;">
-                <strong>Error loading JSON.</strong><br>
-                1. Check if 'data.json' is in the same folder.<br>
-                2. Use VS Code Live Server or GitHub Pages.
+                <strong>Error loading data.</strong><br>
+                The embedded data block could not be parsed.
             </div>`;
         }
     }
 
+    function getActiveGoal() {
+      return (ARCH_DATA.goals || []).find(g => g.id === ACTIVE_GOAL) || null;
+    }
+
+    function renderGoalStrip() {
+      const goals = ARCH_DATA.goals || [];
+      if (!goals.length) { goalStripEl.style.display = 'none'; pathCaptionEl.style.display = 'none'; return; }
+
+      goalStripEl.innerHTML = goals.map(g => `
+        <button type="button" class="goal-pill ${g.id === ACTIVE_GOAL ? 'active' : ''}" data-goal="${esc(g.id)}">
+          <i class="${esc(g.icon)}"></i> ${esc(g.label)}
+        </button>
+      `).join('');
+
+      goalStripEl.querySelectorAll('.goal-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          ACTIVE_GOAL = btn.dataset.goal;
+          renderGoalStrip();
+          renderGrid();
+          renderPathCaption();
+          setTimeout(drawArrows, 100);
+        });
+      });
+
+      renderPathCaption();
+    }
+
+    function renderPathCaption() {
+      const goal = getActiveGoal();
+      if (!goal) { pathCaptionEl.innerHTML = ''; return; }
+
+      const steps = goal.path.map((key, i) => {
+        const d = ARCH_DATA.cards[key];
+        const title = d ? d.title : key;
+        return `<span class="step-chip">${i + 1}. ${esc(title)}</span>`;
+      }).join('<i class="fa-solid fa-arrow-right pc-arrow"></i>');
+
+      pathCaptionEl.innerHTML = `<span class="pc-label"><i class="fa-solid fa-route"></i> Your path:</span> ${steps}`;
+    }
+
     function renderGrid() {
       if (!ARCH_DATA.structure) return;
+      gridEl.style.gridTemplateColumns = `repeat(${ARCH_DATA.structure.length}, 1fr)`;
 
-      gridEl.innerHTML = ARCH_DATA.structure.map(col => {
+      const goal = getActiveGoal();
+      const pathKeys = goal ? goal.path : [];
+
+      gridEl.innerHTML = ARCH_DATA.structure.map((col, colIdx) => {
         
         const cardsHtml = col.items.map(key => {
           const d = ARCH_DATA.cards[key];
           if(!d) return "";
 
+          const stepIdx = pathKeys.indexOf(key);
+          const isOnPath = stepIdx !== -1;
+          const isAlwaysOn = !!d.alwaysOn;
+          const isMuted = pathKeys.length > 0 && !isOnPath && !isAlwaysOn;
+
           const heroClass = d.isHero ? "card-hero" : "";
-          const domId = d.id ? `id="${d.id}"` : ""; 
+          const stateClass = isOnPath ? "on-path" : (isMuted ? "muted" : "");
+          const domId = d.id ? `id="${esc(d.id)}"` : ""; 
           
-          const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${p}</span>`).join('')}</div>` : '';
+          const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${esc(p)}</span>`).join('')}</div>` : '';
+          const connectorHtml = d.connectorLabel ? `<div class="stack-connector"><i class="fa-solid fa-arrow-down-long"></i><span>${esc(d.connectorLabel)}</span></div>` : '';
+          const stepBadgeHtml = isOnPath ? `<span class="step-badge">${stepIdx + 1}</span>` : '';
+          const alwaysOnHtml = isAlwaysOn ? `<span class="always-on-badge">Always included</span>` : '';
+          const infoIconHtml = (!d.isHero && !isAlwaysOn) ? '<i class="fa-solid fa-circle-info" style="position:absolute; top:20px; right:20px; color:#cbd5e1;"></i>' : '';
 
           return `
-            <div class="card ${heroClass}" ${domId} onclick="openModal('${key}')">
+            ${connectorHtml}
+            <div class="card ${heroClass} ${stateClass}" ${domId} onclick="openModal('${esc(key)}')">
+              ${stepBadgeHtml}
+              ${alwaysOnHtml}
               <div class="card-header">
-                <div class="card-icon ${d.iconClass}"><i class="${d.icon}"></i></div>
+                <div class="card-icon ${esc(d.iconClass)}"><i class="${esc(d.icon)}"></i></div>
                 <div class="card-titles">
-                  <h3>${d.title}</h3>
-                  <span>${d.sub}</span>
+                  <h3>${esc(d.title)}</h3>
+                  <span>${esc(d.sub)}</span>
                 </div>
               </div>
               <div class="card-body">
                 ${d.desc}
               </div>
               ${pillsHtml}
-              ${!d.isHero ? '<i class="fa-solid fa-circle-info" style="position:absolute; top:20px; right:20px; color:#cbd5e1;"></i>' : ''}
+              ${infoIconHtml}
             </div>
           `;
         }).join('');
 
         let contentHtml = `<div class="stack">${cardsHtml}</div>`;
         if (col.isFoundationGroup) {
-          contentHtml = `<div class="foundation-group"><span class="foundation-label">Microsoft 365 E3</span>${contentHtml}</div>`;
+          contentHtml = `<div class="foundation-group"><span class="foundation-label">${esc(col.title)}</span>${contentHtml}</div>`;
         }
 
         return `
           <div class="arch-col">
             <div class="col-header">
-              <span class="dot" style="background:${col.dotColor}"></span> ${col.title}
+              <span class="step-num" style="background:${esc(col.dotColor)}">${colIdx + 1}</span> ${esc(col.title)}
             </div>
             ${contentHtml}
           </div>
@@ -219,14 +771,14 @@
       if (!d) return;
 
       document.getElementById("mIcon").className = `modal-icon ${d.iconClass}`;
-      document.getElementById("mIcon").innerHTML = `<i class="${d.icon}"></i>`;
+      document.getElementById("mIcon").innerHTML = `<i class="${esc(d.icon)}"></i>`;
       document.getElementById("mTitle").innerText = d.title;
       document.getElementById("mMeta").innerText = d.sub;
       document.getElementById("mDesc").innerHTML = d.desc;
       document.getElementById("mLicensing").innerText = d.licensing || "Per User License (User SL).";
 
-      const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${x}</li>`).join('');
-      const mkLinks = (arr) => (arr||[]).map(l => `<a href="${l.url}" target="_blank" class="btn" style="width:100%; justify-content:space-between; margin-bottom:5px; font-size:12px;">${l.label} <i class="fa-solid fa-external-link-alt"></i></a>`).join('');
+      const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${esc(x)}</li>`).join('');
+      const mkLinks = (arr) => (arr||[]).map(l => `<a href="${esc(safeUrl(l.url))}" target="_blank" rel="noopener noreferrer" class="btn" style="width:100%; justify-content:space-between; margin-bottom:5px; font-size:12px;">${esc(l.label)} <i class="fa-solid fa-external-link-alt"></i></a>`).join('');
 
       document.getElementById("mIncludes").innerHTML = mkList(d.includes);
       document.getElementById("mOutcomes").innerHTML = mkList(d.outcomes).replace(/fa-check/g, 'fa-bullseye');
@@ -245,12 +797,43 @@
     });
 
     /* ============================================================
+       CHANGE LOG MODAL
+    ============================================================ */
+    const changelogOverlay = document.getElementById("changelogOverlay");
+    let CHANGELOG_LOADED = false;
+
+    async function openChangelog() {
+      changelogOverlay.classList.add("active");
+      if (CHANGELOG_LOADED) return;
+      try {
+        const json = JSON.parse(document.getElementById('changelog-data').textContent);
+        const monthName = (ym) => {
+          const [y, m] = ym.split('-');
+          return new Date(Number(y), Number(m) - 1, 1).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+        };
+        document.getElementById('changelogList').innerHTML = json.entries.map(e => `
+          <li class="changelog-row">
+            <span class="changelog-date">${esc(monthName(e.date))}</span>
+            <div class="changelog-body"><strong>${esc(e.feature)}</strong><span>${esc(e.change)}</span></div>
+            <span class="changelog-tag ${e.action === 'New' ? 'new' : 'change'}">${esc(e.action)}</span>
+          </li>
+        `).join('');
+        CHANGELOG_LOADED = true;
+      } catch (err) {
+        console.error(err);
+        document.getElementById('changelogList').innerHTML = `<li class="changelog-row"><span class="changelog-date">—</span><div class="changelog-body">Unable to load changelog.json</div></li>`;
+      }
+    }
+    function closeChangelog() { changelogOverlay.classList.remove("active"); }
+    changelogOverlay.addEventListener("click", (e) => { if (e.target === changelogOverlay) closeChangelog(); });
+
+    /* ============================================================
        ARROW DRAWING
+       (Static connectors removed — the dynamic goal-based spotlight
+       + path breadcrumb above now shows the recommended route instead.)
     ============================================================ */
     function drawArrows() {
       const svg = document.getElementById("flowSvg");
-      const wrap = document.getElementById("layoutWrap");
-      
       svg.innerHTML = `
         <defs>
           <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
@@ -258,10 +841,6 @@
           </marker>
         </defs>
       `;
-
-      connect("card-emsE3", "card-intuneSuite", svg, wrap);
-      connect("card-intuneSuite", "card-e5Security", svg, wrap);
-      connect("card-e5Security", "card-m365E5", svg, wrap);
     }
 
     function connect(id1, id2, svg, wrap) {

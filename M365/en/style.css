@@ -87,14 +87,14 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 20px 0;
+  padding: clamp(10px, 1.6vh, 20px) 0;
 }
 
 .topbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  padding: clamp(8px, 1.2vh, 12px) clamp(14px, 1.6vw, 24px);
   border-radius: var(--radius-lg);
   
   /* Glass Effect */
@@ -112,21 +112,21 @@ body {
 }
 
 .brand-logo {
-  width: 48px;
-  height: 48px;
+  width: clamp(38px, 3vw, 48px);
+  height: clamp(38px, 3vw, 48px);
   background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
   color: white;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: clamp(18px, 1.4vw, 22px);
   box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.3);
 }
 
 .brand-text h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: clamp(14px, 1.05vw, 18px);
   font-weight: 800;
   letter-spacing: -0.01em;
   color: var(--color-text-main);
@@ -134,7 +134,7 @@ body {
 
 .brand-text p {
   margin: 2px 0 0;
-  font-size: 13px;
+  font-size: clamp(10.5px, 0.78vw, 13px);
   color: var(--color-text-muted);
   font-weight: 600;
 }
@@ -185,7 +185,8 @@ body {
 main {
   flex: 1;
   overflow: hidden;
-  padding-bottom: 30px;
+  padding-bottom: clamp(10px, 2vh, 30px);
+  min-height: 0;
 }
 
 /* Container principal avec effet verre */
@@ -199,6 +200,7 @@ main {
   flex-direction: column;
   overflow: hidden;
   animation: fadeScale 0.5s var(--ease-smooth);
+  min-height: 0;
 }
 
 @keyframes fadeScale {
@@ -207,50 +209,74 @@ main {
 }
 
 .panel-header {
-  padding: 24px 32px;
+  padding: clamp(14px, 2vh, 24px) clamp(20px, 2.4vw, 32px);
   border-bottom: 1px solid rgba(148, 163, 184, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
 }
 
-.panel-title h2 { margin: 0; font-size: 20px; font-weight: 800; color: var(--color-text-main); }
-.panel-title p { margin: 4px 0 0; font-size: 14px; color: var(--color-text-muted); }
+.panel-title h2 { margin: 0; font-size: clamp(16px, 1.3vw, 20px); font-weight: 800; color: var(--color-text-main); }
+.panel-title p { margin: 4px 0 0; font-size: clamp(11.5px, 0.85vw, 14px); color: var(--color-text-muted); }
 
 /* --- ARCHITECTURE GRID --- */
 .arch-board {
   flex: 1;
   overflow: auto;
   position: relative;
-  padding: 40px;
+  padding: clamp(12px, 2vh, 32px) clamp(16px, 2.4vw, 40px);
   display: flex;
   justify-content: center;
+  min-height: 0;
 }
 
 .arch-layout {
   position: relative;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1800px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 80px; /* Espace vertical entre colonnes et socle */
+  gap: clamp(14px, 2.2vh, 32px); /* Espace vertical entre colonnes et socle */
+  min-height: 0;
 }
 
 .arch-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
-  align-items: center; /* Centrage vertical */
+  grid-template-rows: minmax(0, 1fr);
+  gap: clamp(12px, 1.6vw, 32px);
+  align-items: stretch; /* Colonnes de même hauteur */
   position: relative;
   z-index: 2; /* Au dessus des flèches */
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .arch-grid { grid-template-columns: repeat(2, 1fr) !important; grid-template-rows: none !important; }
+  .arch-board { overflow: auto; }
+}
+@media (max-width: 640px) {
+  .arch-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Each column is itself a flex column so its .stack/.foundation-group
+   (and the cards inside) can flex to exactly fill the stretched row height. */
+.arch-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
 }
 
 /* Colonnes & Titres */
 .col-header {
   text-align: center;
-  margin-bottom: 24px;
-  font-size: 12px;
+  margin-bottom: clamp(10px, 1.6vh, 20px);
+  font-size: clamp(10.5px, 0.85vw, 12px);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -259,15 +285,47 @@ main {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 .dot { width: 8px; height: 8px; border-radius: 50%; display: block; }
+.step-num {
+  width: clamp(18px, 1.5vw, 22px); height: clamp(18px, 1.5vw, 22px);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: clamp(9.5px, 0.75vw, 11px);
+  font-weight: 800;
+  flex-shrink: 0;
+}
 
 /* Groupes (Stack) */
 .stack {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: clamp(10px, 1.6vh, 22px);
+  flex: 1;
+  min-height: 0;
 }
+.stack > .card { flex: 1; } /* card's own min-height clamp() still applies as a readability floor */
+
+/* Connector between two cards that build on one another (e.g. E5 -> E7) */
+.stack-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: -4px 0;
+  font-size: clamp(9.5px, 0.75vw, 11px);
+  font-weight: 800;
+  color: #6366f1;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+.stack-connector i { font-size: 13px; }
 
 /* --- CARDS (Le cœur du design) --- */
 .card {
@@ -275,12 +333,15 @@ main {
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid white;
   border-radius: var(--radius-md);
-  padding: 24px;
+  padding: clamp(12px, 1.8vh, 24px) clamp(14px, 1.6vw, 24px);
   box-shadow: var(--shadow-card);
   transition: all 0.3s var(--ease-bounce);
   cursor: pointer;
   z-index: 10;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(96px, 14.5vh, 163px); /* floor so icon+title are never clipped when columns stack many cards */
 }
 
 .card:hover {
@@ -295,53 +356,63 @@ main {
 .card-header {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: clamp(10px, 1.2vw, 16px);
+  margin-bottom: clamp(6px, 1vh, 12px);
+  flex-shrink: 0;
+  padding-right: clamp(16px, 1.6vw, 24px); /* reserve room so the corner info icon never overlaps the title text */
 }
 
 .card-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+  width: clamp(34px, 3vw, 52px);
+  height: clamp(34px, 3vw, 52px);
+  border-radius: clamp(10px, 1vw, 16px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: clamp(16px, 1.4vw, 24px);
   color: white;
   flex-shrink: 0;
   box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
 }
 
+.card-titles {
+  min-width: 0; /* allow the title to shrink/wrap instead of overflowing into the corner info icon */
+}
 .card-titles h3 {
   margin: 0;
-  font-size: 17px;
+  font-size: clamp(13px, 1vw, 17px);
   font-weight: 800;
   color: var(--color-text-main);
   line-height: 1.2;
 }
-
 .card-titles span {
   display: block;
   margin-top: 4px;
-  font-size: 13px;
+  font-size: clamp(10.5px, 0.78vw, 13px);
   font-weight: 600;
   color: var(--color-text-muted);
 }
 
 .card-body {
-  font-size: 13.5px;
+  font-size: clamp(11px, 0.82vw, 13.5px);
   color: #475569;
-  line-height: 1.5;
-  margin-bottom: 16px;
+  line-height: 1.45;
+  margin-bottom: clamp(8px, 1.2vh, 16px);
+  flex: 1;
+  min-height: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .card-body strong { color: var(--color-text-main); font-weight: 700; }
 
 /* Pills / Badges */
-.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pills { display: flex; flex-wrap: wrap; gap: clamp(4px, 0.6vw, 8px); flex-shrink: 0; }
 .pill {
-  font-size: 11px;
+  font-size: clamp(9px, 0.68vw, 11px);
   font-weight: 700;
-  padding: 4px 10px;
+  padding: clamp(2px, 0.4vh, 4px) clamp(6px, 0.8vw, 10px);
   border-radius: 20px;
   background: #f1f5f9;
   color: #64748b;
@@ -384,29 +455,34 @@ main {
 
 /* Socle Azure (Bas de page) */
 .footer-socle {
-  margin-top: 20px;
+  margin-top: clamp(6px, 1vh, 20px);
   width: 100%;
   display: flex;
   justify-content: center;
   z-index: 2;
+  flex-shrink: 0;
 }
 .card-socle {
   width: 100%;
   background: linear-gradient(to right, #ffffff, #f8fafc);
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: clamp(14px, 1.8vw, 32px);
   border-top: 4px solid var(--accent-sky);
 }
-.card-socle .card-body { margin-bottom: 0; flex: 1; font-size: 15px; }
+.card-socle .card-body { margin-bottom: 0; flex: 1; font-size: clamp(12px, 0.95vw, 15px); -webkit-line-clamp: 4; }
 
 /* Foundation Group (Cadre ME3) */
 .foundation-group {
   position: relative;
   border: 2px dashed rgba(14, 165, 233, 0.25);
   border-radius: 24px;
-  padding: 24px;
+  padding: clamp(12px, 1.8vh, 24px);
   background: rgba(14, 165, 233, 0.02);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 .foundation-label {
   position: absolute;
@@ -416,7 +492,7 @@ main {
   color: #0284c7;
   padding: 4px 12px;
   border-radius: 12px;
-  font-size: 11px;
+  font-size: clamp(9.5px, 0.72vw, 11px);
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -427,6 +503,7 @@ main {
 .icon-red    { background: linear-gradient(135deg, #f87171, #dc2626); }
 .icon-dark   { background: linear-gradient(135deg, #1e293b, #4338ca); border: 1px solid rgba(255,255,255,0.2); }
 .icon-azure  { background: linear-gradient(135deg, #0ea5e9, #6366f1); }
+.icon-green  { background: linear-gradient(135deg, #34d399, #059669); }
 
 /* SVG Arrows */
 .flow-svg {
@@ -655,7 +732,6 @@ tbody td:first-child {
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {
-  .arch-grid { grid-template-columns: repeat(2, 1fr); }
   .detail-grid { grid-template-columns: 1fr; }
 }
 
@@ -697,3 +773,270 @@ tbody td:first-child {
   color: #10b981; /* Vert Frontline */
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
+
+/* Style actif pour "All plans" (Indigo neutre) */
+.ps-btn.active-all {
+  background: white;
+  color: #6366f1;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* ============================================================
+   10. HOW TO READ THIS (Guided caption)
+============================================================ */
+.how-to-read {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 24px 16px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  color: #4338ca;
+  font-size: 13px;
+  line-height: 1.6;
+  min-width: 0;
+}
+.how-to-read > span { flex: 1 1 auto; min-width: 0; }
+.how-to-read i { margin-top: 2px; color: var(--accent-indigo); flex-shrink: 0; }
+.how-to-read strong { color: #312e81; }
+
+/* ============================================================
+   6. SOURCE / FRESHNESS BADGE (Topbar)
+============================================================ */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #047857;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.source-badge:hover {
+  background: rgba(16, 185, 129, 0.16);
+  transform: translateY(-1px);
+}
+.source-badge i { font-size: 12px; }
+
+/* ============================================================
+   7. WHAT'S NEW / CHANGE LOG
+============================================================ */
+.changelog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.changelog-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 12px;
+  transition: background 0.15s ease;
+}
+.changelog-row:hover { background: #f8fafc; }
+.changelog-date {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.changelog-body strong {
+  display: block;
+  font-size: 14px;
+  color: var(--color-text-main);
+  margin-bottom: 2px;
+}
+.changelog-body span {
+  font-size: 13px;
+  color: #64748b;
+}
+.changelog-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.changelog-tag.new { background: #dcfce7; color: #15803d; }
+.changelog-tag.change { background: #fef3c7; color: #b45309; }
+
+/* ============================================================
+   8. SECTION TABS (Matrix: Core / Add-ons / Windows Add-ons)
+============================================================ */
+.section-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 0 24px 20px;
+  flex-wrap: wrap;
+}
+.section-tab {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: white;
+  color: #64748b;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-bounce);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-tab:hover { color: var(--color-text-main); border-color: rgba(99,102,241,0.3); }
+.section-tab.active {
+  background: var(--color-text-main);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.2);
+}
+.section-tab .tab-count {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   9. LEGEND (Matrix key)
+============================================================ */
+.matrix-legend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 24px 16px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+.matrix-legend .legend-item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ============================================================
+   11. GOAL SELECTOR & GUIDED PATH (Architecture pages)
+============================================================ */
+.goal-strip {
+  display: flex;
+  gap: clamp(8px, 1vw, 14px);
+  padding: 0 clamp(16px, 2.2vw, 32px);
+  margin-top: clamp(10px, 1.4vh, 16px);
+  flex-shrink: 0;
+}
+.goal-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: clamp(8px, 1.1vh, 13px) clamp(10px, 1.2vw, 18px);
+  border-radius: 999px;
+  font-size: clamp(11.5px, 0.9vw, 13.5px);
+  font-weight: 800;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.7);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-bounce);
+  text-align: center;
+}
+.goal-pill:hover { background: rgba(255,255,255,0.9); transform: translateY(-1px); }
+.goal-pill.active {
+  background: var(--color-text-main);
+  color: white;
+  box-shadow: var(--shadow-card);
+}
+.goal-pill i { font-size: 0.95em; flex-shrink: 0; }
+
+.path-caption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: clamp(11px, 0.85vw, 13px);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  background: rgba(99, 102, 241, 0.07);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  padding: clamp(7px, 1vh, 11px) clamp(16px, 2.2vw, 30px);
+  margin: clamp(8px, 1.2vh, 14px) clamp(16px, 2.2vw, 32px) 0;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.path-caption .pc-label { color: var(--accent-indigo); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.path-caption .step-chip {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.95em;
+  font-weight: 800;
+  color: var(--color-text-main);
+  white-space: nowrap;
+}
+.path-caption i.pc-arrow { color: #c7d2fe; font-size: 0.8em; }
+
+/* Card states driven by the active goal's path */
+.card.on-path {
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.22), var(--shadow-float);
+  transform: translateY(-2px);
+}
+.card.on-path:hover { transform: translateY(-6px) scale(1.02); }
+.card.card-hero.on-path {
+  box-shadow: 0 0 0 4px rgba(165,180,252,0.5), 0 25px 50px -12px rgba(99, 102, 241, 0.5);
+}
+.card.muted {
+  opacity: 0.48;
+  filter: saturate(0.65);
+}
+.card.muted:hover { opacity: 0.85; }
+
+.step-badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: clamp(20px, 1.7vw, 25px);
+  height: clamp(20px, 1.7vw, 25px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  font-size: clamp(10px, 0.8vw, 12px);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px -2px rgba(99,102,241,0.6);
+  border: 2px solid white;
+  z-index: 15;
+}
+
+.always-on-badge {
+  align-self: flex-end;
+  margin-bottom: 6px;
+  font-size: 8.8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #ede9fe;
+  color: #6d28d9;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.card-hero .always-on-badge { background: rgba(255,255,255,0.18); color: #e9d5ff; }

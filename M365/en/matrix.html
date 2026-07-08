@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"/>
   <title>M365 Licensing — Sales Matrix</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  
-  <link rel="stylesheet" href="style.css"/>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <link rel="stylesheet" href="style.css?v=20260701"/>
 
   <style>
     /* SPECIFIC STYLES FOR THE LARGE MATRIX */
@@ -94,7 +97,17 @@
     }
     .dot-inc { background: #dcfce7; color: #166534; }
     .dot-add { background: #dbeafe; color: #1e40af; }
+    .dot-partial { background: #ffedd5; color: #c2410c; }
     .dot-no  { color: #e2e8f0; font-size: 10px; }
+    .dot-text {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #475569;
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 3px 6px;
+      white-space: nowrap;
+    }
     
     /* Hover Row */
     tbody tr:hover td { background: #f8fafc; }
@@ -113,16 +126,21 @@
             <div class="brand-logo"><i class="fa-brands fa-microsoft"></i></div>
             <div class="brand-text">
               <h1>M365 Licensing Matrix</h1>
-              <p>Granular Comparison (18 Licenses)</p>
+              <p id="brandSub">Granular Comparison</p>
             </div>
           </div>
 <div class="nav-actions">
-  <div class="persona-switch">
-    <a href="architecture.html" class="ps-btn" title="Voir l'Architecture Enterprise">Enterprise</a>
-    <a href="frontline_arch.html" class="ps-btn" title="Voir l'Architecture Frontline">Frontline</a>
+  <button class="source-badge" onclick="openChangelog()" title="View what changed in the July 2026 update">
+    <i class="fa-solid fa-circle-check"></i> Updated Jul 1, 2026
+  </button>
+
+  <div class="persona-switch" id="personaSwitch">
+    <a href="matrix.html?persona=all" class="ps-btn" data-persona="all" title="Show every plan side by side">All plans</a>
+    <a href="matrix.html?persona=enterprise" class="ps-btn" data-persona="enterprise" title="Show only Enterprise / Information Worker plans">Enterprise</a>
+    <a href="matrix.html?persona=frontline" class="ps-btn" data-persona="frontline" title="Show only Frontline Worker plans">Frontline</a>
   </div>
 
-  <a href="architecture.html" class="btn"><i class="fa-solid fa-diagram-project"></i> Architecture</a>
+  <a href="architecture.html" class="btn" id="archNavBtn"><i class="fa-solid fa-diagram-project"></i> Architecture</a>
   <button class="btn active"><i class="fa-solid fa-table"></i> Sales Matrix</button>
 </div>
         </div>
@@ -134,15 +152,29 @@
         <div class="panel-header">
           <div class="panel-title">
             <h2>Deep Dive Comparison</h2>
-            <p>Exhaustive view of features by SKU.</p>
+            <p id="panelSub">Exhaustive view of features by SKU.</p>
           </div>
         </div>
+
+        <div class="how-to-read" id="howToRead">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span><strong>How to read this:</strong> pick <strong>All plans</strong>, <strong>Enterprise</strong> or <strong>Frontline</strong> above to filter the columns you care about, use the tabs below to switch between the core comparison and the add-on tables, then search or scroll to find a capability. <span class="dot-badge dot-inc" style="width:16px;height:16px;font-size:9px;display:inline-flex;vertical-align:middle;"><i class="fa-solid fa-check"></i></span> = included, <span class="dot-badge dot-add" style="width:16px;height:16px;font-size:9px;display:inline-flex;vertical-align:middle;"><i class="fa-solid fa-plus"></i></span> = can be added.</span>
+        </div>
+
+        <div class="section-tabs" id="sectionTabs"></div>
 
         <div class="matrix-search-container">
           <div class="search-input-wrapper">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="q" class="search-input" placeholder="Filter features (e.g., EPM, Copilot, Bitlocker...)" autofocus>
           </div>
+        </div>
+
+        <div class="matrix-legend">
+          <span class="legend-item"><div class="dot-badge dot-inc" style="width:18px;height:18px;font-size:10px;"><i class="fa-solid fa-check"></i></div> Included</span>
+          <span class="legend-item"><div class="dot-badge dot-add" style="width:18px;height:18px;font-size:10px;"><i class="fa-solid fa-plus"></i></div> Can be added</span>
+          <span class="legend-item"><div class="dot-badge dot-partial" style="width:18px;height:18px;font-size:10px;"><i class="fa-solid fa-circle-half-stroke"></i></div> Partially included</span>
+          <span class="legend-item"><span class="dot-no"><i class="fa-solid fa-minus"></i></span> Not applicable</span>
         </div>
 
         <div class="matrix-table-container thin-scroll">
@@ -159,33 +191,7378 @@
     </main>
   </div>
 
-  <script>
-    let MATRIX_DATA = {};
+  <div class="modal-overlay" id="changelogOverlay">
+    <div class="modal-content" style="width:min(720px, 95%);">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon" style="background:#059669;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <div class="modal-text">
+            <h2>What's new</h2>
+            <span>Changes since the previous licensing comparison</span>
+          </div>
+        </div>
+        <button class="btn-close" onclick="closeChangelog()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-scroll thin-scroll" style="background:white;">
+        <ul class="changelog-list" id="changelogList">
+          <li class="changelog-row"><span class="changelog-date">—</span><div class="changelog-body">Loading…</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" id="matrix-data">
+{
+ "meta": {
+  "source": "Microsoft 365, Office 365, Enterprise Mobility + Security, and Windows 11 Subscriptions comparison",
+  "publishDate": "2026-07-01",
+  "lastSynced": "2026-07-07"
+ },
+ "sections": [
+  {
+   "id": "core",
+   "label": "Core plan comparison",
+   "description": "Information Worker, Agent, and Frontline Worker plans side by side.",
+   "columns": [
+    "M365 E3",
+    "M365 E5",
+    "M365 E7",
+    "Defender Suite",
+    "Purview Suite",
+    "O365 E1",
+    "O365 E3",
+    "O365 E5",
+    "EMS E3",
+    "EMS E5",
+    "Win 11 Pro",
+    "Win 11 Ent E3",
+    "Win 11 Ent E5",
+    "Agent 365 (incl.)",
+    "Agent 365 License",
+    "M365 F1",
+    "M365 F3",
+    "Defender Suite FLW",
+    "Purview Suite FLW",
+    "Defender+Purview FLW",
+    "O365 F3"
+   ],
+   "matrix": [
+    {
+     "category": "Copilot",
+     "items": [
+      {
+       "name": "Copilot Chat",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Copilot Chat Analytics",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 Copilot",
+       "vals": [
+        2,
+        2,
+        1,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Security Copilot",
+       "vals": [
+        2,
+        1,
+        1,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Agent Observability",
+     "items": [
+      {
+       "name": "Agent Identity",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Agent Registry",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Basic agent usage insights",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Advanced agent usage insights",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Agent map",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Registry sync",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Graph API",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Agent Governance",
+     "items": [
+      {
+       "name": "Agent Identity Governance",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Lifecycle management for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Admin agent governance actions",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Automate agent lifecycle actions",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Tool controls for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Policy templates for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Audit logs and eDiscovery for agent activity",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Data Lifecycle Management for agent data and interactions",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Communication compliance for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Agent Security",
+     "items": [
+      {
+       "name": "Data Security Posture Management for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Insider Risk Management for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Agents inherit and honor data sensitivity labels",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Data loss prevention for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Conditional access and identity protection for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Secure Access Service Edge (SASE) for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Device compliance for agent conditional access",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Policy controlled environment for agents runtime",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Configure policies to contain managed local agents",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Block unsanctioned local endpoint agents",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Discovery of AI on endpoints",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Agent Security Posture Management",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Threat Detection and Blocking for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Threat Hunting and Investigation for agents",
+       "vals": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Microsoft 365 apps",
+     "items": [
+      {
+       "name": "Desktop client apps",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 for mobile",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "Read only",
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Install apps on up to 5 PCs/Mac + 5 tablets + 5 smartphones",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft 365 for the web",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "Read only",
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Visio for the web",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "Read only",
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Create and share Microsoft Loop components and pages",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Create and share Loop workspaces",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Contribute to Loop components, pages and workspaces",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Clipchamp Standard",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Editor premium features",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Multilingual user interface for Microsoft 365 apps",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Email, calendar, and scheduling",
+     "items": [
+      {
+       "name": "Exchange Kiosk (2 GB mailbox)",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        "See note",
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Exchange Plan 1 (50 GB mailbox + 50 GB archive)",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Exchange Plan 2 (100 GB mailbox + up to 1.5 TB archive)",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Calendar",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Outlook desktop client",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Auto-expanding email archive",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Built-in security add-on for cloud mailboxes",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Public folder mailboxes",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Resource mailboxes",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Inactive mailboxes",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Shifts",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft Bookings",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Meetings, calling, and chat",
+     "items": [
+      {
+       "name": "Microsoft Teams",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Unlimited chat",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Online meetings",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Town hall",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Webinars",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Immersive Events",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Avatars for Teams",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Screen sharing and custom backgrounds",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Record meetings",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Priority notifications",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Teams Phone Standard",
+       "vals": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Audio Conferencing",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Intranet and storage",
+     "items": [
+      {
+       "name": "SharePoint Kiosk (2 GB OneDrive storage)",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "SharePoint Plan 1 (1 TB OneDrive storage)",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "SharePoint Plan 2 (1+ TB OneDrive storage)",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Content services",
+     "items": [
+      {
+       "name": "Microsoft Graph API",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft Search",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft Forms",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft Lists",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Delve",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Places",
+     "items": [
+      {
+       "name": "In-person events, Hybrid RSVP, Places card, Work plans, Workplace presence",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Places Explorer",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Places Finder",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Analytics",
+     "items": [
+      {
+       "name": "Adoption Score",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Secure Score",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Compliance Management",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Power BI Pro",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Project and task management",
+     "items": [
+      {
+       "name": "Microsoft Planner",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft To-Do",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Viva Learning",
+     "items": [
+      {
+       "name": "Viva Learning in Teams",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Create learning tabs in Teams channels",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Search, share, and chat about learning content",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft Learn and Microsoft 365 Training libraries + 125 top LinkedIn Learning courses",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Organization-generated content with SharePoint and Viva Learning",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Viva Insights",
+     "items": [
+      {
+       "name": "Viva Insights app in Teams",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Personal insights and experiences",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Premium personal insights and experiences",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Viva Engage",
+     "items": [
+      {
+       "name": "Communities, Conversations, and Storyline",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Advanced Security",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Viva Connection",
+     "items": [
+      {
+       "name": "Dashboard, Feed, Resources, Teams app",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Automation, app building, and chatbots",
+     "items": [
+      {
+       "name": "Power Apps for Microsoft 365",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Power Automate for Microsoft 365",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Copilot Studio for Teams",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Dataverse for Teams",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Endpoint and app management",
+     "items": [
+      {
+       "name": "Microsoft Intune Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Intune Plan 2",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Mobile Device Management",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Mobile application management",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows Autopilot",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Group Policy support for Windows",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Group Policy support for Microsoft 365 apps",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Cloud Policy service for Microsoft 365",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Shared computer activation for Microsoft 365 apps",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Endpoint Analytics",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Intune Remote Help",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Intune Advanced Analytics",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Threat protection",
+     "items": [
+      {
+       "name": "Microsoft Defender Antimalware",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Microsoft Defender Firewall",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Exploit Guard",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Credential Guard",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "BitLocker and BitLocker To Go",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows Information Protection",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint Plan 2",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for IoT – Enterprise IoT",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender XDR",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Identity",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Office 365 Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Office 365 Plan 2",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Application Guard for Edge",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Application Guard for Office",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Security Exposure Management",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "URL time-of-click protection",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Safe Documents",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Cloud access security broker",
+     "items": [
+      {
+       "name": "Microsoft Defender for Cloud Apps Discovery",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Cloud Apps",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Office 365 Cloud App Security",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Data lifecycle management",
+     "items": [
+      {
+       "name": "Manual retention labels",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Basic org-wide or location-wide retention policies",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Rules-based automatic retention policies",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Machine Learning-based retention",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Teams message retention policies",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Records Management",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Identity and access management",
+     "items": [
+      {
+       "name": "Microsoft Entra ID Free",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Plan 2",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra Suite",
+       "vals": [
+        2,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Protection",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra Internet Access for Microsoft Services",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "User Provisioning",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Cloud user self-service password change",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Cloud user self-service password reset",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Hybrid user self-service password change/reset with on-premises write-back",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Advanced Security Reports",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Multi Factor Authentication",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Conditional Access",
+       "vals": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Risk Based Conditional Access / Identity Protection",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Privileged Identity Management",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Access Reviews",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Entitlement Management",
+       "vals": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 Groups",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Single sign-on (SSO)",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "DirectAccess supported",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows Hello for Business",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Data loss prevention (DLP)",
+     "items": [
+      {
+       "name": "DLP for emails & files",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "DLP for Teams chat",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Endpoint DLP",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "eDiscovery and auditing",
+     "items": [
+      {
+       "name": "eDiscovery (Standard) (including Hold and Export)",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Litigation Hold",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "eDiscovery (Premium)",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Audit (Standard)",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1
+       ]
+      },
+      {
+       "name": "Audit (Premium)",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Information protection",
+     "items": [
+      {
+       "name": "Azure Information Protection Plan 1",
+       "vals": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Azure Information Protection Plan 2",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Manual, default, and mandatory sensitivity labeling in Microsoft 365 apps",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Automatic sensitivity labeling in Microsoft 365 apps",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Manual sensitivity labeling for Teams meetings",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Default sensitivity labels for SharePoint document libraries",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Automatic sensitivity labels in Exchange, SharePoint, and OneDrive",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Sensitivity labels based on advanced classifiers",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Sensitivity labeling for containers in Microsoft 365",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Basic Message Encryption",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Advanced Message Encryption",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Customer Key",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Personal Data Encryption",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows Information Protection",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Insider risk management",
+     "items": [
+      {
+       "name": "Microsoft Purview Insider Risk Management",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Adaptive Protection",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Communication Compliance",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Information Barriers",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Customer Lockbox",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      },
+      {
+       "name": "Privileged Access Management",
+       "vals": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Windows",
+     "items": [
+      {
+       "name": "Windows 11 Edition",
+       "vals": [
+        "Enterprise",
+        "Enterprise",
+        "Enterprise",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "Pro",
+        "Enterprise",
+        "Enterprise",
+        0,
+        0,
+        0,
+        "Enterprise",
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Azure Virtual Desktop",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows 365 Enterprise access",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Virtual Desktop Access",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Universal Print",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows Autopatch",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Windows Enterprise LTSC and MDOP",
+       "vals": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Quick Machine Recovery",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Post-quantum security APIs",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "addons",
+   "label": "Add-on subscriptions",
+   "description": "Security, Copilot, Teams, Viva, SharePoint, video, and Power Platform add-ons.",
+   "columns": [
+    "M365 E3",
+    "M365 E5",
+    "M365 E7",
+    "O365 E1",
+    "O365 E3",
+    "O365 E5",
+    "M365 F1",
+    "M365 F3",
+    "O365 F3"
+   ],
+   "matrix": [
+    {
+     "category": "Security and compliance",
+     "items": [
+      {
+       "name": "Microsoft 365 Defender Suite",
+       "vals": [
+        2,
+        1,
+        1,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 Purview Suite",
+       "vals": [
+        2,
+        1,
+        1,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 E5 Info Protection and Governance",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        3,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 E5 Insider Risk Management",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        3,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Forensic evidence add-on for Insider Risk Management",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft 365 E5 eDiscovery and Audit",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Suite FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Purview Suite FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft 365 Defender + Purview Suite FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft 365 F5 Information Protection and Governance",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft 365 F5 Insider Risk Management",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft 365 F5 eDiscovery and Audit",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint F1",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint F2",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Office F1",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Office F2",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Identity F1",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Cloud Apps F1",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Identity",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Office 365 Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Office 365 Plan 2",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Cloud Apps",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint Plan 2",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender for Endpoint for servers",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender Experts for Hunting - XDR",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender Experts for XDR",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender for IoT – Enterprise for IoT",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender Vulnerability Management (standalone)",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Vulnerability Management (add-on)",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender Vulnerability Management FLW (standalone)",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Defender Vulnerability Management add-on to Defender for Endpoint for servers",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Defender Experts Suite P1 and P2",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        2,
+        2,
+        0
+       ]
+      },
+      {
+       "name": "Premium Assessments add-on for Compliance Manager",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Priva Privacy Risk Management",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Priva Subject Rights Requests",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Compliance Program for Microsoft Cloud",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Purview Data Loss Prevention (for email and files)",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        0,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Exchange Archiving",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        0,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        1,
+        1,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Plan 2",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID F2",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Governance",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Governance FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Governance Plan 2",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra ID Governance F2 FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra Suite",
+       "vals": [
+        2,
+        2,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra Suite FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra Suite Add-On for Microsoft Entra ID P2",
+       "vals": [
+        2,
+        2,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra Suite Add-On for Microsoft Entra ID F2 FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra Internet Access",
+       "vals": [
+        2,
+        2,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra Private Access",
+       "vals": [
+        2,
+        2,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Entra Internet Access for FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Entra Private Access for FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "10-year Audit Log Retention",
+       "vals": [
+        0,
+        2,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "10-year Audit Log Retention for FLW",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Plan 1",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        1,
+        1,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Plan 2",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Suite",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Remote Help",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Advanced Analytics",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Enterprise Application Management",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Cloud PKI",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft Intune Endpoint Privilege Management",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Copilot",
+     "items": [
+      {
+       "name": "Microsoft Security Copilot",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Copilot Studio per tenant per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Teams services",
+     "items": [
+      {
+       "name": "Teams Enterprise/Teams EEA",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "name": "Teams Premium",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Audio Conferencing with Dial Out to US and Canada",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Extended Dial Out Minutes to US and Canada",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Teams Phone Standard",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        1,
+        0,
+        0,
+        2
+       ]
+      },
+      {
+       "name": "Teams Phone Standard for Frontline Workers",
+       "vals": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Domestic Calling Plan",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Domestic Calling 120-minute Plan",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "International Calling Plan",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Pay-as-you-go Calling Plan",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Teams Phone with Domestic Calling Plan",
+       "vals": [
+        2,
+        3,
+        3,
+        2,
+        2,
+        3,
+        0,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Teams Phone with International Calling Plan",
+       "vals": [
+        2,
+        3,
+        3,
+        2,
+        2,
+        3,
+        0,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Teams Phone with Pay-as-you-go Calling Plan",
+       "vals": [
+        2,
+        3,
+        3,
+        2,
+        2,
+        3,
+        0,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Attendee Packs",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Teams Shared Space License",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Microsoft Teams Room Pro",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Microsoft Viva",
+     "items": [
+      {
+       "name": "Viva suite",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Viva Workplace Analytics and Employee Feedback",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Viva Employee Communications and Communities",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Viva Insights",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+       ]
+      },
+      {
+       "name": "Viva Learning",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Viva Glint",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Viva Pulse",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "category": "SharePoint, storage, and migration",
+     "items": [
+      {
+       "name": "SharePoint Advanced Management",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Microsoft 365 Extra File Storage",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Advanced eDiscovery Storage",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Cross-tenant user data migration",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Advanced Data Residency",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Video editing",
+     "items": [
+      {
+       "name": "Microsoft Clipchamp Standard",
+       "vals": [
+        1,
+        1,
+        1,
+        2,
+        1,
+        1,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Clipchamp Premium",
+       "vals": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Clipchamp Premium Add-on",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "category": "Power Platform",
+     "items": [
+      {
+       "name": "Power BI Pro per user per month",
+       "vals": [
+        2,
+        1,
+        1,
+        2,
+        2,
+        1,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power BI Premium per user per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Apps per-app (1 app OR website + 250 AI Builder credits per user per month)",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Apps Premium unlimited apps and websites + 500 AI Builder credits per user per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Automate per-user (unlimited flows per user per month)",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Automate Premium (unlimited flows + 5K AI Builder credits per user per month)",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Automate Process per bot per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Automate per flow per month for unlimited users",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Copilot Studio per tenant per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Pages Authenticated users per website per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Pages Anonymous users per website per month",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Apps per app pay-as-you-go meter",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Pages Authenticated users pay-as-you-go meter",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Power Pages Anonymous users pay-as-you-go meter",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Dataverse Database Capacity Add-on",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Dataverse File Capacity Add-On",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "Dataverse Log Capacity Add-On",
+       "vals": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "windows-addons",
+   "label": "Windows add-ons",
+   "description": "Add-ons that also extend to Windows 11 Enterprise E3/E5.",
+   "columns": [
+    "M365 E3",
+    "M365 E5",
+    "M365 E7",
+    "O365 E1",
+    "O365 E3",
+    "O365 E5",
+    "M365 F1",
+    "M365 F3",
+    "O365 F3",
+    "Win 11 Ent E3",
+    "Win 11 Ent E5"
+   ],
+   "matrix": [
+    {
+     "category": "Windows",
+     "items": [
+      {
+       "name": "Universal Print Volume Add-on",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+       ]
+      },
+      {
+       "name": "High Efficiency Video Codec (HEVC)",
+       "vals": [
+        2,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        2,
+        2
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
+</script>
+<script type="application/json" id="changelog-data">
+{
+ "publishDate": "2026-07-01",
+ "entries": [
+  {
+   "feature": "Quick Machine Recovery",
+   "change": "Added Quick Machine Recovery",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Post-quantum security APIs",
+   "change": "Added Post-quantum security APIs",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "URL time-of-click protection",
+   "change": "Added URL time-of-click protection",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Intune Remote Help",
+   "change": "Added Microsoft Intune Remote Help",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Intune Advanced Analytics",
+   "change": "Added Microsoft Intune Advanced Analytics",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Copilot Chat Analytics",
+   "change": "Added Copilot Chat Analytics",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Entra Suite",
+   "change": "Added Microsoft Entra Suite",
+   "action": "New",
+   "date": "2026-06"
+  },
+  {
+   "feature": "E7",
+   "change": "Added Microsoft 365 E7",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent 365",
+   "change": "Added Agent 365",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Observability",
+   "change": "Added Agent Observability",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Security",
+   "change": "Added Agent Security",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Governance",
+   "change": "Added Agent Governance",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Copilot Chat and Microsoft 365 Copilot",
+   "change": "Changed from Add-ons to Suites",
+   "action": "Change",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Town Hall",
+   "change": "Town Hall now ‘Included’ in certain Suites; added new footnote",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Webinars",
+   "change": "Webinars now ‘Included’ in certain Suites",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Immersive Events",
+   "change": "Added Immersive Events",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Places Explorer",
+   "change": "Added Places Explorer",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Places Finder",
+   "change": "Added Places Finder",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Windows 11 Edition",
+   "change": "Added new footnote",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "SharePoint Plan 2",
+   "change": "Additional storage requirements",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Attendee Packs",
+   "change": "Added Attendee Packs",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Microsoft Teams Shared Space License",
+   "change": "Added Microsoft Teams Shared Space License",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Microsoft Teams Room Pro",
+   "change": "Added Microsoft Teams Room Pro",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Basic org-wide or location-wide retention policies",
+   "change": "Added for all Purview Suites",
+   "action": "Change",
+   "date": "2026-03"
+  },
+  {
+   "feature": "Exchange Online Protection",
+   "change": "Rebranded to Built-in security add-on for cloud mailboxes",
+   "action": "Change",
+   "date": "2026-03"
+  },
+  {
+   "feature": "Microsoft Defender Experts Suite P1 and P2",
+   "change": "Added Microsoft Defender Experts Suite P1 and P2 as add-on",
+   "action": "New",
+   "date": "2026-02"
+  },
+  {
+   "feature": "Microsoft Security Copilot",
+   "change": "Added Microsoft Security Copilot to M365 E5",
+   "action": "New",
+   "date": "2025-12"
+  },
+  {
+   "feature": "Microsoft Security Copilot",
+   "change": "Added Microsoft Security Copilot as add-on",
+   "action": "New",
+   "date": "2025-12"
+  },
+  {
+   "feature": "Microsoft 365 Copilot Business",
+   "change": "Added Microsoft 365 Copilot Business as add-on",
+   "action": "New",
+   "date": "2025-12"
+  }
+ ]
+}
+</script>
+<script>
+    /* ============================================================
+       SECURITY HELPERS
+    ============================================================ */
+    function esc(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    /* ============================================================
+       PERSONA (Enterprise / Frontline / All) — column filtering
+       Column indices below map to the fixed order of each section's
+       "columns" array in datamatrix.json.
+    ============================================================ */
+    const PERSONA_COLS = {
+      core: {
+        enterprise: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+        frontline:  [13,14,15,16,17,18,19,20]
+      },
+      addons: {
+        enterprise: [0,1,2,3,4,5],
+        frontline:  [6,7,8]
+      },
+      'windows-addons': {
+        enterprise: [0,1,2,3,4,5,9,10],
+        frontline:  [6,7,8]
+      }
+    };
+
+    function getPersona() {
+      const p = new URLSearchParams(window.location.search).get('persona');
+      return (p === 'enterprise' || p === 'frontline') ? p : 'all';
+    }
+
+    function getColIndices(section) {
+      const persona = getPersona();
+      if (persona === 'all') return section.columns.map((_, i) => i);
+      const map = PERSONA_COLS[section.id];
+      return (map && map[persona]) ? map[persona] : section.columns.map((_, i) => i);
+    }
+
+    function applyPersonaChrome() {
+      const persona = getPersona();
+      document.querySelectorAll('#personaSwitch .ps-btn').forEach(a => {
+        a.classList.remove('active-ent', 'active-front', 'active-all');
+        if (a.dataset.persona === persona) {
+          a.classList.add(persona === 'enterprise' ? 'active-ent' : persona === 'frontline' ? 'active-front' : 'active-all');
+        }
+      });
+      // The Architecture button should always route to the matching card view.
+      const archBtn = document.getElementById('archNavBtn');
+      archBtn.href = persona === 'frontline' ? 'frontline_arch.html' : 'architecture.html';
+    }
+
+    /* ============================================================
+       STATE & DOM
+    ============================================================ */
+    let MATRIX_DATA = { sections: [] };
+    let ACTIVE_SECTION = 0;
     const thead = document.getElementById("mxThead");
     const tbody = document.getElementById("mxTbody");
     const qInput = document.getElementById("q");
+    const tabsEl = document.getElementById("sectionTabs");
+    const brandSub = document.getElementById("brandSub");
+    const panelSub = document.getElementById("panelSub");
 
     async function loadData() {
       try {
-        const response = await fetch('datamatrix.json');
-        if (!response.ok) throw new Error("HTTP Error");
-        MATRIX_DATA = await response.json();
+        applyPersonaChrome();
+        // Data is embedded directly in this page (see <script type="application/json" id="matrix-data">
+        // above), so it works with a simple double-click — no local web server required.
+        MATRIX_DATA = JSON.parse(document.getElementById('matrix-data').textContent);
+        renderTabs();
         renderTable();
       } catch (error) {
         console.error(error);
-        tbody.innerHTML = `<tr><td style="padding:40px;color:red;text-align:center;">Unable to load datamatrix.json (CORS/Server required).</td></tr>`;
+        tbody.innerHTML = `<tr><td style="padding:40px;color:red;text-align:center;">Unable to parse the embedded matrix data.</td></tr>`;
       }
+    }
+
+    // Rows where every visible column is empty/N-A add no value for the current
+    // persona, so they are hidden to keep the filtered view clean and relevant.
+    function visibleItems(group, colIndices, query) {
+      return group.items.filter(item => {
+        if (!item.name.toLowerCase().includes(query)) return false;
+        return colIndices.some(i => item.vals[i] !== 0 && item.vals[i] !== undefined);
+      });
+    }
+
+    function renderTabs() {
+      const sections = MATRIX_DATA.sections || [];
+      const query = qInput.value.toLowerCase().trim();
+      tabsEl.innerHTML = sections.map((s, i) => {
+        const colIndices = getColIndices(s);
+        const rowCount = s.matrix.reduce((sum, g) => sum + visibleItems(g, colIndices, '').length, 0);
+        return `<button class="section-tab ${i === ACTIVE_SECTION ? 'active' : ''}" data-idx="${i}">
+          <i class="fa-solid fa-layer-group"></i> ${esc(s.label)} <span class="tab-count">${rowCount}</span>
+        </button>`;
+      }).join('');
+
+      const persona = getPersona();
+      const totalVisible = sections.reduce((sum, s) => {
+        const colIndices = getColIndices(s);
+        return sum + s.matrix.reduce((a, g) => a + visibleItems(g, colIndices, '').length, 0);
+      }, 0);
+      const personaLabel = persona === 'enterprise' ? 'Enterprise plans' : persona === 'frontline' ? 'Frontline Worker plans' : 'All plans';
+      brandSub.textContent = `${personaLabel} — ${totalVisible} capabilities across ${sections.length} tables`;
+
+      tabsEl.querySelectorAll('.section-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          ACTIVE_SECTION = Number(btn.dataset.idx);
+          qInput.value = '';
+          renderTabs();
+          renderTable();
+        });
+      });
+    }
+
+    function renderCell(val) {
+      if (val === 1) return `<td><div class="dot-badge dot-inc" title="Included"><i class="fa-solid fa-check"></i></div></td>`;
+      if (val === 2) return `<td><div class="dot-badge dot-add" title="Can be added"><i class="fa-solid fa-plus"></i></div></td>`;
+      if (val === 3) return `<td><div class="dot-badge dot-partial" title="Partially included"><i class="fa-solid fa-circle-half-stroke"></i></div></td>`;
+      if (typeof val === 'string') return `<td><span class="dot-text">${esc(val)}</span></td>`;
+      return `<td><span class="dot-no" title="Not applicable"><i class="fa-solid fa-minus"></i></span></td>`;
     }
 
     function renderTable() {
       const query = qInput.value.toLowerCase().trim();
-      
-      // 1. Generate Header (Columns)
-      if (!MATRIX_DATA.columns) return;
-      
+      const section = (MATRIX_DATA.sections || [])[ACTIVE_SECTION];
+      if (!section) return;
+
+      const colIndices = getColIndices(section);
+      const persona = getPersona();
+      const personaNote = persona === 'all' ? '' : ` — filtered to ${persona === 'enterprise' ? 'Enterprise' : 'Frontline'} plans only`;
+      panelSub.textContent = (section.description || 'Exhaustive view of features by SKU.') + personaNote;
+
+      // 1. Generate Header (only the columns relevant to the active persona)
       let headerHtml = `<tr><th>Feature / Capability</th>`;
-      MATRIX_DATA.columns.forEach(col => {
-        headerHtml += `<th>${col}</th>`;
+      colIndices.forEach(i => {
+        headerHtml += `<th>${esc(section.columns[i])}</th>`;
       });
       headerHtml += `</tr>`;
       thead.innerHTML = headerHtml;
@@ -194,30 +7571,24 @@
       let bodyHtml = "";
       let hasResults = false;
 
-      MATRIX_DATA.matrix.forEach(group => {
-        const matches = group.items.filter(i => i.name.toLowerCase().includes(query));
-        
+      section.matrix.forEach(group => {
+        const matches = visibleItems(group, colIndices, query);
+
         if (matches.length > 0) {
           hasResults = true;
-          // Category Row (colspan = nb columns + 1)
-          bodyHtml += `<tr class="tr-category"><td colspan="${MATRIX_DATA.columns.length + 1}">${group.category}</td></tr>`;
-          
+          bodyHtml += `<tr class="tr-category"><td colspan="${colIndices.length + 1}">${esc(group.category)}</td></tr>`;
+
           matches.forEach(item => {
             bodyHtml += `<tr>
-              <td>${item.name}</td>
-              ${item.vals.map(val => {
-                // Compact rendering (Icon only) to save space
-                if (val === 1) return `<td><div class="dot-badge dot-inc" title="Included"><i class="fa-solid fa-check"></i></div></td>`;
-                if (val === 2) return `<td><div class="dot-badge dot-add" title="Add-on"><i class="fa-solid fa-plus"></i></div></td>`;
-                return `<td><span class="dot-no"><i class="fa-solid fa-minus"></i></span></td>`;
-              }).join('')}
+              <td>${esc(item.name)}</td>
+              ${colIndices.map(i => renderCell(item.vals[i])).join('')}
             </tr>`;
           });
         }
       });
 
       if (!hasResults) {
-        bodyHtml = `<tr><td colspan="${MATRIX_DATA.columns.length + 1}" style="text-align:center;padding:40px;">No results found.</td></tr>`;
+        bodyHtml = `<tr><td colspan="${colIndices.length + 1}" style="text-align:center;padding:40px;">No results found.</td></tr>`;
       }
 
       tbody.innerHTML = bodyHtml;
@@ -225,6 +7596,37 @@
 
     qInput.addEventListener("input", renderTable);
     document.addEventListener("DOMContentLoaded", loadData);
+
+    /* ============================================================
+       CHANGE LOG MODAL
+    ============================================================ */
+    const changelogOverlay = document.getElementById("changelogOverlay");
+    let CHANGELOG_LOADED = false;
+
+    async function openChangelog() {
+      changelogOverlay.classList.add("active");
+      if (CHANGELOG_LOADED) return;
+      try {
+        const json = JSON.parse(document.getElementById('changelog-data').textContent);
+        const monthName = (ym) => {
+          const [y, m] = ym.split('-');
+          return new Date(Number(y), Number(m) - 1, 1).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+        };
+        document.getElementById('changelogList').innerHTML = json.entries.map(e => `
+          <li class="changelog-row">
+            <span class="changelog-date">${esc(monthName(e.date))}</span>
+            <div class="changelog-body"><strong>${esc(e.feature)}</strong><span>${esc(e.change)}</span></div>
+            <span class="changelog-tag ${e.action === 'New' ? 'new' : 'change'}">${esc(e.action)}</span>
+          </li>
+        `).join('');
+        CHANGELOG_LOADED = true;
+      } catch (err) {
+        console.error(err);
+        document.getElementById('changelogList').innerHTML = `<li class="changelog-row"><span class="changelog-date">—</span><div class="changelog-body">Unable to load changelog.json</div></li>`;
+      }
+    }
+    function closeChangelog() { changelogOverlay.classList.remove("active"); }
+    changelogOverlay.addEventListener("click", (e) => { if (e.target === changelogOverlay) closeChangelog(); });
   </script>
 <div style="position: fixed; bottom: 15px; right: 15px; font-size: 11px; color: #94a3b8; font-family: sans-serif; pointer-events: none; z-index: 999;">
   Draft by <span style="font-weight: 600;">Romain Curel</span>

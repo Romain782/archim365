@@ -1,1 +1,266 @@
-Empty :'(
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"/>
+  <title>M365 Architecture — Microsoft 365 Licensing, Explained</title>
+  <meta name="description" content="An interactive map of Microsoft 365 Enterprise and Frontline plans, suites, and add-ons — built to make security-driven licensing decisions simple."/>
+
+  <!-- Social share preview (Teams/Outlook link unfurl) -->
+  <meta property="og:title" content="M365 Architecture — Understand Microsoft 365 licensing, clearly."/>
+  <meta property="og:description" content="An interactive map of Enterprise and Frontline plans, suites, and add-ons."/>
+  <meta property="og:image" content="cover.png"/>
+  <meta property="og:type" content="website"/>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <style>
+    :root { color-scheme: dark; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* the hero always fills the viewport exactly, no scroll */
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    .cover {
+      position: relative;
+      width: 100vw;
+      height: 100dvh; /* adapts to mobile browser chrome too */
+      background:
+        radial-gradient(55% 60% at 90% 6%, rgba(99,102,241,0.35) 0%, transparent 60%),
+        radial-gradient(45% 50% at 6% 96%, rgba(14,165,233,0.22) 0%, transparent 60%),
+        radial-gradient(120% 120% at 10% 0%, #1b2452 0%, #0b1120 55%, #05070d 100%);
+      overflow: hidden;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    /* faint security grid texture */
+    .grid-overlay {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: clamp(28px, 3vw, 56px) clamp(28px, 3vw, 56px);
+      -webkit-mask-image: radial-gradient(120% 100% at 30% 30%, black 0%, transparent 75%);
+      mask-image: radial-gradient(120% 100% at 30% 30%, black 0%, transparent 75%);
+    }
+
+    /* giant faint shield / network watermarks, scaled with viewport */
+    .shield-watermark {
+      position: absolute;
+      right: -6vw; bottom: -10vh;
+      font-size: min(45vw, 55vh);
+      color: rgba(99,102,241,0.08);
+      transform: rotate(-8deg);
+      pointer-events: none;
+    }
+    .shield-watermark-2 {
+      position: absolute;
+      left: -8vw; top: -12vh;
+      font-size: min(30vw, 38vh);
+      color: rgba(14,165,233,0.05);
+      transform: rotate(12deg);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      padding: clamp(24px, 5vh, 96px) clamp(24px, 6.5vw, 120px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: clamp(16px, 2vh, 32px);
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; gap: clamp(12px, 1.4vw, 22px); }
+    .brand-logo {
+      width: clamp(44px, 4.5vw, 76px);
+      height: clamp(44px, 4.5vw, 76px);
+      border-radius: clamp(12px, 1.2vw, 20px);
+      background: linear-gradient(135deg, #ffffff 0%, #dbe4ff 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 14px 40px -10px rgba(99,102,241,0.6);
+      flex-shrink: 0;
+    }
+    .brand-logo i { font-size: clamp(18px, 2vw, 36px); color: #1e293b; }
+    .brand-text .eyebrow {
+      font-size: clamp(10px, 0.95vw, 17px);
+      font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #93c5fd;
+      margin-bottom: clamp(2px, 0.4vh, 6px);
+      white-space: nowrap;
+    }
+    .brand-text .name {
+      font-size: clamp(16px, 1.6vw, 30px);
+      font-weight: 800; color: #f8fafc; letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    .security-badge {
+      display: flex; align-items: center; gap: clamp(8px, 0.8vw, 14px);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      padding: clamp(8px, 0.9vh, 16px) clamp(14px, 1.6vw, 30px);
+      border-radius: 999px;
+      color: #d1fae5;
+      font-size: clamp(11px, 1vw, 19px);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .security-badge i { color: #34d399; }
+
+    .middle { max-width: 62vw; }
+    .middle h1 {
+      font-size: clamp(28px, 5.2vw, 98px);
+      line-height: 1.05;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: clamp(12px, 1.8vh, 32px);
+    }
+    .middle h1 span {
+      background: linear-gradient(90deg, #93c5fd 0%, #c4b5fd 60%, #f0abfc 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .middle p {
+      font-size: clamp(13px, 1.55vw, 30px);
+      line-height: 1.6;
+      color: #b8c2e0;
+      font-weight: 500;
+      max-width: 52vw;
+    }
+
+    .pills { display: flex; gap: clamp(8px, 0.9vw, 16px); margin-top: clamp(16px, 2.4vh, 44px); flex-wrap: wrap; }
+    .pill {
+      font-size: clamp(11px, 1vw, 19px); font-weight: 700;
+      padding: clamp(7px, 0.7vh, 13px) clamp(12px, 1.4vw, 26px);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #e2e8f0;
+      display: inline-flex; align-items: center; gap: clamp(6px, 0.7vw, 12px);
+      white-space: nowrap;
+    }
+    .pill i { font-size: clamp(10px, 0.95vw, 18px); color: #93c5fd; }
+
+    .bottom-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      display: flex; align-items: center; gap: clamp(10px, 1.1vw, 20px);
+      color: #f8fafc;
+      font-size: clamp(13px, 1.4vw, 26px);
+      font-weight: 800;
+      flex-wrap: wrap;
+    }
+    .cta .arrow-chip {
+      width: clamp(38px, 3.3vw, 64px);
+      height: clamp(38px, 3.3vw, 64px);
+      border-radius: clamp(10px, 1vw, 18px);
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 30px -8px rgba(99,102,241,0.7);
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .cover:hover .arrow-chip { transform: translateX(4px); }
+    .cta .arrow-chip i { color: white; font-size: clamp(13px, 1.25vw, 24px); }
+    .cta .url { color: #93c5fd; font-weight: 700; }
+
+    .credit {
+      display: flex; align-items: center; gap: clamp(8px, 0.75vw, 14px);
+      font-size: clamp(12px, 1.05vw, 20px);
+      color: #cbd5e1;
+      font-weight: 600;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: clamp(8px, 0.8vh, 15px) clamp(14px, 1.4vw, 26px);
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .credit .avatar {
+      width: clamp(20px, 1.7vw, 32px); height: clamp(20px, 1.7vw, 32px);
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(9px, 0.75vw, 14px); color: white; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .credit strong { color: #ffffff; font-weight: 800; }
+
+    /* Below ~560px tall or very narrow, drop non-essential chrome to always keep it one full screen */
+    @media (max-height: 480px), (max-width: 420px) {
+      .middle { max-width: 92vw; }
+      .middle p { max-width: 90vw; }
+      .security-badge span.full { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="cover" href="M365/en/architecture.html" aria-label="Open the M365 Architecture tool">
+    <div class="grid-overlay"></div>
+    <i class="fa-solid fa-network-wired shield-watermark-2"></i>
+    <i class="fa-solid fa-shield-halved shield-watermark"></i>
+
+    <div class="content">
+      <div class="top-row">
+        <div class="brand">
+          <div class="brand-logo"><i class="fa-brands fa-microsoft"></i></div>
+          <div class="brand-text">
+            <div class="eyebrow">Microsoft 365 &nbsp;·&nbsp; Licensing Reference</div>
+            <div class="name">M365 Architecture</div>
+          </div>
+        </div>
+        <div class="security-badge"><i class="fa-solid fa-shield-halved"></i> Security-first design</div>
+      </div>
+
+      <div class="middle">
+        <h1>Understand Microsoft<br/><span>365 licensing</span>, clearly.</h1>
+        <p>An interactive map of Enterprise and Frontline plans, suites, and add-ons — built to make security-driven licensing decisions simple.</p>
+        <div class="pills">
+          <span class="pill"><i class="fa-solid fa-shield-halved"></i> Defender</span>
+          <span class="pill"><i class="fa-solid fa-scale-balanced"></i> Purview</span>
+          <span class="pill"><i class="fa-solid fa-key"></i> Entra</span>
+          <span class="pill"><i class="fa-solid fa-robot"></i> Agent 365</span>
+          <span class="pill"><i class="fa-solid fa-table"></i> Sales Matrix</span>
+        </div>
+      </div>
+
+      <div class="bottom-row">
+        <div class="cta">
+          <div class="arrow-chip"><i class="fa-solid fa-arrow-right"></i></div>
+          <span>Explore the architecture &nbsp;·&nbsp; <span class="url">aka.ms/m365architecture</span></span>
+        </div>
+        <div class="credit"><span class="avatar">RC</span> Draft by <strong>Romain Curel</strong></div>
+      </div>
+    </div>
+  </a>
+</body>
+</html>

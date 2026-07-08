@@ -3,48 +3,86 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>M365 Licensing — Frontline Architecture</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"/>
+  <title>Frontline Licensing — Architecture</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <link rel="stylesheet" href="style.css?v=20260701"/>
 </head>
+
 <body>
   <div class="app">
+    
     <div class="topbar">
       <div class="container">
         <div class="topbar-inner">
           <div class="brand">
-            <div class="brand-logo" style="background: var(--accent-mint);"><i class="fa-solid fa-users-line"></i></div>
+            <div class="brand-logo" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+                <i class="fa-solid fa-users-line"></i>
+            </div>
             <div class="brand-text">
-              <h1>Frontline Architecture</h1>
-              <p>F1 to F5 Pathways • 2026 Vision</p>
+              <h1>Frontline Licensing Architecture</h1>
+              <p>Strategic View • F1 to F5 Path</p>
             </div>
           </div>
-          <div class="nav-actions">
-            <div class="persona-switch">
-              <a href="architecture.html" class="ps-btn">Enterprise</a>
-              <span class="ps-btn active-front">Frontline</span>
-            </div>
-            <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
-            <a href="matrix.html" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
-          </div>
+          
+<div class="nav-actions">
+  <button class="source-badge" onclick="openChangelog()" title="View what changed in the July 2026 update">
+    <i class="fa-solid fa-circle-check"></i> Updated Jul 1, 2026
+  </button>
+
+  <div class="persona-switch">
+    <a href="architecture.html" class="ps-btn">Enterprise</a>
+    <span class="ps-btn active-front">Frontline</span>
+  </div>
+
+  <button class="btn active"><i class="fa-solid fa-diagram-project"></i> Architecture</button>
+  <a href="matrix.html?persona=frontline" class="btn"><i class="fa-solid fa-table"></i> Sales Matrix</a>
+</div>
         </div>
       </div>
     </div>
 
     <main class="container">
       <div class="view-panel">
+        
         <div class="panel-header">
           <div class="panel-title">
-            <h2>Frontline Maturity</h2>
-            <p>From secure entry (F1) to advanced protection (F5).</p>
+            <h2>Choose your goal, see your path</h2>
+            <p>The full Frontline map always stays visible — pick a goal to spotlight the cards you need, click any card for full details.</p>
           </div>
-          <button class="btn-info" onclick="toggleLegal()"><i class="fa-solid fa-circle-info"></i> Legal & Info</button>
         </div>
 
+        <div class="goal-strip" id="goalStrip"></div>
+        <div class="path-caption" id="pathCaption"></div>
+
         <div class="arch-board thin-scroll">
-          <div class="arch-layout">
-            <div class="arch-grid" id="archGrid" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="arch-layout" id="layoutWrap">
+            
+            <svg class="flow-svg" id="flowSvg"></svg>
+
+            <div class="arch-grid" id="archGrid">
+                <div style="grid-column:1/-1; text-align:center; padding:40px; color:#64748b;">Loading Frontline Architecture...</div>
+            </div>
+
+            <div class="footer-socle" id="footerSocle" style="display:none;">
+              <div class="card card-socle" onclick="openModal('soc')">
+                <div class="card-icon icon-azure"><i class="fa-solid fa-cloud"></i></div>
+                <div class="card-titles">
+                  <h3>Azure Security (SOC Layer)</h3>
+                  <span>Microsoft Sentinel + Defender for Cloud</span>
                 </div>
+                <div class="card-body">
+                  Transversal Infrastructure Layer: Unified SIEM/SOAR + Multi-Cloud Protection (CNAPP).<br>
+                  <strong>Pay-as-you-go (Azure Consumption).</strong>
+                </div>
+                <i class="fa-solid fa-circle-info" style="color:var(--color-text-light); font-size:20px;"></i>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -55,32 +93,45 @@
         <div class="modal-header">
           <div class="modal-title-group">
             <div class="modal-icon" id="mIcon"></div>
-            <div class="modal-text"><h2 id="mTitle"></h2><span id="mMeta"></span></div>
+            <div class="modal-text">
+              <h2 id="mTitle">Title</h2>
+              <span id="mMeta">Subtitle</span>
+            </div>
           </div>
           <button class="btn-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
+
         <div class="modal-scroll thin-scroll">
           <div class="detail-grid">
             <div>
               <div class="detail-box">
                 <div class="kicker"><i class="fa-solid fa-align-left"></i> Description</div>
-                <div id="mDesc" class="desc-text"></div>
-                <div class="kicker"><i class="fa-solid fa-list-check"></i> Key Features</div>
+                <div id="mDesc" style="font-size:14px; line-height:1.6; color:#334155; margin-bottom:20px;"></div>
+                
+                <div class="kicker"><i class="fa-solid fa-list-check"></i> Included Capabilities</div>
                 <ul id="mIncludes" class="clean-list"></ul>
               </div>
+
               <div class="detail-box">
-                 <div class="kicker"><i class="fa-solid fa-bullseye"></i> Business Outcomes</div>
+                 <div class="kicker"><i class="fa-solid fa-bullseye"></i> Key Outcomes</div>
                  <ul id="mOutcomes" class="clean-list"></ul>
               </div>
             </div>
+
             <div>
               <div class="detail-box">
                 <div class="kicker"><i class="fa-solid fa-lightbulb"></i> Use Cases</div>
                 <ul id="mUseCases" class="clean-list"></ul>
               </div>
+
               <div class="detail-box" style="background:#f8fafc;">
                 <div class="kicker"><i class="fa-solid fa-file-contract"></i> Licensing</div>
-                <p id="mLicensing" style="font-size:13px; margin:0;"></p>
+                <p id="mLicensing" style="font-size:13px; color:#475569; margin:0;"></p>
+              </div>
+
+              <div class="detail-box">
+                <div class="kicker"><i class="fa-solid fa-link"></i> Resources</div>
+                <div id="mLinks" style="display:flex; flex-direction:column; gap:8px;"></div>
               </div>
             </div>
           </div>
@@ -88,70 +139,661 @@
       </div>
     </div>
 
-    <div class="legal-overlay" id="legalOverlay">
-        <div class="legal-modal">
-            <h3>Information & Disclaimer</h3>
-            <div class="legal-body">
-                <p><strong>Author:</strong> Romain Curel (rocurel@microsoft.com)</p>
-                <p>This document is an unofficial visualization tool. Microsoft does not guarantee the contractual accuracy of this material.</p>
+    <div class="modal-overlay" id="changelogOverlay">
+      <div class="modal-content" style="width:min(720px, 95%);">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <div class="modal-icon" style="background:#059669;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="modal-text">
+              <h2>What's new</h2>
+              <span>Changes since the previous licensing comparison</span>
             </div>
-            <br>
-            <button class="btn" onclick="toggleLegal()">I Understand</button>
+          </div>
+          <button class="btn-close" onclick="closeChangelog()"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="modal-scroll thin-scroll" style="background:white;">
+          <ul class="changelog-list" id="changelogList">
+            <li class="changelog-row"><span class="changelog-date">—</span><div class="changelog-body">Loading…</div></li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <script>
+  </div>
+<script type="application/json" id="site-data">
+{
+  "architecture": {
+    "structure": [
+      {
+        "id": "col1",
+        "title": "Entry Level",
+        "dotColor": "#10b981",
+        "isFoundationGroup": true,
+        "items": ["m365F1", "o365F3"]
+      },
+      {
+        "id": "col2",
+        "title": "Standard",
+        "dotColor": "#0ea5e9",
+        "items": ["m365F3"]
+      },
+      {
+        "id": "col3",
+        "title": "F5 Add-ons",
+        "dotColor": "#f59e0b",
+        "items": ["f5Sec", "f5Comp", "f5DefPurview"]
+      },
+      {
+        "id": "col4",
+        "title": "All-up",
+        "dotColor": "#1e293b",
+        "items": ["m365F5"]
+      }
+    ],
+    "goals": [
+      {
+        "id": "standardize",
+        "label": "Just standardize",
+        "icon": "fa-solid fa-rocket",
+        "path": ["m365F1", "o365F3"]
+      },
+      {
+        "id": "secure",
+        "label": "Add security & compliance",
+        "icon": "fa-solid fa-shield-halved",
+        "path": ["m365F1", "o365F3", "m365F3", "f5Sec", "f5Comp"]
+      },
+      {
+        "id": "zerotrust",
+        "label": "Zero Trust, all-in",
+        "icon": "fa-solid fa-key",
+        "path": ["m365F1", "o365F3", "m365F3", "f5DefPurview", "m365F5"]
+      }
+    ],
+    "cards": {
+      "m365F1": {
+        "id": "card-f1",
+        "title": "Microsoft 365 F1",
+        "sub": "Secure entry (no mailbox rights)",
+        "icon": "fa-solid fa-shield-cat",
+        "iconClass": "icon-green",
+        "desc": "Baseline security + Teams for workers who don't need a full mailbox but need connection, device management, and identity protection.",
+        "pills": ["Teams", "Intune P1", "Entra P1", "Copilot Chat"],
+        "includes": ["Microsoft Teams (Shifts, Walkie Talkie)", "Microsoft Intune Plan 1", "Microsoft Entra ID Plan 1", "SharePoint (read-only)", "Copilot Chat + Copilot Chat Analytics (included)"],
+        "outcomes": ["Device management", "Secure access", "Connected frontline workforce"],
+        "useCases": ["Retail associates", "Secure BYOD", "Task workers without email"],
+        "licensing": "Per-user subscription; requires the user to meet Frontline Worker eligibility.",
+        "links": [
+          {"label": "Frontline worker licensing options", "url": "https://learn.microsoft.com/en-us/microsoft-365/frontline/flw-licensing-options?view=o365-worldwide"},
+          {"label": "Microsoft 365 for frontline workers", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/frontline"}
+        ]
+      },
+      "o365F3": {
+        "title": "Office 365 F3",
+        "sub": "Lightweight, mail-first option",
+        "icon": "fa-brands fa-microsoft",
+        "iconClass": "icon-green",
+        "desc": "Office 365 apps and Exchange Kiosk mail for frontline workers, without the device-management layer that comes with Microsoft 365 F1/F3.",
+        "includes": ["M365 apps for web & mobile", "Exchange Kiosk (2 GB mailbox)", "Microsoft Teams", "SharePoint / OneDrive"],
+        "outcomes": ["Low-cost productivity baseline", "Fast provisioning"],
+        "useCases": ["Frontline staff needing lightweight email + Teams only", "Environments where device management is handled separately"],
+        "licensing": "Per-user subscription; frontline worker eligibility required.",
+        "links": [
+          {"label": "Frontline worker licensing options", "url": "https://learn.microsoft.com/en-us/microsoft-365/frontline/flw-licensing-options?view=o365-worldwide"}
+        ]
+      },
+      "m365F3": {
+        "id": "card-f3",
+        "title": "Microsoft 365 F3",
+        "sub": "The hero SKU",
+        "icon": "fa-solid fa-layer-group",
+        "iconClass": "icon-blue",
+        "isHero": true,
+        "desc": "The complete standard: Windows 11 VDA rights, Power Platform seed rights, full mailbox, and full device management.",
+        "pills": ["Win 11 VDA", "Exchange 2GB", "Automation", "Copilot Chat"],
+        "includes": ["Everything in F1", "Exchange Kiosk (2 GB mailbox)", "Windows 11 Enterprise E3 (VDA rights)", "Power Platform seed rights", "Office web/mobile apps", "Copilot Chat + Copilot Chat Analytics (included)"],
+        "outcomes": ["Full empowerment", "Process automation", "Virtualization ready"],
+        "useCases": ["Frontline managers", "Shared devices", "VDI users"],
+        "licensing": "Per-user subscription; frontline worker eligibility required.",
+        "links": [
+          {"label": "Microsoft 365 F3 service description", "url": "https://learn.microsoft.com/en-us/office365/servicedescriptions/microsoft-365-service-descriptions/microsoft-365-tenantlevel-services-licensing-guidance/microsoft-365-frontline"},
+          {"label": "Frontline worker licensing options", "url": "https://learn.microsoft.com/en-us/microsoft-365/frontline/flw-licensing-options?view=o365-worldwide"}
+        ]
+      },
+      "f5Sec": {
+        "id": "card-f5sec",
+        "title": "Defender Suite FLW",
+        "sub": "formerly F5 Security · Add-on",
+        "icon": "fa-solid fa-shield-halved",
+        "iconClass": "icon-orange",
+        "desc": "Upgrades F1/F3 to XDR level: endpoint, identity, email, and cloud app protection sized for frontline workers.",
+        "includes": ["Microsoft Defender for Endpoint F1/F2", "Microsoft Defender for Office F1/F2", "Microsoft Defender for Identity F1", "Microsoft Defender for Cloud Apps F1", "Microsoft Entra ID Plan 2"],
+        "outcomes": ["Advanced threat protection", "Identity risk automation", "Shared-device security"],
+        "useCases": ["Shared PC security", "High-risk retail / healthcare environments"],
+        "licensing": "Add-on requiring EMS E3 (K) or equivalent frontline base; not available for new VL/Web Direct purchases as a legacy F5 Security SKU — use the current Defender Suite FLW.",
+        "links": [
+          {"label": "Frontline security add-ons", "url": "https://learn.microsoft.com/en-us/microsoft-365/frontline/flw-licensing-options?view=o365-worldwide"}
+        ]
+      },
+      "f5Comp": {
+        "title": "Purview Suite FLW",
+        "sub": "formerly F5 Compliance · Add-on",
+        "icon": "fa-solid fa-scale-balanced",
+        "iconClass": "icon-orange",
+        "desc": "Advanced governance for frontline workers: eDiscovery, insider risk, retention, and auto-labeling.",
+        "includes": ["Information Protection (auto-labeling)", "Insider Risk Management", "eDiscovery Premium", "Communication Compliance", "Advanced Message Encryption"],
+        "outcomes": ["Data governance", "Legal & regulatory compliance", "Internal investigations"],
+        "useCases": ["Regulated industries", "Data leak prevention for frontline staff"],
+        "licensing": "Add-on requiring EMS E3 (K) or equivalent frontline base.",
+        "links": [
+          {"label": "Microsoft Purview", "url": "https://learn.microsoft.com/en-us/purview/purview"}
+        ]
+      },
+      "f5DefPurview": {
+        "title": "Defender + Purview Suite FLW",
+        "sub": "= Defender Suite FLW + Purview Suite FLW",
+        "connectorLabel": "Bundles the two add-ons above into one SKU",
+        "icon": "fa-solid fa-shield-heart",
+        "iconClass": "icon-orange",
+        "desc": "The newest frontline add-on: <strong>Defender Suite FLW</strong> and <strong>Purview Suite FLW</strong> combined into a single SKU for simpler purchasing — same protection, one line item.",
+        "pills": ["XDR", "Purview", "One SKU"],
+        "includes": ["Everything in Defender Suite FLW", "Everything in Purview Suite FLW"],
+        "outcomes": ["Simplified procurement", "Full E5-equivalent protection for frontline"],
+        "useCases": ["Organizations standardizing frontline security + compliance in one purchase"],
+        "licensing": "Add-on requiring EMS E3 (K) or equivalent frontline base.",
+        "links": [
+          {"label": "Frontline worker licensing options", "url": "https://learn.microsoft.com/en-us/microsoft-365/frontline/flw-licensing-options?view=o365-worldwide"}
+        ]
+      },
+      "m365F5": {
+        "id": "card-f5all",
+        "title": "M365 F3 + Defender + Purview FLW",
+        "sub": "Ultimate frontline protection",
+        "icon": "fa-solid fa-crown",
+        "iconClass": "icon-dark",
+        "isHero": true,
+        "desc": "The frontline equivalent of Microsoft 365 E5: <strong>Microsoft 365 F3</strong> plus the combined <strong>Defender + Purview Suite FLW</strong> add-on.",
+        "pills": ["XDR", "Automation", "Governance"],
+        "includes": ["Microsoft 365 F3 (base)", "Defender + Purview Suite FLW add-on"],
+        "outcomes": ["Zero Trust for frontline workers", "Full parity with Enterprise-grade security"],
+        "useCases": ["Critical infrastructure", "Healthcare frontline", "Regulated frontline operations"],
+        "licensing": "Per-user subscription (F3) + Defender + Purview Suite FLW add-on.",
+        "links": [
+          {"label": "Compare all Microsoft 365 plans", "url": "https://www.microsoft.com/en-us/microsoft-365/enterprise/microsoft-365-plans-and-pricing"},
+          {"label": "Frontline worker licensing options", "url": "https://learn.microsoft.com/en-us/microsoft-365/frontline/flw-licensing-options?view=o365-worldwide"}
+        ]
+      },
+      "soc": {
+        "title": "Azure Security",
+        "sub": "SOC Layer",
+        "icon": "fa-solid fa-cloud",
+        "iconClass": "icon-azure",
+        "desc": "Cloud-native SIEM and multi-cloud infrastructure protection that sits underneath every Frontline tier.",
+        "includes": ["Microsoft Sentinel", "Microsoft Defender for Cloud", "Log Analytics"],
+        "outcomes": ["Single pane of glass", "SOC automation"],
+        "useCases": ["Unified SOC", "AWS / GCP protection (CNAPP)"],
+        "licensing": "Pay-as-you-go (Azure consumption).",
+        "links": [
+          {"label": "Microsoft Sentinel", "url": "https://learn.microsoft.com/en-us/azure/sentinel/overview"},
+          {"label": "Microsoft Defender for Cloud", "url": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-cloud-introduction"}
+        ]
+      }
+    }
+  }
+}
+</script>
+<script type="application/json" id="changelog-data">
+{
+ "publishDate": "2026-07-01",
+ "entries": [
+  {
+   "feature": "Quick Machine Recovery",
+   "change": "Added Quick Machine Recovery",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Post-quantum security APIs",
+   "change": "Added Post-quantum security APIs",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "URL time-of-click protection",
+   "change": "Added URL time-of-click protection",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Intune Remote Help",
+   "change": "Added Microsoft Intune Remote Help",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Intune Advanced Analytics",
+   "change": "Added Microsoft Intune Advanced Analytics",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Copilot Chat Analytics",
+   "change": "Added Copilot Chat Analytics",
+   "action": "New",
+   "date": "2026-07"
+  },
+  {
+   "feature": "Microsoft Entra Suite",
+   "change": "Added Microsoft Entra Suite",
+   "action": "New",
+   "date": "2026-06"
+  },
+  {
+   "feature": "E7",
+   "change": "Added Microsoft 365 E7",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent 365",
+   "change": "Added Agent 365",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Observability",
+   "change": "Added Agent Observability",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Security",
+   "change": "Added Agent Security",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Agent Governance",
+   "change": "Added Agent Governance",
+   "action": "New",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Copilot Chat and Microsoft 365 Copilot",
+   "change": "Changed from Add-ons to Suites",
+   "action": "Change",
+   "date": "2026-05"
+  },
+  {
+   "feature": "Town Hall",
+   "change": "Town Hall now ‘Included’ in certain Suites; added new footnote",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Webinars",
+   "change": "Webinars now ‘Included’ in certain Suites",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Immersive Events",
+   "change": "Added Immersive Events",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Places Explorer",
+   "change": "Added Places Explorer",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Places Finder",
+   "change": "Added Places Finder",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Windows 11 Edition",
+   "change": "Added new footnote",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "SharePoint Plan 2",
+   "change": "Additional storage requirements",
+   "action": "Change",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Attendee Packs",
+   "change": "Added Attendee Packs",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Microsoft Teams Shared Space License",
+   "change": "Added Microsoft Teams Shared Space License",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Microsoft Teams Room Pro",
+   "change": "Added Microsoft Teams Room Pro",
+   "action": "New",
+   "date": "2026-04"
+  },
+  {
+   "feature": "Basic org-wide or location-wide retention policies",
+   "change": "Added for all Purview Suites",
+   "action": "Change",
+   "date": "2026-03"
+  },
+  {
+   "feature": "Exchange Online Protection",
+   "change": "Rebranded to Built-in security add-on for cloud mailboxes",
+   "action": "Change",
+   "date": "2026-03"
+  },
+  {
+   "feature": "Microsoft Defender Experts Suite P1 and P2",
+   "change": "Added Microsoft Defender Experts Suite P1 and P2 as add-on",
+   "action": "New",
+   "date": "2026-02"
+  },
+  {
+   "feature": "Microsoft Security Copilot",
+   "change": "Added Microsoft Security Copilot to M365 E5",
+   "action": "New",
+   "date": "2025-12"
+  },
+  {
+   "feature": "Microsoft Security Copilot",
+   "change": "Added Microsoft Security Copilot as add-on",
+   "action": "New",
+   "date": "2025-12"
+  },
+  {
+   "feature": "Microsoft 365 Copilot Business",
+   "change": "Added Microsoft 365 Copilot Business as add-on",
+   "action": "New",
+   "date": "2025-12"
+  }
+ ]
+}
+</script>
+<script>
+    /* ============================================================
+       SECURITY HELPERS
+    ============================================================ */
+    function esc(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+    function safeUrl(url) {
+      try {
+        const u = new URL(url, window.location.href);
+        return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : '#';
+      } catch { return '#'; }
+    }
+
+    /* ============================================================
+       LOGIC: FETCH JSON & RENDER
+    ============================================================ */
+    
     let ARCH_DATA = {};
+    let ACTIVE_GOAL = null;
+    const gridEl = document.getElementById("archGrid");
+    const footerEl = document.getElementById("footerSocle");
+    const goalStripEl = document.getElementById("goalStrip");
+    const pathCaptionEl = document.getElementById("pathCaption");
+
     async function loadData() {
         try {
-            const response = await fetch('frontline_data.json');
-            const json = await response.json();
+            // Data is embedded directly in this page (see <script type="application/json" id="site-data">
+            // above), so it works with a simple double-click — no local web server required.
+            const json = JSON.parse(document.getElementById('site-data').textContent);
             ARCH_DATA = json.architecture;
+            ACTIVE_GOAL = (ARCH_DATA.goals && ARCH_DATA.goals[1]) ? ARCH_DATA.goals[1].id : (ARCH_DATA.goals?.[0]?.id ?? null);
+            
+            renderGoalStrip();
             renderGrid();
-        } catch (error) { console.error(error); }
+            footerEl.style.display = "flex";
+            
+            setTimeout(drawArrows, 100);
+        } catch (error) {
+            console.error(error);
+            gridEl.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:red; padding:40px;">
+                <strong>Error loading data.</strong><br>
+                The embedded data block could not be parsed.
+            </div>`;
+        }
+    }
+
+    function getActiveGoal() {
+      return (ARCH_DATA.goals || []).find(g => g.id === ACTIVE_GOAL) || null;
+    }
+
+    function renderGoalStrip() {
+      const goals = ARCH_DATA.goals || [];
+      if (!goals.length) { goalStripEl.style.display = 'none'; pathCaptionEl.style.display = 'none'; return; }
+
+      goalStripEl.innerHTML = goals.map(g => `
+        <button type="button" class="goal-pill ${g.id === ACTIVE_GOAL ? 'active' : ''}" data-goal="${esc(g.id)}">
+          <i class="${esc(g.icon)}"></i> ${esc(g.label)}
+        </button>
+      `).join('');
+
+      goalStripEl.querySelectorAll('.goal-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          ACTIVE_GOAL = btn.dataset.goal;
+          renderGoalStrip();
+          renderGrid();
+          renderPathCaption();
+          setTimeout(drawArrows, 100);
+        });
+      });
+
+      renderPathCaption();
+    }
+
+    function renderPathCaption() {
+      const goal = getActiveGoal();
+      if (!goal) { pathCaptionEl.innerHTML = ''; return; }
+
+      const steps = goal.path.map((key, i) => {
+        const d = ARCH_DATA.cards[key];
+        const title = d ? d.title : key;
+        return `<span class="step-chip">${i + 1}. ${esc(title)}</span>`;
+      }).join('<i class="fa-solid fa-arrow-right pc-arrow"></i>');
+
+      pathCaptionEl.innerHTML = `<span class="pc-label"><i class="fa-solid fa-route"></i> Your path:</span> ${steps}`;
     }
 
     function renderGrid() {
       if (!ARCH_DATA.structure) return;
-      document.getElementById("archGrid").innerHTML = ARCH_DATA.structure.map(col => {
+      gridEl.style.gridTemplateColumns = `repeat(${ARCH_DATA.structure.length}, 1fr)`;
+
+      const goal = getActiveGoal();
+      const pathKeys = goal ? goal.path : [];
+
+      gridEl.innerHTML = ARCH_DATA.structure.map((col, colIdx) => {
+        
         const cardsHtml = col.items.map(key => {
           const d = ARCH_DATA.cards[key];
           if(!d) return "";
+
+          const stepIdx = pathKeys.indexOf(key);
+          const isOnPath = stepIdx !== -1;
+          const isAlwaysOn = !!d.alwaysOn;
+          const isMuted = pathKeys.length > 0 && !isOnPath && !isAlwaysOn;
+
+          const heroClass = d.isHero ? "card-hero" : "";
+          const stateClass = isOnPath ? "on-path" : (isMuted ? "muted" : "");
+          const domId = d.id ? `id="${esc(d.id)}"` : ""; 
+          
+          const pillsHtml = d.pills ? `<div class="pills">${d.pills.map(p => `<span class="pill">${esc(p)}</span>`).join('')}</div>` : '';
+          const connectorHtml = d.connectorLabel ? `<div class="stack-connector"><i class="fa-solid fa-arrow-down-long"></i><span>${esc(d.connectorLabel)}</span></div>` : '';
+          const stepBadgeHtml = isOnPath ? `<span class="step-badge">${stepIdx + 1}</span>` : '';
+          const alwaysOnHtml = isAlwaysOn ? `<span class="always-on-badge">Always included</span>` : '';
+          const infoIconHtml = (!d.isHero && !isAlwaysOn) ? '<i class="fa-solid fa-circle-info" style="position:absolute; top:20px; right:20px; color:#cbd5e1;"></i>' : '';
+
           return `
-            <div class="card" onclick="openModal('${key}')">
+            ${connectorHtml}
+            <div class="card ${heroClass} ${stateClass}" ${domId} onclick="openModal('${esc(key)}')">
+              ${stepBadgeHtml}
+              ${alwaysOnHtml}
               <div class="card-header">
-                <div class="card-icon ${d.iconClass}"><i class="${d.icon}"></i></div>
-                <div class="card-titles"><h3>${d.title}</h3><span>${d.sub}</span></div>
+                <div class="card-icon ${esc(d.iconClass)}"><i class="${esc(d.icon)}"></i></div>
+                <div class="card-titles">
+                  <h3>${esc(d.title)}</h3>
+                  <span>${esc(d.sub)}</span>
+                </div>
               </div>
-              <div class="card-body">${d.desc}</div>
-              <i class="fa-solid fa-circle-info" style="position:absolute; top:20px; right:20px; color:#cbd5e1;"></i>
+              <div class="card-body">
+                ${d.desc}
+              </div>
+              ${pillsHtml}
+              ${infoIconHtml}
             </div>
           `;
         }).join('');
-        return `<div><div style="text-align:center; font-weight:800; font-size:14px; margin-bottom:20px; color:#64748b; text-transform:uppercase;">${col.title}</div><div class="stack">${cardsHtml}</div></div>`;
+
+        let contentHtml = `<div class="stack">${cardsHtml}</div>`;
+        if (col.isFoundationGroup) {
+          contentHtml = `<div class="foundation-group"><span class="foundation-label">${esc(col.title)}</span>${contentHtml}</div>`;
+        }
+
+        return `
+          <div class="arch-col">
+            <div class="col-header">
+              <span class="step-num" style="background:${esc(col.dotColor)}">${colIdx + 1}</span> ${esc(col.title)}
+            </div>
+            ${contentHtml}
+          </div>
+        `;
       }).join('');
     }
 
+    /* ============================================================
+       MODAL LOGIC (Identique)
+    ============================================================ */
+    const modalOverlay = document.getElementById("modalOverlay");
+    
     function openModal(key) {
       const d = ARCH_DATA.cards[key];
       if (!d) return;
+
       document.getElementById("mIcon").className = `modal-icon ${d.iconClass}`;
-      document.getElementById("mIcon").innerHTML = `<i class="${d.icon}"></i>`;
+      document.getElementById("mIcon").innerHTML = `<i class="${esc(d.icon)}"></i>`;
       document.getElementById("mTitle").innerText = d.title;
       document.getElementById("mMeta").innerText = d.sub;
       document.getElementById("mDesc").innerHTML = d.desc;
-      document.getElementById("mLicensing").innerText = "Frontline Worker eligibility required.";
-      const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${x}</li>`).join('');
+      document.getElementById("mLicensing").innerText = d.licensing || "Per User License (Frontline Worker needs to satisfy eligibility).";
+
+      const mkList = (arr) => (arr||[]).map(x => `<li><i class="fa-solid fa-check"></i> ${esc(x)}</li>`).join('');
+      const mkLinks = (arr) => (arr||[]).map(l => `<a href="${esc(safeUrl(l.url))}" target="_blank" rel="noopener noreferrer" class="btn" style="width:100%; justify-content:space-between; margin-bottom:5px; font-size:12px;">${esc(l.label)} <i class="fa-solid fa-external-link-alt"></i></a>`).join('');
+
       document.getElementById("mIncludes").innerHTML = mkList(d.includes);
       document.getElementById("mOutcomes").innerHTML = mkList(d.outcomes).replace(/fa-check/g, 'fa-bullseye');
       document.getElementById("mUseCases").innerHTML = mkList(d.useCases).replace(/fa-check/g, 'fa-bolt');
-      document.getElementById("modalOverlay").classList.add("active");
+      document.getElementById("mLinks").innerHTML = mkLinks(d.links);
+
+      modalOverlay.classList.add("active");
     }
 
-    function closeModal() { document.getElementById("modalOverlay").classList.remove("active"); }
-    function toggleLegal() { document.getElementById("legalOverlay").classList.toggle("active"); }
-    document.addEventListener("DOMContentLoaded", loadData);
+    function closeModal() {
+      modalOverlay.classList.remove("active");
+    }
+
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    /* ============================================================
+       CHANGE LOG MODAL
+    ============================================================ */
+    const changelogOverlay = document.getElementById("changelogOverlay");
+    let CHANGELOG_LOADED = false;
+
+    async function openChangelog() {
+      changelogOverlay.classList.add("active");
+      if (CHANGELOG_LOADED) return;
+      try {
+        const json = JSON.parse(document.getElementById('changelog-data').textContent);
+        const monthName = (ym) => {
+          const [y, m] = ym.split('-');
+          return new Date(Number(y), Number(m) - 1, 1).toLocaleString('en-US', { month: 'short', year: 'numeric' });
+        };
+        document.getElementById('changelogList').innerHTML = json.entries.map(e => `
+          <li class="changelog-row">
+            <span class="changelog-date">${esc(monthName(e.date))}</span>
+            <div class="changelog-body"><strong>${esc(e.feature)}</strong><span>${esc(e.change)}</span></div>
+            <span class="changelog-tag ${e.action === 'New' ? 'new' : 'change'}">${esc(e.action)}</span>
+          </li>
+        `).join('');
+        CHANGELOG_LOADED = true;
+      } catch (err) {
+        console.error(err);
+        document.getElementById('changelogList').innerHTML = `<li class="changelog-row"><span class="changelog-date">—</span><div class="changelog-body">Unable to load changelog.json</div></li>`;
+      }
+    }
+    function closeChangelog() { changelogOverlay.classList.remove("active"); }
+    changelogOverlay.addEventListener("click", (e) => { if (e.target === changelogOverlay) closeChangelog(); });
+
+    /* ============================================================
+       ARROW DRAWING
+       (Static connectors removed — the dynamic goal-based spotlight
+       + path breadcrumb above now shows the recommended route instead.)
+    ============================================================ */
+    function drawArrows() {
+      const svg = document.getElementById("flowSvg");
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrowHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#94a3b8" />
+          </marker>
+        </defs>
+      `;
+    }
+
+    function connect(id1, id2, svg, wrap) {
+      const el1 = document.getElementById(id1);
+      const el2 = document.getElementById(id2);
+      if(!el1 || !el2) return;
+
+      const r1 = el1.getBoundingClientRect();
+      const r2 = el2.getBoundingClientRect();
+      const wR = wrap.getBoundingClientRect();
+
+      const x1 = r1.right - wR.left;
+      const y1 = r1.top - wR.top + (r1.height / 2);
+
+      const x2 = r2.left - wR.left;
+      const y2 = r2.top - wR.top + (r2.height / 2);
+
+      const mx = x1 + (x2 - x1) / 2;
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const d = `M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`;
+      
+      path.setAttribute("class", "flow-line");
+      path.setAttribute("d", d);
+      path.setAttribute("marker-end", "url(#arrowHead)");
+      
+      svg.appendChild(path);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadData();
+      window.addEventListener("resize", () => setTimeout(drawArrows, 100));
+    });
+
   </script>
+  <div style="position: fixed; bottom: 15px; right: 15px; font-size: 11px; color: #94a3b8; font-family: sans-serif; pointer-events: none; z-index: 999;">
+  Draft by <span style="font-weight: 600;">Romain Curel</span>
+</div>
 </body>
 </html>
