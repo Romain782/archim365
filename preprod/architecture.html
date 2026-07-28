@@ -887,8 +887,18 @@
     });
 
   </script>
-<div style="position: fixed; bottom: 15px; right: 15px; font-size: 11px; color: #94a3b8; font-family: sans-serif; pointer-events: none; z-index: 999;">
-  Draft by <span style="font-weight: 600;">Romain Curel</span>
+<style>
+  body { padding-bottom: 82px; }
+  #legalFooter a { color:#93c5fd; text-decoration:underline; }
+  #legalFooter a:hover { opacity:.85; }
+  @media (max-width: 720px){ #legalFooter{ font-size:9px; } body{ padding-bottom:132px; } }
+</style>
+<div id="legalFooter" style="position:fixed; left:0; right:0; bottom:0; z-index:1000; background:rgba(15,23,42,0.94); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border-top:1px solid rgba(148,163,184,0.25); color:#cbd5e1; font-family:'Segoe UI',system-ui,-apple-system,sans-serif; font-size:10px; line-height:1.45; padding:7px 16px 8px; display:flex; gap:16px; align-items:center; justify-content:space-between;">
+  <div>
+    <strong style="color:#e2e8f0; font-weight:600;">Disclaimer / Avertissement —</strong>
+    Unofficial, personal reference provided for illustrative and educational purposes only. It is <strong>not</strong> official Microsoft documentation, guidance, advice or a contractual commitment, and does not represent the views of Microsoft Corporation. All product names, plans and packaging are trademarks of their respective owners, referenced for identification only. Licensing terms, plan contents, features and availability change frequently and may contain errors or omissions; this material is provided "as is", without any warranty of accuracy, completeness or fitness for a particular purpose. Always verify against the official <a href="https://www.microsoft.com/licensing/terms/" target="_blank" rel="noopener">Microsoft Product Terms</a>, Microsoft licensing documentation and your Microsoft account team before making any purchasing or deployment decision. To the maximum extent permitted by law, the author accepts no liability whatsoever for any loss, damage or decision arising from use of, or reliance on, this material — use entirely at your own risk. <em style="color:#94a3b8;">Version FR : référence personnelle non officielle, fournie à titre purement informatif et pédagogique, sans aucune garantie ; l'auteur décline toute responsabilité en cas d'erreur, d'omission, d'interprétation ou d'usage, y compris en cas de partage.</em>
+  </div>
+  <div style="white-space:nowrap; color:#94a3b8; align-self:flex-end;">Draft by <span style="font-weight:600; color:#cbd5e1;">Romain Curel</span></div>
 </div>
 </body>
 </html>
